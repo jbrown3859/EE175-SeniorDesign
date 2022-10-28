@@ -1,7 +1,7 @@
 # EE175-SeniorDesign
-Joey Brown jbrow123 at ucr dot edu  
-Merrick Slane mslan002 at ucr dot edu  
-Vincent Le vle059 at ucr dot edu  
+Joey Brown, jbrow123 at ucr dot edu  
+Merrick Slane, mslan002 at ucr dot edu  
+Vincent Le, vle059 at ucr dot edu  
 
 [Google Drive with more material](https://drive.google.com/drive/folders/17umrwFU26v1C86p7LwNFVo5_QjvbGcJk?usp=sharing)
 
