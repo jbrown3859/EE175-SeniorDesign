@@ -3,6 +3,8 @@
 
 #define MCLK_FREQ_MHZ 8                     // MCLK = 8MHz
 
+char SPI_TIMEOUT = 0; //set in ISR
+
 /* This function is from the TI MSP430 example code. Things work without it but I'm not taking any chances */
 void Software_Trim() {
     unsigned int oldDcoTap = 0xffff;
@@ -147,8 +149,34 @@ void putchars(char* msg) {
     }
 }
 
+void print_binary(char b) {
+    int i;
+    for (i = 7; i >= 0; i--) {
+        if (((b >> i) & 0x01) == 0x01) {
+            putchar('1');
+        }
+        else {
+            putchar('0');
+        }
+    }
+}
 
-/* Init SPI on UCB1 */
+void print_hex(char h) {
+    int i;
+    char nibble;
+    for (i = 1; i >= 0; i--) {
+        nibble = ((h >> (4 * i)) & 0x0F);
+        if (nibble < 10) { //decimal number
+            putchar(nibble + 48);
+        }
+        else { //letter
+            putchar(nibble + 55);
+        }
+    }
+}
+
+
+/* Init SPI on UCB1 and init timeout timer */
 void init_SPI_master(void) {
     /* SPI Pin Configuration:
      * P4.7: MISO
@@ -171,6 +199,29 @@ void init_SPI_master(void) {
 
     UCB1CTLW0 &= ~UCSWRST;
     UCB1IE |= UCRXIE;
+
+    /* Timeout clock init */
+    TB1CCTL0 = CCIE; //interrupt mode
+    TB1CCR0 = 1000; //trigger value
+    TB1CTL = TBSSEL__SMCLK | ID_0 | TBCLR; //fast peripheral clock, no division, clear at start
+}
+
+
+void set_SPI_timer(char mode) {
+    if (mode == 1) { //enable timer
+        TB1CTL |= MC__UP | TBCLR;
+    }
+    else { //disable timer
+        TB1CTL |= TBCLR;
+        TB1CTL &= ~(0b11 << 4); //stop timer
+    }
+}
+
+
+#pragma vector=TIMER1_B0_VECTOR
+__interrupt void TIMER1_B0_VECTOR_ISR (void) {
+    SPI_TIMEOUT = 1;
+    TB1CCTL0 &= ~CCIFG; //reset interrupt
 }
 
 
@@ -187,5 +238,35 @@ char SPI_TX(char c) {
     while ((UCB1IFG & UCRXIFG) == 0);
 
     char r = UCB1RXBUF;
+    return r;
+}
+
+/* send 8 bit address to slave in order to get data back */
+char SPI_RX(char addr) {
+    char r;
+
+    set_SPI_timer(1); //enable timeout
+
+    P4OUT &= ~(1 << 4); //NSS low
+    __no_operation();
+
+    while ((UCB1IFG & UCTXIFG) == 0);
+    UCB1TXBUF = addr;
+
+    while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
+    r = UCB1RXBUF;
+    SPI_TIMEOUT = 0;
+
+    while ((UCB1IFG & UCTXIFG) == 0 );
+    UCB1TXBUF = 0x00; //transmit nothing
+
+    while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
+    r = UCB1RXBUF;
+    SPI_TIMEOUT = 0;
+
+    __no_operation();
+    P4OUT |= (1 << 4); //NSS high
+
+    set_SPI_timer(0); //disable timeout
     return r;
 }

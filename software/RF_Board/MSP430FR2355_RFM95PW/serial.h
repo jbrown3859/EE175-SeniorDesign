@@ -17,12 +17,15 @@ void init_UART(void);
 int getchar(void);
 void putchar(char c);
 void putchars(char* msg);
+void print_binary(char b);
+void print_hex(char h);
 
 /* SPI functions */
 void init_SPI_master(void);
-void init_SPI_slave(void);
+void set_SPI_timer(char mode);
 
-int SPI_RX(void);
-void SPI_TX(char c);
+//int SPI_RX(void);
+char SPI_TX(char c);
+char SPI_RX(char addr);
 
 #endif /* SERIAL_H_ */

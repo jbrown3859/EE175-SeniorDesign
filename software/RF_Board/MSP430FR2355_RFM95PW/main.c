@@ -13,6 +13,9 @@ void init_GPIO(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
+    /* NSS */
+    P4SEL0 |= 0b0;
+
     /* temp, delete me later */
     P1DIR = 0xFF; P2DIR = 0xFF; P4DIR = 0xFF;
     P1REN = 0xFF; P2REN = 0xFF; P4REN = 0xFF;
@@ -28,7 +31,7 @@ void init_Timer_B0() {
 #pragma vector=TIMER0_B0_VECTOR
 __interrupt void TIMER0_B0_VECTOR_ISR (void) {
     P1OUT ^= 0x01; //toggle led
-    TB1CCTL0 &= ~CCIFG; //reset timer?
+    TB0CCTL0 &= ~CCIFG; //reset interrupt
     //SPI_TX('a');
 }
 
@@ -84,6 +87,8 @@ int main(void) {
     init_Timer_B0();
     __bis_SR_register(GIE); //enable interrupts
 
+    P4OUT |= (1 << 4); //NSS high
+
     char c;
     for(;;) {
         /*
@@ -92,9 +97,23 @@ int main(void) {
             putchars("What hath God wrought?\n\r");
         }
         */
-        SPI_TX('a');
-        unsigned int i;
-        for (i = 0; i < 10; i++);
+        /*
+        c = SPI_RX(0x3C); //temp sensor addr
+        print_binary(c);
+        putchar(' ');
+        print_binary(0xF1);
+        putchars("\n\r");
+        */
+
+        unsigned char i;
+        for (i = 0; i < 128; i++) {
+            putchars("Address: ");
+            print_hex(i);
+            c = SPI_RX(i);
+            putchars(" Data: ");
+            print_hex(c);
+            putchars("\n\r");
+        }
     }
 
     return 0;
