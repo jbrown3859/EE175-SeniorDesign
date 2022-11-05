@@ -12,7 +12,7 @@ void Software_Trim(void);
 void init_clock(void);
 
 /* UART Functions */
-void init_UART(void);
+void init_UART(unsigned long);
 
 int getchar(void);
 void putchar(char c);
@@ -25,7 +25,7 @@ void init_SPI_master(void);
 void set_SPI_timer(char mode);
 
 //int SPI_RX(void);
-char SPI_TX(char c);
+void SPI_TX(char addr, char c);
 char SPI_RX(char addr);
 
 #endif /* SERIAL_H_ */

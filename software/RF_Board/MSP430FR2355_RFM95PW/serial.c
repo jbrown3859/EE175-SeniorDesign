@@ -89,8 +89,8 @@ void init_clock() {
 }
 
 
-/* Init UART on UCA0 (from TI example code) */
-void init_UART() {
+/* init UART to a standard baud rate */
+void init_UART(unsigned long baud) {
     // Configure UART pins
     P1SEL0 |= BIT6 | BIT7;                    // set 2-UART pin as second function
 
@@ -98,19 +98,33 @@ void init_UART() {
     UCA0CTLW0 |= UCSWRST;
     UCA0CTLW0 |= UCSSEL__SMCLK;
 
-    // Baud Rate calculation
-    // 8000000/(16*9600) = 52.083
-    // Fractional portion = 0.083
-    // User's Guide Table 17-4: UCBRSx = 0x49
-    // UCBRFx = int ( (52.083-52)*16) = 1
-    UCA0BR0 = 52;                             // 8000000/16/9600
-    UCA0BR1 = 0x00;
-    UCA0MCTLW = 0x4900 | UCOS16 | UCBRF_1;
+    switch(baud) {
+    case 115200:
+        /* 115200 BAUD settings (from user guide):
+        * UCOS16 = 1
+        * UCBRF = 5
+        * UCBRS = 0x55
+        * UCA0BR0 = 4
+        */
+        UCA0BR0 = 4;
+        UCA0BR1 = 0x00;
+        UCA0MCTLW = 0x5500 | UCOS16 | UCBRF_5;
+        break;
+    default: //9600 baud
+        // Baud Rate calculation
+        // 8000000/(16*9600) = 52.083
+        // Fractional portion = 0.083
+        // User's Guide Table 17-4: UCBRSx = 0x49
+        // UCBRFx = int ( (52.083-52)*16) = 1
+        UCA0BR0 = 52;                             // 8000000/16/9600
+        UCA0BR1 = 0x00;
+        UCA0MCTLW = 0x4900 | UCOS16 | UCBRF_1;
+        break;
+    }
 
     UCA0CTLW0 &= ~UCSWRST;                    // Initialize eUSCI
     UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
 }
-
 
 /* Grab char from the RX buffer IF it is full, but do not wait UNTIL it's full */
 int getchar() {
@@ -131,6 +145,7 @@ void putchar(char c) {
     while (( UCA0IFG & UCTXIFG ) == 0 );
 
     /* Transmit data */
+
     UCA0TXBUF = c;
     __no_operation();
 }
@@ -184,7 +199,12 @@ void init_SPI_master(void) {
      * P4.5: SCK
      * P4.4: SS
      */
-    P4SEL0 |= BIT7 | BIT6 | BIT5 | BIT4; //configure pins
+    P4SEL0 |= BIT7 | BIT6 | BIT5; //configure pins
+
+    /* NSS */
+    P4SEL0 &= ~(0b1 << 4);
+    P4DIR |= (0b1 << 4);
+    P4OUT |= (0b1 << 4);
 
     UCB1CTLW0 |= UCSWRST;
     UCB1CTLW0 |= UCMST|UCSYNC|UCCKPL|UCMSB|UCMODE_0; //3-pin, 8-bit SPI master
@@ -225,20 +245,20 @@ __interrupt void TIMER1_B0_VECTOR_ISR (void) {
 }
 
 
-/* Transmit char and return the result of the RX buffer */
-char SPI_TX(char c) {
-    /* wait until transmit buffer is ready */
-    while ((UCB1IFG & UCTXIFG) == 0 );
-
-    /* Transmit data */
-    UCB1TXBUF = c;
+/* Transmit address + char */
+void SPI_TX(char addr, char c) {
+    P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    /* wait until RX is ready */
-    while ((UCB1IFG & UCRXIFG) == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 );
+    UCB1TXBUF = addr;
 
-    char r = UCB1RXBUF;
-    return r;
+    while ((UCB1IFG & UCTXIFG) == 0 );
+    UCB1TXBUF = c;
+
+    __no_operation();
+    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    P4OUT |= (1 << 4); //NSS high
 }
 
 /* send 8 bit address to slave in order to get data back */
@@ -265,6 +285,7 @@ char SPI_RX(char addr) {
     SPI_TIMEOUT = 0;
 
     __no_operation();
+    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
 
     set_SPI_timer(0); //disable timeout

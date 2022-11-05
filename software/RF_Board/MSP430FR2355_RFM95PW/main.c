@@ -1,6 +1,7 @@
 #include <msp430.h>
 
 #include <serial.h>
+#include <rfm95w.h>
 
 char rxbuf[32];
 char rx_ptr = 0;
@@ -13,13 +14,10 @@ void init_GPIO(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
-    /* NSS */
-    P4SEL0 |= 0b0;
-
     /* temp, delete me later */
-    P1DIR = 0xFF; P2DIR = 0xFF; P4DIR = 0xFF;
-    P1REN = 0xFF; P2REN = 0xFF; P4REN = 0xFF;
-    P1OUT = 0x00; P2OUT = 0x00; P4OUT = 0x00;
+    P1DIR = 0xFF; P2DIR = 0xFF;
+    P1REN = 0xFF; P2REN = 0xFF;
+    P1OUT = 0x00; P2OUT = 0x00;
 }
 
 void init_Timer_B0() {
@@ -82,38 +80,22 @@ int main(void) {
 
     init_clock();
     init_GPIO();
-    init_UART();
+    init_UART(115200);
     init_SPI_master();
     init_Timer_B0();
     __bis_SR_register(GIE); //enable interrupts
 
-    P4OUT |= (1 << 4); //NSS high
 
-    char c;
+    putchars("Before Write:\n\r");
+    rfm95w_register_dump();
+    SPI_TX(0x81, 0x08); //sleep mode
+    putchars("After Write:\n\r");
+    rfm95w_register_dump();
+
     for(;;) {
-        /*
-        c = getchar();
-        if (c == 'w') {
-            putchars("What hath God wrought?\n\r");
-        }
-        */
-        /*
-        c = SPI_RX(0x3C); //temp sensor addr
-        print_binary(c);
-        putchar(' ');
-        print_binary(0xF1);
-        putchars("\n\r");
-        */
-
-        unsigned char i;
-        for (i = 0; i < 128; i++) {
-            putchars("Address: ");
-            print_hex(i);
-            c = SPI_RX(i);
-            putchars(" Data: ");
-            print_hex(c);
-            putchars("\n\r");
-        }
+        SPI_TX(0x81, 0x01); //sleep mode
+        //int i;
+        //for (i=0;i<100;i++);
     }
 
     return 0;
