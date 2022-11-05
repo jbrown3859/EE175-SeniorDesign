@@ -43,11 +43,13 @@ __interrupt void USCI_A0_ISR(void) {
         case USCI_UART_UCRXIFG:
                 //while(!(UCA0IFG&UCTXIFG));
                 //rxchar = UCA0RXBUF;
+                /*
                 rxbuf[rx_ptr] = UCA0RXBUF;
                 if (rx_ptr < 31){
                     rx_ptr++;
                 }
                 __no_operation();
+                */
               break;
         case USCI_UART_UCTXIFG:
             break;
@@ -85,17 +87,33 @@ int main(void) {
     init_Timer_B0();
     __bis_SR_register(GIE); //enable interrupts
 
+    putchars("\n\rProgramming LoRa Registers\n\r");
+    rfm95w_set_lora_mode(MODE_LORA);
+    rfm95w_display_register(0x01);
+    putchars("\n\r");
 
-    putchars("Before Write:\n\r");
-    rfm95w_register_dump();
-    SPI_TX(0x81, 0x08); //sleep mode
-    putchars("After Write:\n\r");
-    rfm95w_register_dump();
+    rfm95w_set_carrier_frequency(433500000);
+    rfm95w_display_register(0x06);
+    rfm95w_display_register(0x07);
+    rfm95w_display_register(0x08);
+    putchars("\n\r");
 
+    rfm95w_set_tx_power(PA_RFO, 0x0, 0x0);
+    rfm95w_display_register(0x09);
+    putchars("\n\r");
+
+    __no_operation(); //debug
     for(;;) {
-        SPI_TX(0x81, 0x01); //sleep mode
-        //int i;
-        //for (i=0;i<100;i++);
+        char j;
+        for(j=0;j<16;j++) {
+            rfm95w_set_tx_power(PA_RFO, 0x0, j);
+            char i;
+            for (i=1;i<256;i++) {
+                while(rfm95w_get_mode() != MODE_STDBY); //wait until out of TX
+                rfm95w_write_fifo(i); //send a single byte to TX buffer
+                rfm95w_set_mode(MODE_TX); //set to transmit mode
+            }
+        }
     }
 
     return 0;
