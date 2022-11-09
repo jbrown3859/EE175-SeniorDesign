@@ -89,31 +89,20 @@ int main(void) {
 
     putchars("\n\rProgramming LoRa Registers\n\r");
     rfm95w_set_lora_mode(MODE_LORA);
-    rfm95w_display_register(0x01);
-    putchars("\n\r");
-
     rfm95w_set_carrier_frequency(433500000);
-    rfm95w_display_register(0x06);
-    rfm95w_display_register(0x07);
-    rfm95w_display_register(0x08);
-    putchars("\n\r");
 
     rfm95w_set_tx_power(PA_RFO, 0x0, 0x0);
-    rfm95w_display_register(0x09);
-    putchars("\n\r");
+
+    rfm95w_set_lora_bandwidth(BW_41_7);
+    rfm95w_set_spreading_factor(8);
+
+    rfm95w_write(0x40, 0b01010101); //set DIO
 
     __no_operation(); //debug
     for(;;) {
-        char j;
-        for(j=0;j<16;j++) {
-            rfm95w_set_tx_power(PA_RFO, 0x0, j);
-            char i;
-            for (i=1;i<256;i++) {
-                while(rfm95w_get_mode() != MODE_STDBY); //wait until out of TX
-                rfm95w_write_fifo(i); //send a single byte to TX buffer
-                rfm95w_set_mode(MODE_TX); //set to transmit mode
-            }
-        }
+        rfm95w_transmit_chars("What hath god wrought?");
+        while(rfm95w_tx_done() == 0);
+        rfm95w_write(0x12, 0x08); //clear flag
     }
 
     return 0;

@@ -35,7 +35,7 @@ void rfm95w_set_mode(const char mode) {
 }
 
 char rfm95w_get_mode(void) {
-    return rfm95w_read(0x01) & 0b111; //return only mode bits
+    return (rfm95w_read(0x01) & 0b111); //return only mode bits
 }
 
 /* set register 0x01 to configure radio modulation and put radio into standby */
@@ -67,4 +67,42 @@ void rfm95w_set_tx_power(const char boost, const char max, const char power) {
 
 void rfm95w_write_fifo(const char c) {
     rfm95w_write(0x00, c);
+}
+
+/* set bandwidth */
+void rfm95w_set_lora_bandwidth(char b) {
+    char r = rfm95w_read(0x1D) & 0x0F; //clear high bits
+    rfm95w_write(0x1D, (r | b));
+}
+
+/* set spreading factor (will only write if sf is in range 6-12) */
+void rfm95w_set_spreading_factor(char sf) {
+    char r = rfm95w_read(0x1E) & 0x0F; //clear high bits
+
+    if (sf >= 6 && sf <= 12) {
+        rfm95w_write(0x1E, (r | (sf << 4)));
+    }
+}
+
+/* load chars into FIFO until null terminator is encountered and then transmit */
+void rfm95w_transmit_chars(const char* data) {
+    char c;
+    unsigned char i = 0;
+    char tx_ptr = rfm95w_read(0x0E);
+    rfm95w_write(0x0D, tx_ptr); //set FIFO pointer to transmit buffer region
+
+    c = data[i];
+    while(c != '\0') {
+        rfm95w_write_fifo(c);
+        i++;
+        c = data[i];
+    }
+
+    rfm95w_write(0x22, i); //write payload length
+    rfm95w_set_mode(MODE_TX); //set to transmit mode
+}
+
+/* tx done flag (prefer to do this in hardware with DIO0 instead) */
+char rfm95w_tx_done(void) {
+    return ((rfm95w_read(0x12) >> 3) & 0x01);
 }
