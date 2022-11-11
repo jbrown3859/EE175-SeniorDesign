@@ -3,8 +3,13 @@
 #include <serial.h>
 #include <rfm95w.h>
 
-char rxbuf[32];
+char rxbuf[128];
 char rx_ptr = 0;
+char rx_len = 0;
+
+char DIO0_mode;
+char TX_done;
+char RX_done;
 
 void init_GPIO(void) {
     PM5CTL0 &= ~LOCKLPM5; //disable high-impedance GPIO mode
@@ -14,10 +19,14 @@ void init_GPIO(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
+    P2SEL0 = 0x00;
+    P2REN = 0x00;
+    P2DIR |= (1 << 2);
+
     /* temp, delete me later */
-    P1DIR = 0xFF; P2DIR = 0xFF;
-    P1REN = 0xFF; P2REN = 0xFF;
-    P1OUT = 0x00; P2OUT = 0x00;
+    P1DIR = 0xFF;
+    P1REN = 0xFF;
+    P1OUT = 0x00;
 }
 
 void init_Timer_B0() {
@@ -85,6 +94,7 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
     init_Timer_B0();
+    rfm95w_init();
     __bis_SR_register(GIE); //enable interrupts
 
     putchars("\n\rProgramming LoRa Registers\n\r");
@@ -93,16 +103,42 @@ int main(void) {
 
     rfm95w_set_tx_power(PA_RFO, 0x0, 0x0);
 
-    rfm95w_set_lora_bandwidth(BW_41_7);
-    rfm95w_set_spreading_factor(8);
+    rfm95w_set_lora_bandwidth(BW_15_6);
+    rfm95w_set_spreading_factor(12);
 
-    rfm95w_write(0x40, 0b01010101); //set DIO
+    rfm95w_agc_auto_on(AGC_ON);
+    rfm95w_LDR_optimize(LDR_ENABLE);
+    rfm95w_set_lna_gain(LNA_G6, LNA_BOOST_LF_OFF, LNA_BOOST_HF_OFF);
+    rfm95w_set_mode(MODE_STDBY);
+
+    //rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO
+
+    rfm95w_set_DIO_mode(DIO0_RXDONE);
+    rfm95w_set_mode(MODE_RXCONTINUOUS);
+    rfm95w_display_register(0x01);
+    rfm95w_display_register(0x01);
 
     __no_operation(); //debug
+    RX_done = 0;
+    TX_done = 0;
     for(;;) {
-        rfm95w_transmit_chars("What hath god wrought?");
-        while(rfm95w_tx_done() == 0);
-        rfm95w_write(0x12, 0x08); //clear flag
+        /*
+        rfm95w_transmit_chars("What hath God wrought?\n\r");
+        while(TX_done == 0);
+        putchars("Transmission Complete\n\r");
+        TX_done = 0; //reset
+
+        unsigned int i;
+        for(i=0;i<60000;i++);
+        */
+
+        while(RX_done == 0); //await packet
+        rx_len = rfm95w_read_fifo(rxbuf); //get data
+        rxbuf[rx_len] = '\0'; //null-terminate
+        putchars(rxbuf); //print msg
+        putchars("\n\r");
+        RX_done = 0;
+        //rfm95w_write(0x12, 0x40); //clear flag
     }
 
     return 0;
