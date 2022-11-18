@@ -69,11 +69,14 @@
 #define CR_4_7 0b0110
 #define CR_4_8 0b1000
 
-#define IQ_TX 0x00
-#define IQ_RX 0x01
+#define IQ_STD 0x00
+#define IQ_INV 0x01
 
 #define MODE_LF 0x08
 #define MODE_HF 0x00
+
+/* TX interrupt */
+void set_TX_timer(char mode);
 
 /* init */
 void rfm95w_init(void);
@@ -112,6 +115,7 @@ void rfm95w_set_crc(const char c);
 void rfm95w_set_coding_rate(const char cr);
 void rfm95w_set_IQ(const char m);
 void rfm95w_set_sync_word(const char s);
+unsigned char rfm95w_get_packet_rssi(void);
 
 unsigned char rfm95w_read_fifo(char* buffer);
 void rfm95w_transmit_chars(const char* data);

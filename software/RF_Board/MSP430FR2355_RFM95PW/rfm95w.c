@@ -1,10 +1,34 @@
 #include <msp430.h>
 #include <serial.h>
 #include <rfm95w.h>
+#include <util.h>
 
 extern char DIO0_mode;
 extern char TX_done;
 extern char RX_done;
+
+extern char TX_timeout;
+
+/* timeout vector */
+#pragma vector=TIMER0_B0_VECTOR
+__interrupt void TIMER0_B0_VECTOR_ISR (void) {
+    TX_timeout = 1;
+    TB0CCTL0 &= ~CCIFG; //reset interrupt
+}
+
+void set_TX_timer(char mode) {
+    if (mode == 1) { //enable timer
+        TB0CTL |= MC__UP | TBCLR;
+
+        TB0CCTL0 = CCIE; //interrupt mode
+        TB0CCR0 = 65535; //trigger value
+        TB0CTL = TBSSEL__ACLK | MC__UP | ID_3 | TBCLR; //slow clock, count up, divide by 8, clear at start
+    }
+    else { //disable timer
+        TB0CTL |= TBCLR;
+        TB0CTL &= ~(0b11 << 4); //stop timer
+    }
+}
 
 /* vector for interrupt on P2.0 triggered by DIO0 on LoRa */
 #pragma vector=PORT2_VECTOR
@@ -39,11 +63,10 @@ void rfm95w_init(void) {
 
 /* reset the radio */
 void rfm95w_reset(void) {
-    unsigned long long i;
     P2OUT &= ~(1 << 2); //pull reset low
-    for(i=0;i<200000;i++); //software delay
+    hardware_delay(1000);
     P2OUT |= (1 << 2); //pull high
-    for(i=0;i<200000;i++);
+    hardware_delay(1000);
 }
 
 /* read over SPI */
@@ -217,11 +240,11 @@ void rfm95w_set_coding_rate(const char cr) {
 /* set normal/inverted IQ */
 void rfm95w_set_IQ(const char m) {
     switch (m) {
-    case IQ_TX:
+    case IQ_STD:
         rfm95w_write(0x33, 0x27);
         rfm95w_write(0x3B, 0x1D);
         break;
-    case IQ_RX:
+    case IQ_INV:
         rfm95w_write(0x33, 0x67);
         rfm95w_write(0x3B, 0x19);
         break;
@@ -231,6 +254,11 @@ void rfm95w_set_IQ(const char m) {
 /* set sync word */
 void rfm95w_set_sync_word(const char s) {
     rfm95w_write(0x39, s);
+}
+
+/* get rssi of last packet */
+unsigned char rfm95w_get_packet_rssi(void) {
+    return (unsigned char)rfm95w_read(0x1a);
 }
 
 
