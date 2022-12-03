@@ -34,16 +34,14 @@ int main(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
-    unsigned char i;
-    for (i=0;i<=0x3F;i++) {
-        char c;
-        putchars("Address: ");
-        print_hex(i);
-        c = cc2500_read(i);
-        putchars(" Data: ");
-        print_hex(c);
-        putchars("\n\r");
-    }
+    putchars("\n\rRegister Dump\n\r");
+    cc2500_set_base_frequency(2420000000);
+    cc2500_set_IF_frequency(457000);
+    cc2500_register_dump();
+    //cc2500_write(0x00, 0x29);
+    putchars("\n\rResetting Chip\n\r");
+    cc2500_write(0x30,0x00); //reset chip
+    cc2500_register_dump();
 
 	/* infinite loop */
 	for(;;){
