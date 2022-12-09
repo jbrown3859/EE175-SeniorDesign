@@ -126,6 +126,21 @@ void init_UART(unsigned long baud) {
     UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
 }
 
+/* UART vector */
+#pragma vector=USCI_A0_VECTOR
+__interrupt void USCI_A0_ISR(void) {
+    switch(__even_in_range(UCA0IV,USCI_UART_UCTXCPTIFG)) {
+        case USCI_NONE: break;
+        case USCI_UART_UCRXIFG:
+            UART_RXBUF[UART_RX_PTR] = UCA0RXBUF;
+            UART_RX_PTR++;
+            break;
+        case USCI_UART_UCTXIFG: break;
+        case USCI_UART_UCSTTIFG: break;
+        case USCI_UART_UCTXCPTIFG: break;
+    }
+}
+
 /* Grab char from the RX buffer IF it is full, but do not wait UNTIL it's full */
 int getchar() {
     int chr = -1;
@@ -244,6 +259,20 @@ __interrupt void TIMER1_B0_VECTOR_ISR (void) {
     TB1CCTL0 &= ~CCIFG; //reset interrupt
 }
 
+/* SPI vector */
+#pragma vector=USCI_B1_VECTOR
+__interrupt void USCI_B1_ISR(void) {
+    switch(__even_in_range(UCB1IV,USCI_UART_UCTXCPTIFG))
+    {
+        case USCI_NONE: break;
+        case USCI_UART_UCRXIFG: //this is always set on every transmit
+             break;
+        case USCI_UART_UCTXIFG:
+            break;
+        case USCI_UART_UCSTTIFG: break;
+        case USCI_UART_UCTXCPTIFG: break;
+    }
+}
 
 /* Transmit address + char */
 void SPI_TX(char addr, char c) {

@@ -11,7 +11,11 @@
 void Software_Trim(void);
 void init_clock(void);
 
-/* UART Functions */
+/* UART Functions and Variables */
+extern char UART_RXBUF[256];
+extern unsigned char UART_RX_PTR;
+extern unsigned char UART_RX_BASE;
+
 void init_UART(unsigned long);
 
 int getchar(void);

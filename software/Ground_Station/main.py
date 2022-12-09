@@ -6,12 +6,13 @@ import numpy as np
 from mss import mss
 
 import tkinter as tk
-
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
+
+import serial
+import serial.tools.list_ports
 
 '''
 Arducam OV2640 claims to have the capability to output raw RGB565
@@ -61,6 +62,13 @@ class MainWindow():
         self.interval = 20
         self.widgets = {}
         
+        #radio serial port instances
+        self.UHF = serial.Serial()
+        self.UHF.baudrate = 115200
+        self.SBand = serial.Serial()
+        self.SBand.baudrate = 115200
+        self.SBand.port = 'COM6'
+        
         #image canvas
         self.widgets['img_title'] = tk.Label(self.window, text="S-Band Image Downlink", font=("Arial", 25))
         self.widgets['img_title'].grid(row=0, column=0, columnspan=2,sticky='NSEW')
@@ -79,7 +87,9 @@ class MainWindow():
         self.widgets['sband_status'].grid(row=4,column=0,sticky='NSEW')
         tk.Label(self.widgets['sband_status'], text="S-Band Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
         tk.Label(self.widgets['sband_status'], text="Serial:", font=("Arial", 15)).grid(row=1,column=0)
-        tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red").grid(row=1,column=1)
+        #tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red").grid(row=1,column=1)
+        self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
+        self.widgets['sband_connected'].grid(row=1,column=1)
         
         tk.Label(self.widgets['sband_status'], text="Last Packet:", font=("Arial", 15)).grid(row=2,column=0)
         tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=2,column=1)
@@ -134,6 +144,7 @@ class MainWindow():
             window.grid_rowconfigure(i,weight=1)
         '''
         self.update_image()
+        self.serial_comms()
         
     def update_image(self):
         frame = self.cap.read()[1]
@@ -148,6 +159,29 @@ class MainWindow():
         
         self.widgets['canvas'].create_image(0, 0, anchor=tk.NW, image=self.image)
         self.window.after(self.interval, self.update_image)
+        
+    def serial_comms(self):
+        ports = serial.tools.list_ports.comports()
+        portnames = []
+        
+        for port, desc, hwid in ports:
+            if 'MSP Application UART' in desc:
+                portnames.append(port)
+        
+        if 'COM6' not in portnames and self.SBand.is_open:
+            self.SBand.close()
+            self.widgets['sband_connected'].destroy()
+            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
+            self.widgets['sband_connected'].grid(row=1,column=1)
+        elif 'COM6' in portnames and not self.SBand.is_open:
+            self.SBand.open()
+            self.widgets['sband_connected'].destroy()
+            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Connected", font=("Arial", 15), fg="green")
+            self.widgets['sband_connected'].grid(row=1,column=1)
+        
+        #print(self.SBand.read(1000))
+        self.window.update()
+        self.window.after(self.interval, self.serial_comms)
         
 
 def main():
