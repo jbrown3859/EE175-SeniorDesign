@@ -14,80 +14,10 @@ from matplotlib.figure import Figure
 import serial
 import serial.tools.list_ports
 
-'''
-Arducam OV2640 claims to have the capability to output raw RGB565
-This means 5 bits of R, 6 bits of G, 5 bits of B in two bytes as opposed to three
-
-OpenCV uses BGR instead of RGB for some reason
-
-Must convert from RGB565 -> BGR
-'''
+import radio
+import imaging
 
 res = [160, 120]
-
-def BGRtoGRB422(image, width, height):
-    converted_image = np.zeros((height, width), dtype='uint8')
-    image = image.astype(int)
-
-    for i in range(0, width):
-        for j in range(0, height):
-            converted_image[j][i] = 0
-            converted_image[j][i] |= (image[j][i][0] >> 6) & 0x03 #B
-            converted_image[j][i] |= (image[j][i][1]) & 0xF0 #G
-            converted_image[j][i] |= (image[j][i][2] >> 4) & 0x0C #R
-    
-    return converted_image
-    
-def GRB422toBGR(image, width, height):
-    converted_image = np.zeros((height, width, 3), dtype='uint8')
-    image = image.astype(int)
-    
-    for i in range(0, width):
-        for j in range(0, height):
-            converted_image[j][i][0] = ((image[j][i] & 0x03) << 6) #B
-            converted_image[j][i][1] = ((image[j][i] & 0xF0)) #G
-            converted_image[j][i][2] = ((image[j][i] & 0x0C) << 4) #R
-            
-    return converted_image
-    
-class Radio():
-    def __init__(self, type, baudrate):
-        self.type = type #radio type string
-        self.port = serial.Serial()
-        self.port.baudrate = baudrate
-        self.port.timeout = 0.1 #seconds
-        self.portname = None
-        self.frequency = None
-        self.last_packet = None
-        
-    def attempt_connection(self, portname):
-        self.port.port = portname
-        print("Attempting to connect {} on port {}".format(self.type, portname))
-        try:
-            self.port.open()
-            self.port.reset_input_buffer() #flush buffer
-            self.port.write(b'a') #send info request
-            reply = self.port.read(13) #get returned info
-            #print(reply)
-            
-            if len(reply) >= 3 and reply[0] == 170 and reply[1] == 170: #valid preamble
-                if chr(reply[2]) == 'U':
-                    if self.type == "UHF":
-                        print("UHF Modem Connection Accepted")
-                    else:
-                        self.port.close()
-                elif chr(reply[2]) == 'S':
-                    if self.type == "SBand":
-                        print("S-Band Modem Connection Accepted")
-                    else:
-                        self.port.close()
-                else:   
-                    self.port.close()
-            else:
-                self.port.close()
-        except serial.serialutil.SerialException:
-            if self.port.is_open:
-                self.port.close()
 
 class MainWindow():
     def __init__(self, window, cap):
@@ -95,19 +25,12 @@ class MainWindow():
         self.cap = cap
         self.width = res[0]*4
         self.height = res[1]*4
-        self.interval = 20
         self.widgets = {}
         
         #radio serial port instances
-        self.UHF = Radio("UHF", 115200)
-        self.SBand = Radio("SBand", 115200)
-        '''
-        self.UHF = serial.Serial()
-        self.UHF.baudrate = 115200
-        self.SBand = serial.Serial()
-        self.SBand.baudrate = 115200
-        self.SBand.port = 'COM6'
-        '''
+        self.UHF = radio.Radio("UHF", 115200)
+        self.SBand = radio.Radio("SBand", 115200)
+        
         #image canvas
         self.widgets['img_title'] = tk.Label(self.window, text="S-Band Image Downlink", font=("Arial", 25))
         self.widgets['img_title'].grid(row=0, column=0, columnspan=2,sticky='NSEW')
@@ -126,7 +49,6 @@ class MainWindow():
         self.widgets['sband_status'].grid(row=4,column=0,sticky='NSEW')
         tk.Label(self.widgets['sband_status'], text="S-Band Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
         tk.Label(self.widgets['sband_status'], text="Serial:", font=("Arial", 15)).grid(row=1,column=0)
-        #tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red").grid(row=1,column=1)
         self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
         self.widgets['sband_connected'].grid(row=1,column=1)
         
@@ -134,7 +56,8 @@ class MainWindow():
         tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=2,column=1)
         
         tk.Label(self.widgets['sband_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
-        tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
+        self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['sband_frequency'].grid(row=3,column=1)
         
         self.widgets['uhf_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['uhf_status'].grid(row=4,column=1,sticky='NSEW')
@@ -184,12 +107,14 @@ class MainWindow():
         '''
         self.update_image()
         self.connect_radios()
+        self.get_radio_info()
+        self.monitor_radio_flags()
         
     def update_image(self):
         frame = self.cap.read()[1]
         frame = cv.resize(frame, (res[0], res[1]))
-        frame = BGRtoGRB422(frame, res[0], res[1])
-        frame = GRB422toBGR(frame, res[0], res[1])
+        frame = imaging.BGRtoGRB422(frame, res[0], res[1])
+        frame = imaging.GRB422toBGR(frame, res[0], res[1])
         frame = cv.resize(frame, (self.width, self.height)) 
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         
@@ -197,7 +122,7 @@ class MainWindow():
         self.image = ImageTk.PhotoImage(frame) # to ImageTk format
         
         self.widgets['canvas'].create_image(0, 0, anchor=tk.NW, image=self.image)
-        self.window.after(self.interval, self.update_image)
+        self.window.after(20, self.update_image)
         
     def connect_radios(self):
         ports = serial.tools.list_ports.comports()
@@ -226,9 +151,25 @@ class MainWindow():
             self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
             self.widgets['sband_connected'].grid(row=1,column=1)
         
-        #print(self.SBand.read(1000))
         self.window.update()
         self.window.after(5000, self.connect_radios)
+        
+    def get_radio_info(self):
+        self.widgets['sband_frequency'].destroy()
+        info = self.SBand.get_info()
+        
+        if self.SBand.port.is_open and info:
+            self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=info['frequency'].lstrip('0') + " Hz", font=("Arial", 15), fg="green")
+        else:
+            self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
+        
+        self.widgets['sband_frequency'].grid(row=3,column=1)
+        
+        self.window.after(5000, self.get_radio_info)
+        
+    def monitor_radio_flags(self):
+        self.SBand.monitor_flags()
+        self.window.after(100, self.monitor_radio_flags)
         
 
 def main():
