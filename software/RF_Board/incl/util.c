@@ -46,3 +46,15 @@ void clear_bytes(char* s, unsigned char l) {
         s[i] = 0x00;
     }
 }
+
+/* power function */
+unsigned long long pow(unsigned long long base, unsigned long long exp) {
+    unsigned long long result = 1;
+    unsigned long long i;
+
+    for(i=0;i<exp;i++) {
+        result *= base;
+    }
+
+    return result;
+}

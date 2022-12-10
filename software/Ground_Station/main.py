@@ -49,9 +49,45 @@ def GRB422toBGR(image, width, height):
             converted_image[j][i][2] = ((image[j][i] & 0x0C) << 4) #R
             
     return converted_image
-
-def callback():
-    print("callback called")
+    
+class Radio():
+    def __init__(self, type, baudrate):
+        self.type = type #radio type string
+        self.port = serial.Serial()
+        self.port.baudrate = baudrate
+        self.port.timeout = 0.1 #seconds
+        self.portname = None
+        self.frequency = None
+        self.last_packet = None
+        
+    def attempt_connection(self, portname):
+        self.port.port = portname
+        print("Attempting to connect {} on port {}".format(self.type, portname))
+        try:
+            self.port.open()
+            self.port.reset_input_buffer() #flush buffer
+            self.port.write(b'a') #send info request
+            reply = self.port.read(13) #get returned info
+            #print(reply)
+            
+            if len(reply) >= 3 and reply[0] == 170 and reply[1] == 170: #valid preamble
+                if chr(reply[2]) == 'U':
+                    if self.type == "UHF":
+                        print("UHF Modem Connection Accepted")
+                    else:
+                        self.port.close()
+                elif chr(reply[2]) == 'S':
+                    if self.type == "SBand":
+                        print("S-Band Modem Connection Accepted")
+                    else:
+                        self.port.close()
+                else:   
+                    self.port.close()
+            else:
+                self.port.close()
+        except serial.serialutil.SerialException:
+            if self.port.is_open:
+                self.port.close()
 
 class MainWindow():
     def __init__(self, window, cap):
@@ -63,12 +99,15 @@ class MainWindow():
         self.widgets = {}
         
         #radio serial port instances
+        self.UHF = Radio("UHF", 115200)
+        self.SBand = Radio("SBand", 115200)
+        '''
         self.UHF = serial.Serial()
         self.UHF.baudrate = 115200
         self.SBand = serial.Serial()
         self.SBand.baudrate = 115200
         self.SBand.port = 'COM6'
-        
+        '''
         #image canvas
         self.widgets['img_title'] = tk.Label(self.window, text="S-Band Image Downlink", font=("Arial", 25))
         self.widgets['img_title'].grid(row=0, column=0, columnspan=2,sticky='NSEW')
@@ -144,7 +183,7 @@ class MainWindow():
             window.grid_rowconfigure(i,weight=1)
         '''
         self.update_image()
-        self.serial_comms()
+        self.connect_radios()
         
     def update_image(self):
         frame = self.cap.read()[1]
@@ -160,28 +199,36 @@ class MainWindow():
         self.widgets['canvas'].create_image(0, 0, anchor=tk.NW, image=self.image)
         self.window.after(self.interval, self.update_image)
         
-    def serial_comms(self):
+    def connect_radios(self):
         ports = serial.tools.list_ports.comports()
         portnames = []
         
         for port, desc, hwid in ports:
-            if 'MSP Application UART' in desc:
-                portnames.append(port)
+            portnames.append(port)
         
-        if 'COM6' not in portnames and self.SBand.is_open:
-            self.SBand.close()
-            self.widgets['sband_connected'].destroy()
-            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
-            self.widgets['sband_connected'].grid(row=1,column=1)
-        elif 'COM6' in portnames and not self.SBand.is_open:
-            self.SBand.open()
+        if self.SBand.port.is_open and self.SBand.port.port not in portnames: #close port if disconnected
+            self.SBand.port.close()
+        if self.UHF.port.is_open and self.UHF.port.port not in portnames: #close port if disconnected
+            self.UHF.port.close()
+        
+        for port in portnames:
+            if not self.SBand.port.is_open: #if port is closed
+                self.SBand.attempt_connection(port)
+            if not self.UHF.port.is_open:
+                self.UHF.attempt_connection(port)
+            
+        if self.SBand.port.is_open:
             self.widgets['sband_connected'].destroy()
             self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Connected", font=("Arial", 15), fg="green")
+            self.widgets['sband_connected'].grid(row=1,column=1)
+        else:
+            self.widgets['sband_connected'].destroy()
+            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
             self.widgets['sband_connected'].grid(row=1,column=1)
         
         #print(self.SBand.read(1000))
         self.window.update()
-        self.window.after(self.interval, self.serial_comms)
+        self.window.after(5000, self.connect_radios)
         
 
 def main():

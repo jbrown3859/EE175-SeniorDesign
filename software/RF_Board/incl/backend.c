@@ -1,6 +1,5 @@
 #include <msp430.h>
 #include <backend.h>
-
 #include <serial.h>
 
 char UART_RXBUF[256];
@@ -30,10 +29,13 @@ void main_loop(void) {
     enum State state = INIT;
     char command;
 
+    struct RadioInfo info;
+
     for (;;) {
         //state actions
         switch(state) {
         case INIT:
+            info.frequency = 433500000;
             state = WAIT;
             break;
         case WAIT:
@@ -48,12 +50,17 @@ void main_loop(void) {
             }
             break;
         case SEND_INFO:
+            putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
+            putchar(0xAA);
             #ifdef RADIOTYPE_UHF
-            putchar(0x41);
+            putchar('U');
             #endif
             #ifdef RADIOTYPE_SBAND
-            putchar(0x42);
+            putchar('S');
             #endif
+            print_dec(info.frequency, 10);
+
+            //putchars("\n\r");
             state = WAIT;
             break;
         }

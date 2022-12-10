@@ -23,6 +23,7 @@ void putchar(char c);
 void putchars(char* msg);
 void print_binary(char b);
 void print_hex(char h);
+void print_dec(const long long data, const unsigned char len);
 
 /* SPI functions */
 void init_SPI_master(void);

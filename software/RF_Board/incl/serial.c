@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include <serial.h>
+#include <util.h>
 
 #define MCLK_FREQ_MHZ 8                     // MCLK = 8MHz
 
@@ -202,6 +203,13 @@ void print_hex(char h) {
         else { //letter
             putchar(nibble + 55);
         }
+    }
+}
+
+void print_dec(const long long data, const unsigned char len) {
+    int i;
+    for (i = (len-1); i>=0; i--) {
+        putchar(((data / pow(10,i)) % 10) + 48);
     }
 }
 
