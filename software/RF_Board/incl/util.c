@@ -2,6 +2,29 @@
 
 #include <msp430.h>
 
+extern char timeout_flag; //must be reset by user
+
+/* timeout vector */
+#pragma vector=TIMER0_B0_VECTOR
+__interrupt void TIMER0_B0_VECTOR_ISR (void) {
+    timeout_flag = 1;
+    TB0CCTL0 &= ~CCIFG; //reset interrupt
+}
+
+void hardware_timeout(unsigned int d) {
+    if (d > 0) { //enable timer
+            TB0CTL |= MC__UP | TBCLR;
+
+            TB0CCTL0 = CCIE; //interrupt mode
+            TB0CCR0 = d; //trigger value
+            TB0CTL = TBSSEL__ACLK | MC__UP | ID_3 | TBCLR; //slow clock, count up, divide by 8, clear at start
+    }
+    else { //disable timer
+        TB0CTL |= TBCLR;
+        TB0CTL &= ~(0b11 << 4); //stop timer
+    }
+}
+
 /* delay ISR */
 #pragma vector=TIMER2_B0_VECTOR
 __interrupt void TIMER2_B0_VECTOR_ISR (void) {

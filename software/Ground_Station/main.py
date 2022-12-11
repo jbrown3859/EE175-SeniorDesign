@@ -155,15 +155,16 @@ class MainWindow():
         self.window.after(5000, self.connect_radios)
         
     def get_radio_info(self):
-        self.widgets['sband_frequency'].destroy()
         info = self.SBand.get_info()
         
         if self.SBand.port.is_open and info:
+            self.widgets['sband_frequency'].destroy()
             self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=info['frequency'].lstrip('0') + " Hz", font=("Arial", 15), fg="green")
-        else:
+            self.widgets['sband_frequency'].grid(row=3,column=1)
+        elif not self.SBand.port.is_open:
+            self.widgets['sband_frequency'].destroy()
             self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
-        
-        self.widgets['sband_frequency'].grid(row=3,column=1)
+            self.widgets['sband_frequency'].grid(row=3,column=1)
         
         self.window.after(5000, self.get_radio_info)
         

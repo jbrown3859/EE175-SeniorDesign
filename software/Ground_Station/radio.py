@@ -53,16 +53,22 @@ class Radio():
             if self.port.is_open and self.port.in_waiting == 0: #if there is no flag waiting in the buffer
                 self.port.write(b'a') #send info request
                 reply = self.port.read(13)
-                info["frequency"] = reply[3:13].decode("utf-8")
+                if reply[0] == 170 and reply[1] == 170:
+                    info["frequency"] = reply[3:13].decode("utf-8")
         except serial.serialutil.SerialException:
             pass
-
+        except UnicodeDecodeError:
+            pass
+            
         return info
         
     def monitor_flags(self): #monitor communication initiated by the radio module
         try:
-            if self.port.is_open and self.port.in_waiting != 0:
-                print("Buffer was not empty!")
-                print(self.port.read(self.port.in_waiting)) #read buffer
+            if self.port.is_open and self.port.in_waiting != 0: #if there is data in buffer
+                reply = self.port.read(self.port.in_waiting)
+                
+                if reply[0] == 52: #packet recieved
+                    print("Packet recieved, size: {}".format(reply[1]))
+                    
         except serial.serialutil.SerialException:
             pass
