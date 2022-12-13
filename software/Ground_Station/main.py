@@ -12,6 +12,7 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
+from matplotlib import style
 
 import serial
 import serial.tools.list_ports
@@ -22,22 +23,40 @@ import imaging
 res = [160, 120]
 
 class MainWindow():
-    def __init__(self, window, cap):
+    def __init__(self, window):
         self.window = window
-        self.cap = cap
         self.width = res[0]*4
         self.height = res[1]*4
         self.widgets = {}
         self.frame = np.zeros((120, 160), dtype='uint8') #image frame
-        self.telemetry = [] #list of dicts
-        
-        self.accel_plot = Figure(figsize=(10, 4), dpi=50)
-        self.accel_ax = self.accel_plot.add_subplot()
-        self.accel_animation = animation.FuncAnimation(self.accel_plot, self.plot_telemetry, interval=1000, blit=False)
         
         #radio serial port instances
         self.UHF = radio.Radio("UHF", 115200)
         self.SBand = radio.Radio("SBand", 115200)
+        
+        #telemetry database
+        self.telemetry_packets = [] #list of dicts
+        self.t = [];
+        self.a_x = []
+        self.a_y = []
+        self.a_z = []
+        
+        #plots
+        style.use('ggplot')
+        self.accel_plot = Figure(figsize=(10, 4), dpi=50)
+        self.accel_ax = self.accel_plot.add_subplot()
+        self.accel_ax.set_xlim(0, 100)
+        self.accel_ax.set_ylim(0, 255)
+        self.accel_x, = self.accel_ax.plot(self.t, self.a_x, label='x')
+        self.accel_y, = self.accel_ax.plot(self.t, self.a_y, label='y')
+        self.accel_z, = self.accel_ax.plot(self.t, self.a_z, label='z')
+        self.accel_ax.set_xlabel("Time")
+        self.accel_ax.set_ylabel("Acceleration")
+        self.accel_ax.legend()
+        self.accel_canvas = FigureCanvasTkAgg(self.accel_plot, self.window)
+        self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=2)
+        self.accel_animation = animation.FuncAnimation(self.accel_plot, self.animate_plot, interval=100, blit=False)
+       
         
         #image canvas
         self.widgets['img_title'] = tk.Label(self.window, text="S-Band Image Downlink", font=("Arial", 25))
@@ -80,42 +99,12 @@ class MainWindow():
         tk.Label(self.widgets['uhf_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
         tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
         
-        #embedded matplotlib
-        #fig = Figure(figsize=(10, 4), dpi=50)
-        #t = np.arange(0, 6, 1)
-        #ax = fig.add_subplot()
-        #ax.plot([1,4,5,6,2,3], label='x')
-        #ax.plot([1,2,3,4,5,6], label='y')
-        #ax.plot([3,3,3,2,4,3], label='z')
-        #ax.legend()
-        #ax.set_xlabel("time [s]")
-        #ax.set_ylabel("Acceleration")
-        
-        fig2 = Figure(figsize=(10, 4), dpi=50)
-        t = np.arange(0, 6, 1)
-        ax2 = fig2.add_subplot()
-        #ax2.plot([0,0,0,0,0,0], label='x')
-        #ax2.plot([0,0,1,1,0,0], label='y')
-        #ax2.plot([9.8,9.8,9.8,9.8,9.8,9.8], label='z')
-        ax2.legend()
-        ax2.set_xlabel("time [s]")
-        ax2.set_ylabel("Angular Rate")
-        
-        figure_canvas = FigureCanvasTkAgg(self.accel_plot, master=self.window)
-        self.widgets['plot_accel'] = figure_canvas.get_tk_widget()
-        self.widgets['plot_accel'].grid(row=1, column=3, columnspan=2,sticky='NSEW')
-        
-        figure_canvas = FigureCanvasTkAgg(fig2, master=self.window)
-        self.widgets['plot_gyro'] = figure_canvas.get_tk_widget()
-        self.widgets['plot_gyro'].grid(row=2, column=3, columnspan=2,sticky='NSEW')
-        
         '''
         for i in range(0,4):
             window.grid_columnconfigure(i,weight=1)
             window.grid_rowconfigure(i,weight=1)
         '''
         self.update_image()
-        #self.plot_telemetry()
         self.connect_radios()
         self.get_radio_info()
         self.radio_poll_rx()
@@ -131,36 +120,25 @@ class MainWindow():
         self.widgets['canvas'].create_image(0, 0, anchor=tk.NW, image=self.image)
         self.window.after(500, self.update_image)
         
-    def plot_telemetry(self, i):
-        a_x = []
-        a_y = []
-        a_z = []
-        
-        for packet in self.telemetry:
-            a_x.append(packet['Acceleration'][0])
-            a_y.append(packet['Acceleration'][1])
-            a_z.append(packet['Acceleration'][2])
-            
-            
-        #accel = Figure(figsize=(10, 4), dpi=50)
-        t = np.arange(0, len(self.telemetry), 1)
-        #ax = accel.add_subplot()
-        self.accel_ax.plot(a_x, label='x')
-        self.accel_ax.plot(a_y, label='y')
-        self.accel_ax.plot(a_z, label='z')
-        self.accel_ax.legend()
-        self.accel_ax.set_xlabel("Time")
-        self.accel_ax.set_ylabel("Acceleration")
-            
-        #self.widgets['plot_accel'].destroy()
-        #figure_canvas = FigureCanvasTkAgg(accel, master=self.window)
-        #figure_canvas.draw()
-        #self.widgets['plot_accel'] = figure_canvas.get_tk_widget()
-        #self.widgets['plot_accel'].grid(row=1, column=3, columnspan=2,sticky='NSEW')
-        
-        #self.window.update()
-        #self.window.after(2000, self.plot_telemetry)
-        
+    def animate_plot(self, i):
+        try:
+            for packet in self.telemetry_packets:
+                if (len(self.a_x) == 100):
+                    self.a_x.pop(0)
+                    self.a_y.pop(0)
+                    self.a_z.pop(0)
+                else:
+                    self.t.append(len(self.a_x))
+                
+                self.a_x.append(packet['Acceleration'][0])
+                self.a_y.append(packet['Acceleration'][1])
+                self.a_z.append(packet['Acceleration'][2])
+                self.accel_x.set_data(self.t, self.a_x)
+                self.accel_y.set_data(self.t, self.a_y)
+                self.accel_z.set_data(self.t, self.a_z)
+        except IndexError:
+            pass
+    
     def connect_radios(self):
         ports = serial.tools.list_ports.comports()
         portnames = []
@@ -253,13 +231,13 @@ class MainWindow():
                             packet_data['Angular Rate'] = packet[4:7]
                             packet_data['Magnetic Field'] = packet[7:10]
                             
-                            if (len(self.telemetry) == 100):
-                                self.telemetry.pop(0)
+                            if (len(self.telemetry_packets) == 100):
+                                self.telemetry_packets.pop(0)
                             
-                            self.telemetry.append(packet_data)
+                            self.telemetry_packets.append(packet_data)
                         
                     
-        except serial.serialutil.SerialException:
+        except (serial.serialutil.SerialException, IndexError):
             pass
         
         self.window.after(10, self.radio_poll_rx)
@@ -270,7 +248,7 @@ def main():
     
     root = tk.Tk()
     root.title("Groundstation")
-    MainWindow(root, cv.VideoCapture(0))
+    MainWindow(root)
     root.mainloop()
     
 if __name__ == "__main__":
