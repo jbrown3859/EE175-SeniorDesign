@@ -1,5 +1,6 @@
 import serial
 import serial.tools.list_ports
+import time
 
 class Radio():
     def __init__(self, type, baudrate):
@@ -64,10 +65,14 @@ class Radio():
             
     def get_packet(self, size):
         self.port.write(b'c')
-        return self.port.read(size)
+        packet = self.port.read(size)
+        self.last_packet = time.time()
+        return packet
         
     def burst_read(self, packetsize, packetnum):
         self.port.write(b'd')
         self.port.write(packetsize.to_bytes(1, byteorder='big'))
         self.port.write(packetnum.to_bytes(1, byteorder='big'))
-        return self.port.read(packetsize * packetnum)
+        packets = self.port.read(packetsize * packetnum)
+        self.last_packet = time.time()
+        return packets
