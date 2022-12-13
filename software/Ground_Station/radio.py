@@ -6,7 +6,7 @@ class Radio():
         self.type = type #radio type string
         self.port = serial.Serial()
         self.port.baudrate = baudrate
-        self.port.timeout = 0.1 #seconds
+        self.port.timeout = 0.5 #seconds
         self.portname = None
         self.frequency = None
         self.last_packet = None
@@ -49,26 +49,25 @@ class Radio():
                 
     def get_info(self):
         info = {}
-        try:
-            if self.port.is_open and self.port.in_waiting == 0: #if there is no flag waiting in the buffer
-                self.port.write(b'a') #send info request
-                reply = self.port.read(13)
-                if reply[0] == 170 and reply[1] == 170:
-                    info["frequency"] = reply[3:13].decode("utf-8")
-        except serial.serialutil.SerialException:
-            pass
-        except UnicodeDecodeError:
-            pass
-            
+        self.port.write(b'a') #send info request
+        reply = self.port.read(13)
+        if reply[0] == 170 and reply[1] == 170:
+            info["frequency"] = reply[3:13].decode("utf-8")
+        
         return info
         
-    def monitor_flags(self): #monitor communication initiated by the radio module
-        try:
-            if self.port.is_open and self.port.in_waiting != 0: #if there is data in buffer
-                reply = self.port.read(self.port.in_waiting)
-                
-                if reply[0] == 52: #packet recieved
-                    print("Packet recieved, size: {}".format(reply[1]))
-                    
-        except serial.serialutil.SerialException:
-            pass
+    def poll_rx(self): #poll rx to get the number of packets in queue
+        self.port.write(b'b') #get rx info
+        reply = self.port.read(5)
+        #print(reply)
+        return reply
+            
+    def get_packet(self, size):
+        self.port.write(b'c')
+        return self.port.read(size)
+        
+    def burst_read(self, packetsize, packetnum):
+        self.port.write(b'd')
+        self.port.write(packetsize.to_bytes(1, byteorder='big'))
+        self.port.write(packetnum.to_bytes(1, byteorder='big'))
+        return self.port.read(packetsize * packetnum)

@@ -26,6 +26,7 @@ class MainWindow():
         self.width = res[0]*4
         self.height = res[1]*4
         self.widgets = {}
+        self.frame = np.zeros((120, 160), dtype='uint8')
         
         #radio serial port instances
         self.UHF = radio.Radio("UHF", 115200)
@@ -108,13 +109,14 @@ class MainWindow():
         self.update_image()
         self.connect_radios()
         self.get_radio_info()
-        self.monitor_radio_flags()
+        self.radio_poll_rx()
         
     def update_image(self):
-        frame = self.cap.read()[1]
-        frame = cv.resize(frame, (res[0], res[1]))
-        frame = imaging.BGRtoGRB422(frame, res[0], res[1])
-        frame = imaging.GRB422toBGR(frame, res[0], res[1])
+        #frame = self.cap.read()[1]
+        #frame = cv.resize(frame, (res[0], res[1]))
+        #frame = imaging.BGRtoGRB422(frame, res[0], res[1])
+        
+        frame = imaging.GRB422toBGR(self.frame, res[0], res[1])
         frame = cv.resize(frame, (self.width, self.height)) 
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         
@@ -122,7 +124,7 @@ class MainWindow():
         self.image = ImageTk.PhotoImage(frame) # to ImageTk format
         
         self.widgets['canvas'].create_image(0, 0, anchor=tk.NW, image=self.image)
-        self.window.after(20, self.update_image)
+        self.window.after(500, self.update_image)
         
     def connect_radios(self):
         ports = serial.tools.list_ports.comports()
@@ -155,24 +157,61 @@ class MainWindow():
         self.window.after(5000, self.connect_radios)
         
     def get_radio_info(self):
-        info = self.SBand.get_info()
-        
-        if self.SBand.port.is_open and info:
-            self.widgets['sband_frequency'].destroy()
-            self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=info['frequency'].lstrip('0') + " Hz", font=("Arial", 15), fg="green")
-            self.widgets['sband_frequency'].grid(row=3,column=1)
-        elif not self.SBand.port.is_open:
-            self.widgets['sband_frequency'].destroy()
-            self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
-            self.widgets['sband_frequency'].grid(row=3,column=1)
+        try:
+            if self.SBand.port.is_open:
+                info = self.SBand.get_info()
+                if info:
+                    self.widgets['sband_frequency'].destroy()
+                    self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=info['frequency'].lstrip('0') + " Hz", font=("Arial", 15), fg="green")
+                    self.widgets['sband_frequency'].grid(row=3,column=1)
+            elif not self.SBand.port.is_open:
+                self.widgets['sband_frequency'].destroy()
+                self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
+                self.widgets['sband_frequency'].grid(row=3,column=1)
+        except serial.serialutil.SerialException:
+            pass
+        except UnicodeDecodeError:
+            pass
+        except IndexError:
+            pass
         
         self.window.after(5000, self.get_radio_info)
         
-    def monitor_radio_flags(self):
-        self.SBand.monitor_flags()
-        self.window.after(100, self.monitor_radio_flags)
+    def radio_poll_rx(self):
+        try:
+            if self.SBand.port.is_open:
+                status = self.SBand.poll_rx()
+                if status[1] != 0:
+                    '''
+                    packet = self.SBand.get_packet(status[4])
+                    if (packet[0] & 0x80 == 0x80) and (len(packet) == 18): #if image
+                        index = int.from_bytes(packet[0:2], 'big')
+                        index &= ~0x8000
+                        
+                        for i in range(0,16):
+                            self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
+                    '''
+                    packets = self.SBand.burst_read(status[4], status[1])
+                    if (status[4] == 18): #if image packet
+                        for i in range(0, status[1]):
+                            packet = packets[(18*i):(18*(i+1))]
+                            index = int.from_bytes(packet[0:2], 'big')
+                            index &= ~0x8000
+                            if (index == 0): #clear new frame
+                                self.frame.fill(0)
+                            
+                            try:
+                                for i in range(0,16):
+                                    self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
+                            except IndexError:
+                                print(status)
+                                print(packet)
+                    
+        except serial.serialutil.SerialException:
+            pass
         
-
+        self.window.after(10, self.radio_poll_rx)
+    
 def main():
     print("One day I will be a ground station, big and tall.")
     print("But for now I'm just a placeholder, short and small...")
