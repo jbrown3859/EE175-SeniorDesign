@@ -1,0 +1,23 @@
+{
+	"Downlink Image": 
+	[
+		{
+		"Label": "Resolution", 
+		"Type": "Dropdown", 
+		"Options": [{"160x120":1}, {"320x240":2}, {"640x480":3}]
+		},
+		{
+		"Label": "Color",
+		"Type": "Dropdown",
+		"Options": [{"GRB422":1}]
+		}
+	],
+	"Configure Radio":
+	[
+		{
+		"Label": "Frequency",
+		"Type": "Number",
+		"Range": [2420000000,2480000000]
+		}
+	]
+}

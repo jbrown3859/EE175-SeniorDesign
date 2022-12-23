@@ -12,12 +12,27 @@ unsigned int get_queue_distance(unsigned int bottom, unsigned int top, unsigned 
 int read_UART_FIFO(void);
 unsigned char get_UART_FIFO_size(void);
 
-void write_RX_FIFO(char* data, unsigned char len);
-void read_RX_FIFO(void);
-void burst_read_RX_FIFO(unsigned char packet_size, unsigned char packet_num);
-unsigned char get_RX_FIFO_packet_count(void);
-unsigned int get_RX_FIFO_size(void);
-unsigned int get_next_RX_packet_size(void);
+/* data structure for RX and TX packet buffers */
+struct packet_buffer {
+    char* data;
+    unsigned int max_data;
+    unsigned int data_head;
+    unsigned int data_base;
+
+    unsigned int* pointers;
+    unsigned int max_packets;
+    unsigned int ptr_head;
+    unsigned int ptr_base;
+
+    char flags;
+};
+
+unsigned int get_buffer_data_size(struct packet_buffer* buffer);
+unsigned int get_buffer_packet_count(struct packet_buffer* buffer);
+unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer);
+void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len);
+void read_packet_buffer(struct packet_buffer* buffer);
+void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet_size, unsigned char packet_num);
 
 void main_loop(void);
 

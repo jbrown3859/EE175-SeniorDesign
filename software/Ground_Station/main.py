@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 from mss import mss
 import time
+import json
 
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import (
@@ -36,41 +37,64 @@ class MainWindow():
         
         #telemetry database
         self.telemetry_packets = [] #list of dicts
-        self.t = [];
+        self.t = []
         self.a_x = []
         self.a_y = []
         self.a_z = []
+        self.g_x = []
+        self.g_y = []
+        self.g_z = []
+        self.m_x = []
+        self.m_y = []
+        self.m_z = []
         
         #plots
         style.use('ggplot')
-        self.accel_plot = Figure(figsize=(10, 4), dpi=50)
-        self.accel_ax = self.accel_plot.add_subplot()
+        self.ag_plot = Figure(figsize=(18, 9.5), dpi=50)
+        self.accel_ax = self.ag_plot.add_subplot(2,2,1)
+        self.gyro_ax = self.ag_plot.add_subplot(2,2,2)
+        self.mag_ax = self.ag_plot.add_subplot(2,2,3)
+        self.ag_plot.tight_layout()
+        
         self.accel_ax.set_xlim(0, 100)
         self.accel_ax.set_ylim(0, 255)
-        self.accel_x, = self.accel_ax.plot(self.t, self.a_x, label='x')
-        self.accel_y, = self.accel_ax.plot(self.t, self.a_y, label='y')
-        self.accel_z, = self.accel_ax.plot(self.t, self.a_z, label='z')
-        self.accel_ax.set_xlabel("Time")
-        self.accel_ax.set_ylabel("Acceleration")
+        self.accel_x, = self.accel_ax.plot(self.t, self.a_x, label='x acceleration')
+        self.accel_y, = self.accel_ax.plot(self.t, self.a_y, label='y acceleration')
+        self.accel_z, = self.accel_ax.plot(self.t, self.a_z, label='z acceleration')
+        #self.accel_ax.set_xlabel("Time")
         self.accel_ax.legend()
-        self.accel_canvas = FigureCanvasTkAgg(self.accel_plot, self.window)
-        self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=2)
-        self.accel_animation = animation.FuncAnimation(self.accel_plot, self.animate_plot, interval=100, blit=False)
+        self.accel_canvas = FigureCanvasTkAgg(self.ag_plot, self.window)
+        self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=2, rowspan=2)
+        self.accel_animation = animation.FuncAnimation(self.ag_plot, self.animate_plot, interval=250, blit=False)
+        
+        self.gyro_ax.set_xlim(0, 100)
+        self.gyro_ax.set_ylim(0, 255)
+        self.gyro_x, = self.gyro_ax.plot(self.t, self.g_x, label='x rate')
+        self.gyro_y, = self.gyro_ax.plot(self.t, self.g_y, label='y rate')
+        self.gyro_z, = self.gyro_ax.plot(self.t, self.g_z, label='z rate')
+        self.gyro_ax.legend()
+        
+        self.mag_ax.set_xlim(0, 100)
+        self.mag_ax.set_ylim(0, 100)
+        self.mag_x, = self.mag_ax.plot(self.t, self.m_x, label='x mag')
+        self.mag_y, = self.mag_ax.plot(self.t, self.m_y, label='y mag')
+        self.mag_z, = self.mag_ax.plot(self.t, self.m_z, label='z mag')
+        self.mag_ax.legend()
        
         
         #image canvas
-        self.widgets['img_title'] = tk.Label(self.window, text="S-Band Image Downlink", font=("Arial", 25))
+        self.widgets['img_title'] = tk.Label(self.window, text="Image Downlink", font=("Arial", 25))
         self.widgets['img_title'].grid(row=0, column=0, columnspan=2,sticky='NSEW')
         
         self.widgets['canvas'] = tk.Canvas(self.window, width=self.width, height=self.height)
         self.widgets['canvas'].grid(row=1, column=0, rowspan=2, columnspan=2, sticky='NSEW')
         
-        self.widgets['telem_title'] = tk.Label(self.window, text="UHF Telemetry", font=("Arial", 25))
+        self.widgets['telem_title'] = tk.Label(self.window, text="Spacecraft Telemetry", font=("Arial", 25))
         self.widgets['telem_title'].grid(row=0,column=3, columnspan=2,sticky='NSEW')
         
         #radio status
         self.widgets['status_title'] = tk.Label(self.window, text="Radio Status", font=("Arial", 25))
-        self.widgets['status_title'].grid(row=3,column=0,columnspan=2,sticky='NSEW')
+        self.widgets['status_title'].grid(row=3,column=0,columnspan=2)
         
         self.widgets['sband_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['sband_status'].grid(row=4,column=0,sticky='NSEW')
@@ -98,6 +122,32 @@ class MainWindow():
         
         tk.Label(self.widgets['uhf_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
         tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
+        
+        #command center
+        self.widgets['command_title'] = tk.Label(self.window, text="Command Uplink", font=("Arial", 25))
+        self.widgets['command_title'].grid(row=3,column=3,columnspan=4)
+        
+        self.widgets['command_center'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
+        self.widgets['command_center'].grid(row=4,column=3,columnspan=4)
+        self.command = tk.StringVar(self.window)
+        self.channel = tk.StringVar(self.window)
+        
+        self.widgets['channel_title'] = tk.Label(self.widgets['command_center'], text="Channel", font=("Arial", 12))
+        self.widgets['channel_title'].grid(row=1,column=1)
+        self.widgets['channel'] = tk.OptionMenu(self.widgets['command_center'],self.channel,"UHF","S-Band")
+        self.widgets['channel'].grid(row=2,column=1)
+        self.widgets['channel'].config(width=7)
+        
+        self.widgets['selcom_title'] = tk.Label(self.widgets['command_center'], text="Command", font=("Arial", 12))
+        self.widgets['selcom_title'].grid(row=1,column=2)
+        self.widgets['selected_commands'] = tk.OptionMenu(self.widgets['command_center'],self.command,"Capture Image","Configure Radio")
+        self.widgets['selected_commands'].grid(row=2,column=2)
+        self.widgets['selected_commands'].config(width=15)
+        #self.widgets['command_menu'].grid(row=4,column=3)
+        
+        with open("commands.json") as f:
+            data = json.load(f)
+            print(data["Configure Radio"])
         
         '''
         for i in range(0,4):
@@ -127,6 +177,14 @@ class MainWindow():
                     self.a_x.pop(0)
                     self.a_y.pop(0)
                     self.a_z.pop(0)
+                    
+                    self.g_x.pop(0)
+                    self.g_y.pop(0)
+                    self.g_z.pop(0)
+                    
+                    self.m_x.pop(0)
+                    self.m_y.pop(0)
+                    self.m_z.pop(0)
                 else:
                     self.t.append(len(self.a_x))
                 
@@ -136,6 +194,20 @@ class MainWindow():
                 self.accel_x.set_data(self.t, self.a_x)
                 self.accel_y.set_data(self.t, self.a_y)
                 self.accel_z.set_data(self.t, self.a_z)
+                
+                self.g_x.append(packet['Angular Rate'][0])
+                self.g_y.append(packet['Angular Rate'][1])
+                self.g_z.append(packet['Angular Rate'][2])
+                self.gyro_x.set_data(self.t, self.g_x)
+                self.gyro_y.set_data(self.t, self.g_y)
+                self.gyro_z.set_data(self.t, self.g_z)
+                
+                self.m_x.append(packet['Magnetic Field'][0])
+                self.m_y.append(packet['Magnetic Field'][1])
+                self.m_z.append(packet['Magnetic Field'][2])
+                self.mag_x.set_data(self.t, self.m_x)
+                self.mag_y.set_data(self.t, self.m_y)
+                self.mag_z.set_data(self.t, self.m_z)
         except IndexError:
             pass
     
@@ -167,7 +239,7 @@ class MainWindow():
             self.widgets['sband_connected'].grid(row=1,column=1)
         
         self.window.update()
-        self.window.after(5000, self.connect_radios)
+        self.window.after(2000, self.connect_radios)
         
     def get_radio_info(self):
         try:
@@ -197,7 +269,6 @@ class MainWindow():
         except IndexError:
             pass
             
-        
         self.window.after(1000, self.get_radio_info)
         
     def radio_poll_rx(self):
@@ -240,7 +311,7 @@ class MainWindow():
         except (serial.serialutil.SerialException, IndexError):
             pass
         
-        self.window.after(10, self.radio_poll_rx)
+        self.window.after(50, self.radio_poll_rx)
     
 def main():
     print("One day I will be a ground station, big and tall.")

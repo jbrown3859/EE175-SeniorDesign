@@ -57,82 +57,83 @@ unsigned char get_UART_FIFO_size(void) {
     }
 }
 
-/* RX Queue */
-void write_RX_FIFO(char* data, unsigned char len) {
+/* buffer functions */
+unsigned int get_buffer_data_size(struct packet_buffer* buffer) {
+    if (buffer->data_head >= buffer->data_base) {
+        return buffer->data_head - buffer->data_base;
+    }
+    else {
+        return (buffer->max_data - buffer->data_base) + buffer->data_head;
+    }
+}
+
+unsigned int get_buffer_packet_count(struct packet_buffer* buffer) {
+    if (buffer->ptr_head >= buffer->ptr_base) {
+        return buffer->ptr_head - buffer->ptr_base;
+    }
+    else {
+        return (buffer->max_packets - buffer->ptr_base) + buffer->ptr_head;
+    }
+}
+
+unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
+    unsigned int next = buffer->pointers[buffer->ptr_base];
+
+    if (next >= buffer->data_base) {
+        return next - buffer->data_base;
+    }
+    else {
+        return (buffer->max_data - buffer->data_base) + next;
+    }
+}
+
+
+void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
     unsigned char i;
 
-    if (get_RX_FIFO_size() + len >= (RX_FIFO_SIZE-1)) { //data overflow
-        rx_buffer_flags |= 0x01;
+    if (get_buffer_data_size(buffer) + len >= (buffer->max_data - 1)) { //data overflow
+        buffer->flags |= 0x01;
     }
     else {
-        rx_buffer_flags &= ~0x01;
+        buffer->flags &= ~0x01;
     }
 
-    if (get_RX_FIFO_packet_count() == (RX_FIFO_PACKETS-1)) { //packet overflow
-        rx_buffer_flags |= 0x02;
+    if (get_buffer_packet_count(buffer) == (buffer->max_packets - 1)) { //packet overflow
+        buffer->flags |= 0x02;
     }
     else {
-        rx_buffer_flags &= ~0x02;
+        buffer->flags &= ~0x02;
     }
 
-    if ((rx_buffer_flags & 0x03) == 0) { //if no overflows
+    if ((buffer->flags & 0x03) == 0) { //if no overflows
         for(i=0;i<len;i++) {
-            RADIO_RXBUF[RF_RX_HEAD] = data[i];
-            RF_RX_HEAD = RF_RX_HEAD < (RX_FIFO_SIZE-1) ? RF_RX_HEAD + 1 : 0;
+            buffer->data[buffer->data_head] = data[i];
+            buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
         }
 
-        RADIO_RX_PTRS[RF_RX_PTR_HEAD] = RF_RX_HEAD; //push pointer to queue
-        RF_RX_PTR_HEAD++;
+        buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
+        buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
     }
 }
 
-void read_RX_FIFO(void) {
+void read_packet_buffer(struct packet_buffer* buffer) {
     unsigned int i;
-    if (RF_RX_PTR_HEAD != RF_RX_PTR_BASE) { //if not empty
-        for(i=RF_RX_BASE;i!=RADIO_RX_PTRS[RF_RX_PTR_BASE];i = (i < (RX_FIFO_SIZE-1) ? i+1 : 0)) { //eat up from bottom
-            putchar(RADIO_RXBUF[RF_RX_BASE]);
-            RF_RX_BASE = RF_RX_BASE < (RX_FIFO_SIZE-1) ? RF_RX_BASE + 1 : 0;
+    if (buffer->ptr_head != buffer->ptr_base) { //if not empty
+        for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
+            putchar(buffer->data[buffer->data_base]);
+            buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
         }
-        RF_RX_PTR_BASE++;
+        buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
     }
 }
 
-void burst_read_RX_FIFO(unsigned char packet_size, unsigned char packet_num) {
+void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet_size, unsigned char packet_num) {
     unsigned char i;
     for(i=0;i<packet_num;i++) {
-        if ((get_next_RX_packet_size() != packet_size) || (get_RX_FIFO_packet_count() == 0)) { //exit condition
+        if ((get_next_buffer_packet_size(buffer) != packet_size) || (get_buffer_packet_count(buffer) == 0)) { //exit condition
             break;
         }
-        read_RX_FIFO();
-    }
-}
-
-unsigned char get_RX_FIFO_packet_count(void) {
-    if (RF_RX_PTR_HEAD >= RF_RX_PTR_BASE) {
-        return RF_RX_PTR_HEAD - RF_RX_PTR_BASE;
-    }
-    else {
-        return (RX_FIFO_PACKETS - RF_RX_PTR_BASE) + RF_RX_PTR_HEAD;
-    }
-}
-
-unsigned int get_RX_FIFO_size(void) {
-    if (RF_RX_HEAD >= RF_RX_BASE) {
-        return RF_RX_HEAD - RF_RX_BASE;
-    }
-    else {
-        return (RX_FIFO_SIZE - RF_RX_BASE) + RF_RX_HEAD;
-    }
-}
-
-unsigned int get_next_RX_packet_size(void) {
-    unsigned int next = RADIO_RX_PTRS[RF_RX_PTR_BASE];//RADIO_RX_PTRS[RF_RX_PTR_BASE < (RX_FIFO_PACKETS-1) ? RF_RX_PTR_BASE + 1 : 0];
-
-    if (next >= RF_RX_BASE) {
-        return next - RF_RX_BASE;
-    }
-    else {
-        return (RX_FIFO_SIZE - RF_RX_BASE) + next;
+        read_packet_buffer(buffer);
     }
 }
 
@@ -146,19 +147,54 @@ void main_loop(void) {
 
     /* test */
     unsigned int i = 0;
-    char packet[18];
+    char packet[32];
 
+    packet[0] = 'R';
+    packet[1] = 32;
+    packet[2] = 8;
+    packet[3] = 128;
+    packet[31] = 0x04;
+    /*
     for (i=2;i<18;i++) {
         packet[i] = 0x03; //blue
-        //write_RX_FIFO("WHAT HATH GOD WROUGHT", 21);
     }
     i=0;
+    */
+    char RXbuf_data[2048];
+    unsigned int RXbuf_ptrs[256];
 
+    struct packet_buffer RXbuf;
+    RXbuf.data = RXbuf_data;
+    RXbuf.max_data = 2048;
+    RXbuf.pointers = RXbuf_ptrs;
+    RXbuf.max_packets = 256;
+
+    RXbuf.data_base = 0;
+    RXbuf.data_head = 0;
+    RXbuf.ptr_base = 0;
+    RXbuf.ptr_head = 0;
+
+    for(;;) {
+        write_packet_buffer(&RXbuf,"WHAT HATH GOD WROUGHT?\n\r", 24);
+        read_packet_buffer(&RXbuf);
+        print_dec(RXbuf.data_base, 4);
+        putchars("\n\r\0");
+        print_dec(RXbuf.data_head, 4);
+        putchars("\n\r\0");
+        print_dec(RXbuf.ptr_base, 4);
+        putchars("\n\r\0");
+        print_dec(RXbuf.ptr_head, 4);
+        putchars("\n\r\0");
+        print_hex(RXbuf.flags);
+        putchars("\n\r\0");
+    }
+
+    /*
     for (;;) {
         //state actions
         switch(state) {
         case INIT:
-            hardware_timeout(30);
+            hardware_timeout(2000);
             info.frequency = 2450000000;
             state = WAIT;
             break;
@@ -186,11 +222,8 @@ void main_loop(void) {
             }
 
             if (timeout_flag == 1) {
-                packet[0] = 0x80 | (char)((i >> 8) & 0xFF);
-                packet[1] = (char)(i & 0xFF);
-                write_RX_FIFO(packet, 18);
-
-                i = (i < (1200 - 1)) ? i+1 : 0;
+                packet[1] ^= 0x40;
+                write_RX_FIFO(packet, 32);
                 timeout_flag = 0;
             }
 
@@ -236,4 +269,5 @@ void main_loop(void) {
             break;
         }
     }
+    */
 }
