@@ -18,6 +18,9 @@ from matplotlib import style
 import serial
 import serial.tools.list_ports
 
+import threading
+import queue
+
 import radio
 import imaging
 
@@ -154,12 +157,35 @@ class MainWindow():
             window.grid_columnconfigure(i,weight=1)
             window.grid_rowconfigure(i,weight=1)
         '''
+        self.telem_queue = queue.Queue()
+        self.img_queue = queue.Queue()
+        self.status_queue = queue.Queue(maxsize = 1)
+        
+        self.thread_running = 1
+        self.thread = threading.Thread(target=self.serial_thread)
+        self.thread.start()
+        
         self.update_image()
-        self.connect_radios()
-        self.get_radio_info()
-        self.radio_poll_rx()
+        #self.connect_radios()
+        #self.get_radio_info()
+        #self.radio_poll_rx()
         
     def update_image(self):
+        while not self.img_queue.empty():
+            packet = self.img_queue.get()
+            index = int.from_bytes(packet[0:2], 'big')
+            index &= ~0x8000
+            if (index == 0): #clear new frame
+                self.frame.fill(0)
+            
+            try:
+                for i in range(0,16):
+                    self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
+            except IndexError:
+                print(status)
+                print(packet)
+
+    
         frame = imaging.GRB422toBGR(self.frame, res[0], res[1])
         frame = cv.resize(frame, (self.width, self.height)) 
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
@@ -210,6 +236,10 @@ class MainWindow():
                 self.mag_z.set_data(self.t, self.m_z)
         except IndexError:
             pass
+    
+    def update_radio_status(self):
+        
+        pass
     
     def connect_radios(self):
         ports = serial.tools.list_ports.comports()
@@ -272,46 +302,110 @@ class MainWindow():
         self.window.after(1000, self.get_radio_info)
         
     def radio_poll_rx(self):
-        try:
-            if self.SBand.port.is_open:
-                status = self.SBand.poll_rx()
-                if status[1] != 0:
-                    packets = self.SBand.burst_read(status[4], status[1])
-                    
-                    if (status[4] == 18): #if image packet
-                        for i in range(0, status[1]):
-                            packet = packets[(18*i):(18*(i+1))]
-                            index = int.from_bytes(packet[0:2], 'big')
-                            index &= ~0x8000
-                            if (index == 0): #clear new frame
-                                self.frame.fill(0)
-                            
-                            try:
-                                for i in range(0,16):
-                                    self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
-                            except IndexError:
-                                print(status)
-                                print(packet)
-                    
-                    elif (status[4] == 32): #if telemetry packet
-                        for i in range(0, status[1]):
-                            packet = list(packets[(32*i):(32*(i+1))])
-                            
-                            packet_data = {}
-                            packet_data['Acceleration'] = packet[1:4] #x,y,z
-                            packet_data['Angular Rate'] = packet[4:7]
-                            packet_data['Magnetic Field'] = packet[7:10]
-                            
-                            if (len(self.telemetry_packets) == 100):
-                                self.telemetry_packets.pop(0)
-                            
-                            self.telemetry_packets.append(packet_data)
+        #print("start thread")
+        #while self.thread_running == 1:
+            #print("loop")
+            '''
+            try:
+                if self.SBand.port.is_open:
+                    status = self.SBand.poll_rx()
+                    #print(status)
+                    if status[1] != 0: #if packet
+                        packets = self.SBand.burst_read(status[4], status[1])
                         
-                    
-        except (serial.serialutil.SerialException, IndexError):
-            pass
+                        if (status[4] == 18): #if image packet
+                            for i in range(0, status[1]):
+                                packet = packets[(18*i):(18*(i+1))]
+                                self.img_queue.put(packet)
+                                ''
+                                index = int.from_bytes(packet[0:2], 'big')
+                                index &= ~0x8000
+                                if (index == 0): #clear new frame
+                                    self.frame.fill(0)
+                                
+                                try:
+                                    for i in range(0,16):
+                                        self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
+                                except IndexError:
+                                    print(status)
+                                    print(packet)
+                                ''
+                        
+                        elif (status[4] == 32): #if telemetry packet
+                            for i in range(0, status[1]):
+                                packet = list(packets[(32*i):(32*(i+1))])
+                                
+                                packet_data = {}
+                                packet_data['Acceleration'] = packet[1:4] #x,y,z
+                                packet_data['Angular Rate'] = packet[4:7]
+                                packet_data['Magnetic Field'] = packet[7:10]
+                                
+                                ''
+                                if (len(self.telemetry_packets) == 100):
+                                    self.telemetry_packets.pop(0)
+                                
+                                self.telemetry_packets.append(packet_data)
+                                ''
+                                self.telem_queue.put(packet_data)
+                        
+            except (serial.serialutil.SerialException, IndexError):
+                pass
+            '''
+            #self.window.after(50, self.radio_poll_rx)
+            
+    def serial_thread(self):
+        while self.thread_running == 1:
+            print("loop")
+            
+            #attempt to connect ports
+            ports = serial.tools.list_ports.comports()
+            portnames = []
+            
+            for port, desc, hwid in ports:
+                portnames.append(port)
+            
+            if self.SBand.port.is_open and self.SBand.port.port not in portnames: #close port if disconnected
+                self.SBand.port.close()
+            if self.UHF.port.is_open and self.UHF.port.port not in portnames: #close port if disconnected
+                self.UHF.port.close()
+            
+            for port in portnames:
+                if not self.SBand.port.is_open: #if port is closed
+                    self.SBand.attempt_connection(port)
+                if not self.UHF.port.is_open:
+                    self.UHF.attempt_connection(port)
+            
+            #get packets
+            try:
+                if self.SBand.port.is_open:
+                    status = self.SBand.poll_rx()
+                    #print(status)
+                    if status[1] != 0: #if packet
+                        packets = self.SBand.burst_read(status[4], status[1])
+                        
+                        if (status[4] == 18): #if image packet
+                            for i in range(0, status[1]):
+                                packet = packets[(18*i):(18*(i+1))]
+                                self.img_queue.put(packet)
+                        
+                        elif (status[4] == 32): #if telemetry packet
+                            for i in range(0, status[1]):
+                                packet = list(packets[(32*i):(32*(i+1))])
+                                
+                                packet_data = {}
+                                packet_data['Acceleration'] = packet[1:4] #x,y,z
+                                packet_data['Angular Rate'] = packet[4:7]
+                                packet_data['Magnetic Field'] = packet[7:10]
+                                self.telem_queue.put(packet_data)
+                        
+            except (serial.serialutil.SerialException, IndexError):
+                pass
         
-        self.window.after(50, self.radio_poll_rx)
+    def close_window(self):
+        print("Closing window")
+        self.thread_running = 0
+        self.thread.join()
+        self.window.destroy()
     
 def main():
     print("One day I will be a ground station, big and tall.")
@@ -319,7 +413,8 @@ def main():
     
     root = tk.Tk()
     root.title("Groundstation")
-    MainWindow(root)
+    window = MainWindow(root)
+    root.protocol("WM_DELETE_WINDOW", window.close_window)
     root.mainloop()
     
 if __name__ == "__main__":

@@ -4,29 +4,20 @@
 #include <util.h>
 
 #define RADIOTYPE_SBAND 1
-#define RX_FIFO_SIZE 2048
-#define RX_FIFO_PACKETS 256
+#define RX_SIZE 1024
+#define RX_PACKETS 128
+#define TX_SIZE 1024
+#define TX_PACKETS 128
 
 /* UART data structure */
 char UART_RXBUF[256];
 unsigned char UART_RX_PTR = 0;
 unsigned char UART_RX_BASE = 0;
 
-/* Radio data structure*/
-char RADIO_RXBUF[RX_FIFO_SIZE];
-unsigned int RF_RX_HEAD = 0;
-unsigned int RF_RX_BASE = 0;
-
-unsigned int RADIO_RX_PTRS[RX_FIFO_PACKETS]; //pointers to packet locations inside the RX queue
-unsigned char RF_RX_PTR_HEAD = 0;
-unsigned char RF_RX_PTR_BASE = 0;
-
-char rx_buffer_flags;
-
 char timeout_flag = 0;
 
 /* helper functions */
-unsigned int get_queue_distance(unsigned int bottom, unsigned int top, unsigned int max) {
+unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
     if (top >= bottom) {
         return top - bottom;
     }
@@ -48,43 +39,55 @@ int read_UART_FIFO(void) {
     }
 }
 
-unsigned char get_UART_FIFO_size(void) {
+unsigned int get_UART_FIFO_size(void) {
+    /*
     if (UART_RX_PTR >= UART_RX_BASE) {
         return UART_RX_PTR - UART_RX_BASE;
     }
     else  {
         return (256 - UART_RX_BASE) + UART_RX_PTR;
     }
+    */
+    return get_buffer_distance(UART_RX_BASE, UART_RX_PTR, 256);
 }
 
 /* buffer functions */
 unsigned int get_buffer_data_size(struct packet_buffer* buffer) {
+    /*
     if (buffer->data_head >= buffer->data_base) {
         return buffer->data_head - buffer->data_base;
     }
     else {
         return (buffer->max_data - buffer->data_base) + buffer->data_head;
     }
+    */
+    return get_buffer_distance(buffer->data_base, buffer->data_head, buffer->max_data);
 }
 
 unsigned int get_buffer_packet_count(struct packet_buffer* buffer) {
+    /*
     if (buffer->ptr_head >= buffer->ptr_base) {
         return buffer->ptr_head - buffer->ptr_base;
     }
     else {
         return (buffer->max_packets - buffer->ptr_base) + buffer->ptr_head;
     }
+    */
+    return get_buffer_distance(buffer->ptr_base, buffer->ptr_head, buffer->max_packets);
 }
 
 unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
     unsigned int next = buffer->pointers[buffer->ptr_base];
 
+    /*
     if (next >= buffer->data_base) {
         return next - buffer->data_base;
     }
     else {
         return (buffer->max_data - buffer->data_base) + next;
     }
+    */
+    return get_buffer_distance(buffer->data_base, next, buffer->max_data);
 }
 
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
@@ -152,6 +155,10 @@ void main_loop(void) {
     unsigned char args[2];
     struct RadioInfo info;
 
+    char pkt[256];
+    unsigned int pkt_len = 0;
+    char command;
+
     /* test */
     unsigned int i = 0;
     char packet[32];
@@ -171,29 +178,37 @@ void main_loop(void) {
     }
     i=0;
 
-    char RXbuf_data[2048];
-    unsigned int RXbuf_ptrs[256];
-
+    /* RX buffer */
+    char RXbuf_data[RX_SIZE];
+    unsigned int RXbuf_ptrs[RX_PACKETS];
     struct packet_buffer RXbuf;
     RXbuf.data = RXbuf_data;
-    RXbuf.max_data = 2048;
+    RXbuf.max_data = RX_SIZE;
     RXbuf.pointers = RXbuf_ptrs;
-    RXbuf.max_packets = 256;
-
+    RXbuf.max_packets = RX_PACKETS;
     RXbuf.data_base = 0;
     RXbuf.data_head = 0;
     RXbuf.ptr_base = 0;
     RXbuf.ptr_head = 0;
 
-    char pkt[256];
-    unsigned int pkt_len = 0;
-    char command;
+    /* TX buffer */
+    char TXbuf_data[TX_SIZE];
+    unsigned int TXbuf_ptrs[TX_PACKETS];
+    struct packet_buffer TXbuf;
+    TXbuf.data = TXbuf_data;
+    TXbuf.max_data = TX_SIZE;
+    TXbuf.pointers = TXbuf_ptrs;
+    TXbuf.max_packets = TX_PACKETS;
+    TXbuf.data_base = 0;
+    TXbuf.data_head = 0;
+    TXbuf.ptr_base = 0;
+    TXbuf.ptr_head = 0;
 
     for (;;) {
         //state actions
         switch(state) {
         case INIT:
-            hardware_timeout(2000);
+            hardware_timeout(100);
             info.frequency = 2450000000;
             state = WAIT;
             break;
@@ -222,8 +237,13 @@ void main_loop(void) {
 
             if (timeout_flag == 1) {
                 //packet[1] ^= 0x40;
+                packet[0] = 0x80 | (char)((i >> 8) & 0xFF);
+                packet[1] = (char)(i & 0xFF);
                 write_packet_buffer(&RXbuf, packet, 18);
-                i++
+                i++;
+                if (i >= 1200) {
+                    i = 0;
+                }
                 timeout_flag = 0;
             }
 
@@ -241,7 +261,7 @@ void main_loop(void) {
             state = WAIT;
             break;
         case SEND_RX_BUF_STATE:
-            putchar(rx_buffer_flags);
+            putchar(RXbuf.flags);
             putchar(get_buffer_packet_count(&RXbuf));
 
             temp = get_buffer_data_size(&RXbuf);

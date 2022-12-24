@@ -7,11 +7,6 @@ struct RadioInfo {
     unsigned long frequency;
 };
 
-unsigned int get_queue_distance(unsigned int bottom, unsigned int top, unsigned int max);
-
-int read_UART_FIFO(void);
-unsigned char get_UART_FIFO_size(void);
-
 /* data structure for RX and TX packet buffers */
 struct packet_buffer {
     char* data;
@@ -26,6 +21,11 @@ struct packet_buffer {
 
     char flags;
 };
+
+unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max);
+
+int read_UART_FIFO(void);
+unsigned int get_UART_FIFO_size(void);
 
 unsigned int get_buffer_data_size(struct packet_buffer* buffer);
 unsigned int get_buffer_packet_count(struct packet_buffer* buffer);
