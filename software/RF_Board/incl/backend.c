@@ -87,7 +87,6 @@ unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
     }
 }
 
-
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
     unsigned char i;
 
@@ -116,50 +115,62 @@ void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigne
     }
 }
 
-void read_packet_buffer(struct packet_buffer* buffer) {
+unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest) {
     unsigned int i;
+    unsigned int j = 0;
     if (buffer->ptr_head != buffer->ptr_base) { //if not empty
         for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
-            putchar(buffer->data[buffer->data_base]);
+            dest[j] = buffer->data[buffer->data_base];
             buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
+            j++;
         }
         buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
     }
+    return j;
 }
 
 void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet_size, unsigned char packet_num) {
     unsigned char i;
+    unsigned char j;
+    char rx[256];
+    unsigned int len = 0;
+
     for(i=0;i<packet_num;i++) {
         if ((get_next_buffer_packet_size(buffer) != packet_size) || (get_buffer_packet_count(buffer) == 0)) { //exit condition
             break;
         }
-        read_packet_buffer(buffer);
+        len = read_packet_buffer(buffer,rx);
+        for(j=0;j<len;j++) {
+            putchar(rx[j]);
+        }
     }
 }
 
 void main_loop(void) {
     enum State state = INIT;
-    char command;
     char temp;
     unsigned char args[2];
-
     struct RadioInfo info;
 
     /* test */
     unsigned int i = 0;
     char packet[32];
 
+    /*
     packet[0] = 'R';
     packet[1] = 32;
     packet[2] = 8;
     packet[3] = 128;
     packet[31] = 0x04;
-    /*
+    */
+
+    packet[0] = 0x80;
+    packet[1] = 0;
     for (i=2;i<18;i++) {
         packet[i] = 0x03; //blue
     }
     i=0;
-    */
+
     char RXbuf_data[2048];
     unsigned int RXbuf_ptrs[256];
 
@@ -174,22 +185,10 @@ void main_loop(void) {
     RXbuf.ptr_base = 0;
     RXbuf.ptr_head = 0;
 
-    for(;;) {
-        write_packet_buffer(&RXbuf,"WHAT HATH GOD WROUGHT?\n\r", 24);
-        read_packet_buffer(&RXbuf);
-        print_dec(RXbuf.data_base, 4);
-        putchars("\n\r\0");
-        print_dec(RXbuf.data_head, 4);
-        putchars("\n\r\0");
-        print_dec(RXbuf.ptr_base, 4);
-        putchars("\n\r\0");
-        print_dec(RXbuf.ptr_head, 4);
-        putchars("\n\r\0");
-        print_hex(RXbuf.flags);
-        putchars("\n\r\0");
-    }
+    char pkt[256];
+    unsigned int pkt_len = 0;
+    char command;
 
-    /*
     for (;;) {
         //state actions
         switch(state) {
@@ -222,8 +221,9 @@ void main_loop(void) {
             }
 
             if (timeout_flag == 1) {
-                packet[1] ^= 0x40;
-                write_RX_FIFO(packet, 32);
+                //packet[1] ^= 0x40;
+                write_packet_buffer(&RXbuf, packet, 18);
+                i++
                 timeout_flag = 0;
             }
 
@@ -242,14 +242,14 @@ void main_loop(void) {
             break;
         case SEND_RX_BUF_STATE:
             putchar(rx_buffer_flags);
-            putchar(get_RX_FIFO_packet_count());
+            putchar(get_buffer_packet_count(&RXbuf));
 
-            temp = get_RX_FIFO_size();
+            temp = get_buffer_data_size(&RXbuf);
             putchar((char)((temp >> 8) & 0xFF));
             putchar((char)(temp & 0xFF));
 
             if (temp > 0) {
-                putchar((char)(get_next_RX_packet_size() & 0xFF));
+                putchar((char)(get_next_buffer_packet_size(&RXbuf) & 0xFF));
             }
             else {
                 putchar(0x00);
@@ -257,17 +257,18 @@ void main_loop(void) {
             state = WAIT;
             break;
         case SEND_RX_PACKET:
-            read_RX_FIFO();
+            pkt_len = read_packet_buffer(&RXbuf, pkt);
+            pkt[pkt_len] = '\0';
+            putchars(pkt);
             state = WAIT;
             break;
         case BURST_SEND_RX:
             while (get_UART_FIFO_size() < 2); //await data
             args[0] = read_UART_FIFO();
             args[1] = read_UART_FIFO();
-            burst_read_RX_FIFO(args[0], args[1]);
+            burst_read_packet_buffer(&RXbuf, args[0], args[1]);
             state = WAIT;
             break;
         }
     }
-    */
 }

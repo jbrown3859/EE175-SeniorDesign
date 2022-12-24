@@ -31,7 +31,7 @@ unsigned int get_buffer_data_size(struct packet_buffer* buffer);
 unsigned int get_buffer_packet_count(struct packet_buffer* buffer);
 unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer);
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len);
-void read_packet_buffer(struct packet_buffer* buffer);
+unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest);
 void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet_size, unsigned char packet_num);
 
 void main_loop(void);
