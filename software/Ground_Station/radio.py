@@ -19,7 +19,7 @@ class Radio():
     '''
     def attempt_connection(self, portname):
         self.port.port = portname
-        print("Attempting to connect {} on port {}".format(self.type, portname))
+        #print("Attempting to connect {} on port {}".format(self.type, portname))
         try:
             self.port.open()
             self.port.reset_input_buffer() #flush buffer

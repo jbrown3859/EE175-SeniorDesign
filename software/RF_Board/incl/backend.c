@@ -40,53 +40,20 @@ int read_UART_FIFO(void) {
 }
 
 unsigned int get_UART_FIFO_size(void) {
-    /*
-    if (UART_RX_PTR >= UART_RX_BASE) {
-        return UART_RX_PTR - UART_RX_BASE;
-    }
-    else  {
-        return (256 - UART_RX_BASE) + UART_RX_PTR;
-    }
-    */
     return get_buffer_distance(UART_RX_BASE, UART_RX_PTR, 256);
 }
 
 /* buffer functions */
 unsigned int get_buffer_data_size(struct packet_buffer* buffer) {
-    /*
-    if (buffer->data_head >= buffer->data_base) {
-        return buffer->data_head - buffer->data_base;
-    }
-    else {
-        return (buffer->max_data - buffer->data_base) + buffer->data_head;
-    }
-    */
     return get_buffer_distance(buffer->data_base, buffer->data_head, buffer->max_data);
 }
 
 unsigned int get_buffer_packet_count(struct packet_buffer* buffer) {
-    /*
-    if (buffer->ptr_head >= buffer->ptr_base) {
-        return buffer->ptr_head - buffer->ptr_base;
-    }
-    else {
-        return (buffer->max_packets - buffer->ptr_base) + buffer->ptr_head;
-    }
-    */
     return get_buffer_distance(buffer->ptr_base, buffer->ptr_head, buffer->max_packets);
 }
 
 unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
     unsigned int next = buffer->pointers[buffer->ptr_base];
-
-    /*
-    if (next >= buffer->data_base) {
-        return next - buffer->data_base;
-    }
-    else {
-        return (buffer->max_data - buffer->data_base) + next;
-    }
-    */
     return get_buffer_distance(buffer->data_base, next, buffer->max_data);
 }
 
@@ -163,20 +130,21 @@ void main_loop(void) {
     unsigned int i = 0;
     char packet[32];
 
-    /*
+
     packet[0] = 'R';
     packet[1] = 32;
     packet[2] = 8;
     packet[3] = 128;
     packet[31] = 0x04;
-    */
 
+    /*
     packet[0] = 0x80;
     packet[1] = 0;
     for (i=2;i<18;i++) {
         packet[i] = 0x03; //blue
     }
     i=0;
+    */
 
     /* RX buffer */
     char RXbuf_data[RX_SIZE];
@@ -236,7 +204,8 @@ void main_loop(void) {
             }
 
             if (timeout_flag == 1) {
-                //packet[1] ^= 0x40;
+                packet[1] ^= 0x40;
+                /*
                 packet[0] = 0x80 | (char)((i >> 8) & 0xFF);
                 packet[1] = (char)(i & 0xFF);
                 write_packet_buffer(&RXbuf, packet, 18);
@@ -244,6 +213,8 @@ void main_loop(void) {
                 if (i >= 1200) {
                     i = 0;
                 }
+                */
+                write_packet_buffer(&RXbuf, packet, 32);
                 timeout_flag = 0;
             }
 

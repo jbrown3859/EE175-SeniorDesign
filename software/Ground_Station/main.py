@@ -152,11 +152,6 @@ class MainWindow():
             data = json.load(f)
             print(data["Configure Radio"])
         
-        '''
-        for i in range(0,4):
-            window.grid_columnconfigure(i,weight=1)
-            window.grid_rowconfigure(i,weight=1)
-        '''
         self.telem_queue = queue.Queue()
         self.img_queue = queue.Queue()
         self.status_queue = queue.Queue(maxsize = 1)
@@ -166,9 +161,7 @@ class MainWindow():
         self.thread.start()
         
         self.update_image()
-        #self.connect_radios()
-        #self.get_radio_info()
-        #self.radio_poll_rx()
+        self.update_radio_status()
         
     def update_image(self):
         while not self.img_queue.empty():
@@ -182,8 +175,7 @@ class MainWindow():
                 for i in range(0,16):
                     self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
             except IndexError:
-                print(status)
-                print(packet)
+                print("Error decoding image packet")
 
     
         frame = imaging.GRB422toBGR(self.frame, res[0], res[1])
@@ -198,6 +190,12 @@ class MainWindow():
         
     def animate_plot(self, i):
         try:
+            while not self.telem_queue.empty():
+                if (len(self.telemetry_packets) == 100):
+                    self.telemetry_packets.pop(0)
+                
+                self.telemetry_packets.append(self.telem_queue.get())
+
             for packet in self.telemetry_packets:
                 if (len(self.a_x) == 100):
                     self.a_x.pop(0)
@@ -238,125 +236,37 @@ class MainWindow():
             pass
     
     def update_radio_status(self):
-        
-        pass
-    
-    def connect_radios(self):
-        ports = serial.tools.list_ports.comports()
-        portnames = []
-        
-        for port, desc, hwid in ports:
-            portnames.append(port)
-        
-        if self.SBand.port.is_open and self.SBand.port.port not in portnames: #close port if disconnected
-            self.SBand.port.close()
-        if self.UHF.port.is_open and self.UHF.port.port not in portnames: #close port if disconnected
-            self.UHF.port.close()
-        
-        for port in portnames:
-            if not self.SBand.port.is_open: #if port is closed
-                self.SBand.attempt_connection(port)
-            if not self.UHF.port.is_open:
-                self.UHF.attempt_connection(port)
+        if not self.status_queue.empty():
+            status = self.status_queue.get()
             
-        if self.SBand.port.is_open:
             self.widgets['sband_connected'].destroy()
-            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Connected", font=("Arial", 15), fg="green")
-            self.widgets['sband_connected'].grid(row=1,column=1)
-        else:
-            self.widgets['sband_connected'].destroy()
-            self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
-            self.widgets['sband_connected'].grid(row=1,column=1)
-        
-        self.window.update()
-        self.window.after(2000, self.connect_radios)
-        
-    def get_radio_info(self):
-        try:
-            if self.SBand.port.is_open:
-                info = self.SBand.get_info()
-                if info:
-                    self.widgets['sband_frequency'].destroy()
-                    self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=info['frequency'].lstrip('0') + " Hz", font=("Arial", 15), fg="green")
-                    self.widgets['sband_frequency'].grid(row=3,column=1)
+            self.widgets['sband_last'].destroy()
+            self.widgets['sband_frequency'].destroy()
+            
+            if status['SBand_open']:
+                self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Connected", font=("Arial", 15), fg="green")
+                self.widgets['sband_connected'].grid(row=1,column=1)
+                sband_color = "green"
                 
-                if self.SBand.last_packet:
-                    self.widgets['sband_last'].destroy()
-                    self.widgets['sband_last'] = tk.Label(self.widgets['sband_status'], text=str(int(time.time() - self.SBand.last_packet)) + "s", font=("Arial", 15), fg="green")
-                    self.widgets['sband_last'].grid(row=2,column=1)
-            elif not self.SBand.port.is_open:
-                self.widgets['sband_frequency'].destroy()
-                self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
-                self.widgets['sband_frequency'].grid(row=3,column=1)
+                self.widgets['sband_last'] = tk.Label(self.widgets['sband_status'], text=str(int(time.time() - status['SBand_last_packet'])) + "s", font=("Arial", 15), fg="green")
+                self.widgets['sband_last'].grid(row=2,column=1)
+            else:
+                self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
+                self.widgets['sband_connected'].grid(row=1,column=1)
+                sband_color = "red"
                 
-                self.widgets['sband_last'].destroy()
                 self.widgets['sband_last'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
                 self.widgets['sband_last'].grid(row=2,column=1)
-        except serial.serialutil.SerialException:
-            pass
-        except UnicodeDecodeError:
-            pass
-        except IndexError:
-            pass
             
-        self.window.after(1000, self.get_radio_info)
-        
-    def radio_poll_rx(self):
-        #print("start thread")
-        #while self.thread_running == 1:
-            #print("loop")
-            '''
-            try:
-                if self.SBand.port.is_open:
-                    status = self.SBand.poll_rx()
-                    #print(status)
-                    if status[1] != 0: #if packet
-                        packets = self.SBand.burst_read(status[4], status[1])
-                        
-                        if (status[4] == 18): #if image packet
-                            for i in range(0, status[1]):
-                                packet = packets[(18*i):(18*(i+1))]
-                                self.img_queue.put(packet)
-                                ''
-                                index = int.from_bytes(packet[0:2], 'big')
-                                index &= ~0x8000
-                                if (index == 0): #clear new frame
-                                    self.frame.fill(0)
-                                
-                                try:
-                                    for i in range(0,16):
-                                        self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
-                                except IndexError:
-                                    print(status)
-                                    print(packet)
-                                ''
-                        
-                        elif (status[4] == 32): #if telemetry packet
-                            for i in range(0, status[1]):
-                                packet = list(packets[(32*i):(32*(i+1))])
-                                
-                                packet_data = {}
-                                packet_data['Acceleration'] = packet[1:4] #x,y,z
-                                packet_data['Angular Rate'] = packet[4:7]
-                                packet_data['Magnetic Field'] = packet[7:10]
-                                
-                                ''
-                                if (len(self.telemetry_packets) == 100):
-                                    self.telemetry_packets.pop(0)
-                                
-                                self.telemetry_packets.append(packet_data)
-                                ''
-                                self.telem_queue.put(packet_data)
-                        
-            except (serial.serialutil.SerialException, IndexError):
-                pass
-            '''
-            #self.window.after(50, self.radio_poll_rx)
+            self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=status['SBand_frequency'], font=("Arial", 15), fg=sband_color)
+            self.widgets['sband_frequency'].grid(row=3,column=1)
+            
+        self.window.after(1000, self.update_radio_status)
             
     def serial_thread(self):
+        radio_status = {}
+        radio_status['SBand_last_packet'] = 0
         while self.thread_running == 1:
-            print("loop")
-            
             #attempt to connect ports
             ports = serial.tools.list_ports.comports()
             portnames = []
@@ -375,12 +285,28 @@ class MainWindow():
                 if not self.UHF.port.is_open:
                     self.UHF.attempt_connection(port)
             
-            #get packets
+            #get radio info          
+            if self.status_queue.empty():
+                radio_status['SBand_open'] = self.SBand.port.is_open
+                radio_status['UHF_open'] = self.UHF.port.is_open
+                
+                if self.SBand.port.is_open:
+                    try:
+                        sband_info = self.SBand.get_info()
+                        radio_status['SBand_frequency'] = sband_info['frequency'].lstrip('0') + " Hz"
+                    except(serial.serialutil.SerialException, IndexError):
+                        pass
+                else:
+                    radio_status['SBand_frequency'] = "N/A"
+                
+                self.status_queue.put(radio_status)
+            
             try:
+                #get packets
                 if self.SBand.port.is_open:
                     status = self.SBand.poll_rx()
-                    #print(status)
                     if status[1] != 0: #if packet
+                        radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])
                         
                         if (status[4] == 18): #if image packet
