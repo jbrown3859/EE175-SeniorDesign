@@ -1,23 +1,37 @@
 {
-	"Downlink Image": 
-	[
-		{
-		"Label": "Resolution", 
-		"Type": "Dropdown", 
-		"Options": [{"160x120":1}, {"320x240":2}, {"640x480":3}]
-		},
-		{
-		"Label": "Color",
-		"Type": "Dropdown",
-		"Options": [{"GRB422":1}]
-		}
-	],
-	"Configure Radio":
-	[
-		{
-		"Label": "Frequency",
-		"Type": "Number",
-		"Range": [2420000000,2480000000]
-		}
-	]
+	"Downlink Image":{
+		"header": 32,
+		"arguments": [
+			{
+			"label": "Resolution", 
+			"type": "dropdown", 
+			"options": [{"160x120":1}, {"320x240":2}, {"640x480":3}]
+			},
+			{
+			"label": "Color",
+			"type": "dropdown",
+			"options": [{"GRB422":1}]
+			}
+		]
+	},
+	"Configure Radio":{
+		"header": 33,
+		"arguments": [
+			{
+			"label": "Frequency",
+			"type": "number",
+			"range": [2420000000,2480000000]
+			}
+		]
+	},
+	"Configure Telemetry": {
+		"header": 34,
+		"arguments": [
+			{
+			"label": "Period (ms)",
+			"type": "number",
+			"range": [1, 65536]
+			}
+		]
+	}
 }

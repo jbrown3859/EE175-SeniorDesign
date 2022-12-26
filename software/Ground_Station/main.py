@@ -34,11 +34,15 @@ class MainWindow():
         self.widgets = {}
         self.frame = np.zeros((120, 160), dtype='uint8') #image frame
         
-        #radio serial port instances
+        '''
+        radio serial port instances
+        '''
         self.UHF = radio.Radio("UHF", 115200)
         self.SBand = radio.Radio("SBand", 115200)
         
-        #telemetry database
+        '''
+        telemetry database
+        '''
         self.telemetry_packets = [] #list of dicts
         self.t = []
         self.a_x = []
@@ -50,8 +54,10 @@ class MainWindow():
         self.m_x = []
         self.m_y = []
         self.m_z = []
-        
-        #plots
+
+        '''
+        plots
+        '''
         style.use('ggplot')
         self.ag_plot = Figure(figsize=(18, 9.5), dpi=50)
         self.accel_ax = self.ag_plot.add_subplot(2,2,1)
@@ -84,8 +90,9 @@ class MainWindow():
         self.mag_z, = self.mag_ax.plot(self.t, self.m_z, label='z mag')
         self.mag_ax.legend()
        
-        
-        #image canvas
+        '''
+        image canvas
+        '''
         self.widgets['img_title'] = tk.Label(self.window, text="Image Downlink", font=("Arial", 25))
         self.widgets['img_title'].grid(row=0, column=0, columnspan=2,sticky='NSEW')
         
@@ -95,7 +102,9 @@ class MainWindow():
         self.widgets['telem_title'] = tk.Label(self.window, text="Spacecraft Telemetry", font=("Arial", 25))
         self.widgets['telem_title'].grid(row=0,column=3, columnspan=2,sticky='NSEW')
         
-        #radio status
+        '''
+        radio status
+        '''
         self.widgets['status_title'] = tk.Label(self.window, text="Radio Status", font=("Arial", 25))
         self.widgets['status_title'].grid(row=3,column=0,columnspan=2)
         
@@ -126,32 +135,62 @@ class MainWindow():
         tk.Label(self.widgets['uhf_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
         tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
         
-        #command center
+        '''
+        command center
+        '''
+        self.num_args = 5
+        
+        self.command_boxes = []
+        for i in range(0,self.num_args):
+            box = "box_{}".format(i)
+            self.command_boxes.append(tk.StringVar(self.window, value=''))
+        
+        self.commands = []
+        with open("commands.json") as f:
+            self.command_data = json.load(f)
+            for command in self.command_data.keys():
+                self.commands.append(command)
+        
         self.widgets['command_title'] = tk.Label(self.window, text="Command Uplink", font=("Arial", 25))
         self.widgets['command_title'].grid(row=3,column=3,columnspan=4)
         
         self.widgets['command_center'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['command_center'].grid(row=4,column=3,columnspan=4)
-        self.command = tk.StringVar(self.window)
-        self.channel = tk.StringVar(self.window)
         
+        self.channel = tk.StringVar(self.window)
         self.widgets['channel_title'] = tk.Label(self.widgets['command_center'], text="Channel", font=("Arial", 12))
         self.widgets['channel_title'].grid(row=1,column=1)
         self.widgets['channel'] = tk.OptionMenu(self.widgets['command_center'],self.channel,"UHF","S-Band")
         self.widgets['channel'].grid(row=2,column=1)
         self.widgets['channel'].config(width=7)
         
+        self.command = tk.StringVar(self.window)
         self.widgets['selcom_title'] = tk.Label(self.widgets['command_center'], text="Command", font=("Arial", 12))
         self.widgets['selcom_title'].grid(row=1,column=2)
-        self.widgets['selected_commands'] = tk.OptionMenu(self.widgets['command_center'],self.command,"Capture Image","Configure Radio")
+        self.widgets['selected_commands'] = tk.OptionMenu(self.widgets['command_center'],self.command,*self.commands)
         self.widgets['selected_commands'].grid(row=2,column=2)
         self.widgets['selected_commands'].config(width=15)
-        #self.widgets['command_menu'].grid(row=4,column=3)
         
-        with open("commands.json") as f:
-            data = json.load(f)
-            print(data["Configure Radio"])
         
+        for i in range(0, self.num_args):
+            box = "box_{}".format(i)
+            arg = "arg_{}".format(i)
+            self.widgets[arg] = tk.Label(self.widgets['command_center'], text=None, font=("Arial",12))
+            self.widgets[arg].grid(row=1,column=3+i)
+            self.widgets[box] = tk.OptionMenu(self.widgets['command_center'], self.command_boxes[i], None)
+            self.widgets[box].grid(row=2,column=3+i)
+            self.widgets[box].config(width=10)
+        
+        self.widgets['command_button'] = tk.Button(self.widgets['command_center'], 
+                                                    text = "Issue Command", command = self.issue_command, 
+                                                    width = 20, height = 2, bg='#c5e6e1')
+        self.widgets['command_button'].grid(row=3,column=1,columnspan=2+self.num_args)
+        
+        self.last_command = None
+
+        '''
+        threading
+        '''
         self.telem_queue = queue.Queue()
         self.img_queue = queue.Queue()
         self.status_queue = queue.Queue(maxsize = 1)
@@ -162,6 +201,7 @@ class MainWindow():
         
         self.update_image()
         self.update_radio_status()
+        self.update_command()
         
     def update_image(self):
         while not self.img_queue.empty():
@@ -234,6 +274,57 @@ class MainWindow():
                 self.mag_z.set_data(self.t, self.m_z)
         except IndexError:
             pass
+    
+    def update_command(self):
+        channel = self.channel.get()
+        command = self.command.get()
+        
+        if command in self.commands and command != self.last_command:
+            for i in range(0,self.num_args):
+                box = "box_{}".format(i)
+                arg = "arg_{}".format(i)
+                self.widgets[box].destroy()
+                self.widgets[arg].destroy()
+                self.command_boxes[i].set('')
+            
+            for i, argument in enumerate(self.command_data[command]['arguments']):
+                box = "box_{}".format(i)
+                arg = "arg_{}".format(i)
+                
+                if argument['type'] == 'dropdown':
+                    options = []
+                    for option in argument['options']:
+                        options.append(list(option.keys())[0])
+                    
+                    self.widgets[box] = tk.OptionMenu(self.widgets['command_center'], self.command_boxes[i], *options)
+                    self.widgets[box].grid(row=2,column=3+i)
+                    self.widgets[box].config(width=10)
+                elif argument['type'] == 'number':
+                    self.widgets[box] = tk.Entry(self.widgets['command_center'], textvariable=self.command_boxes[i], width = 16)
+                    self.widgets[box].grid(row=2,column=3+i)
+                
+                self.widgets[arg] = tk.Label(self.widgets['command_center'], text=argument['label'], font=("Arial",12))
+                self.widgets[arg].grid(row=1,column=3+i)
+                
+            
+            for i in range(len(self.command_data[command]['arguments']), self.num_args):
+                box = "box_{}".format(i)
+                self.widgets[box] = tk.OptionMenu(self.widgets['command_center'], self.command_boxes[i], None)
+                self.widgets[box].grid(row=2,column=3+i)
+                self.widgets[box].config(width=10)
+                
+            
+            print(len(self.command_data[command]['arguments']))
+        
+        self.last_command = command
+        self.window.after(100, self.update_command)
+        
+    def issue_command(self):
+        print(self.channel.get())
+        print(self.command.get())
+    
+        for box in self.command_boxes:
+                print(box.get())
     
     def update_radio_status(self):
         if not self.status_queue.empty():
