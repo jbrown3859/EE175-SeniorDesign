@@ -30,13 +30,13 @@ class Radio():
             if len(reply) >= 3 and reply[0] == 170 and reply[1] == 170: #valid preamble
                 if chr(reply[2]) == 'U':
                     if self.type == "UHF":
-                        print("UHF Modem Connection Accepted")
+                        #print("UHF Modem Connection Accepted")
                         self.port.reset_input_buffer()
                     else:
                         self.port.close()
                 elif chr(reply[2]) == 'S':
                     if self.type == "SBand":
-                        print("S-Band Modem Connection Accepted")
+                        #print("S-Band Modem Connection Accepted")
                         self.port.reset_input_buffer()
                     else:
                         self.port.close()
