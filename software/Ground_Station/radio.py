@@ -60,7 +60,6 @@ class Radio():
     def poll_rx(self): #poll rx to get the number of packets in queue
         self.port.write(b'b') #get rx info
         reply = self.port.read(5)
-        #print(reply)
         return reply
             
     def get_packet(self, size):
@@ -77,24 +76,42 @@ class Radio():
         self.last_packet = time.time()
         return packets
         
-    def poll_tx(self):
+    def flush_rx(self):
         self.port.write(b'e')
+        return self.port.read(10000)
+        
+    def poll_tx(self):
+        self.port.write(b'f')
         reply = self.port.read(5)
         return reply
         
-    def write_packet(self, packetsize, packet):
-        self.port.write(b'f')
-        self.port.write(packetsize.to_bytes(1, byteorder='big'))
+    def write_packet(self, packet):
+        self.port.write(b'g')
+        self.port.write(len(packet).to_bytes(1, byteorder='big'))
         self.port.write(bytearray(packet))
         flags = self.port.read(1)
         return flags
         
     def burst_write(self, packetsize, packetnum, packets):
-        self.port.write(b'g')
+        self.port.write(b'h')
         self.port.write(packetsize.to_bytes(1, byteorder='big'))
         self.port.write(packetnum.to_bytes(1, byteorder='big'))
         self.port.write(packets)
         flags = self.port.read(1)
         return flags
         
+    def flush_tx(self):
+        self.port.write(b'i')
+        return self.port.read(10000)
         
+    def write_rx(self, packet):
+        self.port.write(b'p')
+        self.port.write(len(packet).to_bytes(1, byteorder='big'))
+        self.port.write(bytearray(packet))
+        flags = self.port.read(1)
+        return flags
+        
+    def read_tx(self, size):
+        self.port.write(b'q')
+        packet = self.port.read(size)
+        return packet       

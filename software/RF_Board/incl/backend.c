@@ -61,7 +61,7 @@ unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
     unsigned char i;
 
-    if (get_buffer_data_size(buffer) + len >= (buffer->max_data - 1)) { //data overflow
+    if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
         buffer->flags |= 0x01;
     }
     else {
@@ -193,25 +193,37 @@ void main_loop(void) {
 
                 switch(command) {
                 case 0x61: //get info
-                    state = SEND_INFO;
+                    state = GET_RADIO_INFO;
                     break;
                 case 0x62: //send RX buffer size
-                    state = SEND_RX_BUF_STATE;
+                    state = GET_RX_BUF_STATE;
                     break;
                 case 0x63: //read RX packet
-                    state = SEND_RX_PACKET;
+                    state = READ_RX_BUF;
                     break;
                 case 0x64: //burst read RX packets
-                    state = BURST_SEND_RX;
+                    state = BURST_READ_RX;
                     break;
-                case 0x65: //send TX buffer state
-                    state = SEND_TX_BUF_STATE;
+                case 0x65: //flush RX buffer
+                    state = FLUSH_RX;
                     break;
-                case 0x66: //write to TX
-                    state = GET_TX_PACKET;
+                case 0x66: //send TX buffer state
+                    state = GET_TX_BUF_STATE;
                     break;
-                case 0x67:
+                case 0x67: //write to TX
+                    state = WRITE_TX_BUF;
+                    break;
+                case 0x68: //burst write TX packets
                     state = BURST_WRITE_TX;
+                    break;
+                case 0x69: //flush TX buffer
+                    state = FLUSH_TX;
+                    break;
+                case 0x70:
+                    state = WRITE_RX_BUF;
+                    break;
+                case 0x71:
+                    state = READ_TX_BUF;
                     break;
                 default:
                     state = WAIT;
@@ -242,7 +254,7 @@ void main_loop(void) {
             }
 
             break;
-        case SEND_INFO:
+        case GET_RADIO_INFO:
             putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
             putchar(0xAA);
             #ifdef RADIOTYPE_UHF
@@ -254,7 +266,7 @@ void main_loop(void) {
             print_dec(info.frequency, 10);
             state = WAIT;
             break;
-        case SEND_RX_BUF_STATE:
+        case GET_RX_BUF_STATE:
             putchar(RXbuf.flags);
             putchar((char)get_buffer_packet_count(&RXbuf));
 
@@ -270,20 +282,28 @@ void main_loop(void) {
             }
             state = WAIT;
             break;
-        case SEND_RX_PACKET:
+        case READ_RX_BUF:
             pkt_len = read_packet_buffer(&RXbuf, pkt);
             pkt[pkt_len] = '\0';
             putchars(pkt);
             state = WAIT;
             break;
-        case BURST_SEND_RX:
+        case BURST_READ_RX:
             while (get_UART_FIFO_size() < 2); //await data
             pkt_len = read_UART_FIFO(); //packet size
             pkt_num = read_UART_FIFO(); //packet number
             burst_read_packet_buffer(&RXbuf, pkt_len, pkt_num);
             state = WAIT;
             break;
-        case SEND_TX_BUF_STATE:
+        case FLUSH_RX:
+            while (get_buffer_packet_count(&RXbuf) != 0) {
+                pkt_len = read_packet_buffer(&RXbuf, pkt);
+                pkt[pkt_len] = '\0';
+                putchars(pkt);
+            }
+            state = WAIT;
+            break;
+        case GET_TX_BUF_STATE:
             putchar(TXbuf.flags);
             putchar((char)get_buffer_packet_count(&TXbuf));
 
@@ -300,7 +320,7 @@ void main_loop(void) {
 
             state = WAIT;
             break;
-        case GET_TX_PACKET:
+        case WRITE_TX_BUF:
             while (get_UART_FIFO_size() == 0); //await data
             pkt_len = read_UART_FIFO(); //packet size
 
@@ -321,12 +341,38 @@ void main_loop(void) {
             for(i=0;i<pkt_num;i++) {
                 for(j=0;j<pkt_len;j++) {
                     while (get_UART_FIFO_size() == 0);
-                    pkt[i] = read_UART_FIFO();
+                    pkt[j] = read_UART_FIFO();
                 }
                 write_packet_buffer(&TXbuf, pkt, pkt_len);
             }
 
             putchar(TXbuf.flags);
+            state = WAIT;
+            break;
+        case FLUSH_TX:
+            while (get_buffer_packet_count(&TXbuf) != 0) {
+                pkt_len = read_packet_buffer(&TXbuf, pkt);
+                pkt[pkt_len] = '\0';
+                putchars(pkt);
+            }
+            state = WAIT;
+            break;
+        case WRITE_RX_BUF:
+            while (get_UART_FIFO_size() == 0); //await data
+            pkt_len = read_UART_FIFO(); //packet size
+
+            for(i=0;i<pkt_len;i++) {
+                while (get_UART_FIFO_size() == 0);
+                pkt[i] = read_UART_FIFO();
+            }
+
+            write_packet_buffer(&RXbuf, pkt, pkt_len);
+            putchar(RXbuf.flags);
+            break;
+        case READ_TX_BUF:
+            pkt_len = read_packet_buffer(&TXbuf, pkt);
+            pkt[pkt_len] = '\0';
+            putchars(pkt);
             state = WAIT;
             break;
         }
