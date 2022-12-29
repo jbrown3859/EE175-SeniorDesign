@@ -65,7 +65,7 @@ class MainWindow():
         self.mag_ax = self.ag_plot.add_subplot(2,2,3)
         self.ag_plot.tight_layout()
         
-        self.accel_ax.set_xlim(0, 100)
+        #self.accel_ax.set_xlim(0, 100)
         self.accel_ax.set_ylim(0, 255)
         self.accel_x, = self.accel_ax.plot(self.t, self.a_x, label='x acceleration')
         self.accel_y, = self.accel_ax.plot(self.t, self.a_y, label='y acceleration')
@@ -76,15 +76,15 @@ class MainWindow():
         self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=2, rowspan=2)
         self.accel_animation = animation.FuncAnimation(self.ag_plot, self.animate_plot, interval=250, blit=False)
         
-        self.gyro_ax.set_xlim(0, 100)
+        #self.gyro_ax.set_xlim(0, 100)
         self.gyro_ax.set_ylim(0, 255)
         self.gyro_x, = self.gyro_ax.plot(self.t, self.g_x, label='x rate')
         self.gyro_y, = self.gyro_ax.plot(self.t, self.g_y, label='y rate')
         self.gyro_z, = self.gyro_ax.plot(self.t, self.g_z, label='z rate')
         self.gyro_ax.legend()
         
-        self.mag_ax.set_xlim(0, 100)
-        self.mag_ax.set_ylim(0, 100)
+        #self.mag_ax.set_xlim(0, 100)
+        self.mag_ax.set_ylim(0, 255)
         self.mag_x, = self.mag_ax.plot(self.t, self.m_x, label='x mag')
         self.mag_y, = self.mag_ax.plot(self.t, self.m_y, label='y mag')
         self.mag_z, = self.mag_ax.plot(self.t, self.m_z, label='z mag')
@@ -250,7 +250,8 @@ class MainWindow():
                 if (len(self.telemetry_packets) == 100):
                     self.telemetry_packets.pop(0)
                 
-                self.telemetry_packets.append(self.telem_queue.get())
+                telem = self.telem_queue.get()
+                self.telemetry_packets.append(telem)
 
             for packet in self.telemetry_packets:
                 if (len(self.a_x) == 100):
@@ -265,8 +266,15 @@ class MainWindow():
                     self.m_x.pop(0)
                     self.m_y.pop(0)
                     self.m_z.pop(0)
-                else:
-                    self.t.append(len(self.a_x))
+                    
+                    self.t.pop(0)
+                
+                self.t.append(packet['Timestamp'])
+                
+                #adjust x scale to match packet timestamps
+                self.mag_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                self.accel_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                self.gyro_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
                 
                 self.a_x.append(packet['Acceleration'][0])
                 self.a_y.append(packet['Acceleration'][1])
@@ -455,9 +463,10 @@ class MainWindow():
                                 packet = list(packets[(32*i):(32*(i+1))])
                                 
                                 packet_data = {}
-                                packet_data['Acceleration'] = packet[1:4] #x,y,z
-                                packet_data['Angular Rate'] = packet[4:7]
-                                packet_data['Magnetic Field'] = packet[7:10]
+                                packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
+                                packet_data['Acceleration'] = packet[5:8] #x,y,z
+                                packet_data['Angular Rate'] = packet[8:11]
+                                packet_data['Magnetic Field'] = packet[11:14]
                                 self.telem_queue.put(packet_data)
                         
             except (serial.serialutil.SerialException, IndexError):
@@ -470,9 +479,6 @@ class MainWindow():
         self.window.destroy()
     
 def main():
-    print("One day I will be a ground station, big and tall.")
-    print("But for now I'm just a placeholder, short and small...")
-    
     root = tk.Tk()
     root.title("Groundstation")
     window = MainWindow(root)

@@ -15,6 +15,7 @@ unsigned char UART_RX_PTR = 0;
 unsigned char UART_RX_BASE = 0;
 
 char timeout_flag = 0;
+unsigned long long timestamp = 0;
 
 /* helper functions */
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
@@ -118,20 +119,24 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 
 void main_loop(void) {
     enum State state = INIT;
-    char temp;
-    unsigned char args[2];
+    unsigned int temp;
     struct RadioInfo info;
 
+    /* temporary variables*/
     char pkt[256];
     unsigned int pkt_len = 0;
+    unsigned int pkt_num = 0;
     char command;
 
-    /* test */
     unsigned int i = 0;
+    unsigned int j = 0;
+
+    /* test */
     char packet[32];
 
 
     packet[0] = 'R';
+
     packet[1] = 32;
     packet[2] = 8;
     packet[3] = 128;
@@ -158,6 +163,7 @@ void main_loop(void) {
     RXbuf.data_head = 0;
     RXbuf.ptr_base = 0;
     RXbuf.ptr_head = 0;
+    RXbuf.flags = 0;
 
     /* TX buffer */
     char TXbuf_data[TX_SIZE];
@@ -171,6 +177,7 @@ void main_loop(void) {
     TXbuf.data_head = 0;
     TXbuf.ptr_base = 0;
     TXbuf.ptr_head = 0;
+    TXbuf.flags = 0;
 
     for (;;) {
         //state actions
@@ -197,6 +204,15 @@ void main_loop(void) {
                 case 0x64: //burst read RX packets
                     state = BURST_SEND_RX;
                     break;
+                case 0x65: //send TX buffer state
+                    state = SEND_TX_BUF_STATE;
+                    break;
+                case 0x66: //write to TX
+                    state = GET_TX_PACKET;
+                    break;
+                case 0x67:
+                    state = BURST_WRITE_TX;
+                    break;
                 default:
                     state = WAIT;
                     break;
@@ -204,7 +220,12 @@ void main_loop(void) {
             }
 
             if (timeout_flag == 1) {
-                packet[1] ^= 0x40;
+
+                for(i=0;i<4;i++) {
+                    packet[i+1] = (char)((timestamp >> (8*(3-i))) & 0xFF);
+                }
+
+                packet[5] ^= 0x40;
                 /*
                 packet[0] = 0x80 | (char)((i >> 8) & 0xFF);
                 packet[1] = (char)(i & 0xFF);
@@ -215,6 +236,8 @@ void main_loop(void) {
                 }
                 */
                 write_packet_buffer(&RXbuf, packet, 32);
+
+                timestamp++;
                 timeout_flag = 0;
             }
 
@@ -233,7 +256,7 @@ void main_loop(void) {
             break;
         case SEND_RX_BUF_STATE:
             putchar(RXbuf.flags);
-            putchar(get_buffer_packet_count(&RXbuf));
+            putchar((char)get_buffer_packet_count(&RXbuf));
 
             temp = get_buffer_data_size(&RXbuf);
             putchar((char)((temp >> 8) & 0xFF));
@@ -255,9 +278,55 @@ void main_loop(void) {
             break;
         case BURST_SEND_RX:
             while (get_UART_FIFO_size() < 2); //await data
-            args[0] = read_UART_FIFO();
-            args[1] = read_UART_FIFO();
-            burst_read_packet_buffer(&RXbuf, args[0], args[1]);
+            pkt_len = read_UART_FIFO(); //packet size
+            pkt_num = read_UART_FIFO(); //packet number
+            burst_read_packet_buffer(&RXbuf, pkt_len, pkt_num);
+            state = WAIT;
+            break;
+        case SEND_TX_BUF_STATE:
+            putchar(TXbuf.flags);
+            putchar((char)get_buffer_packet_count(&TXbuf));
+
+            temp = get_buffer_data_size(&TXbuf);
+            putchar((char)((temp >> 8) & 0xFF));
+            putchar((char)(temp & 0xFF));
+
+            if (temp > 0) {
+                putchar((char)(get_next_buffer_packet_size(&TXbuf) & 0xFF));
+            }
+            else {
+                putchar(0x00);
+            }
+
+            state = WAIT;
+            break;
+        case GET_TX_PACKET:
+            while (get_UART_FIFO_size() == 0); //await data
+            pkt_len = read_UART_FIFO(); //packet size
+
+            for(i=0;i<pkt_len;i++) {
+                while (get_UART_FIFO_size() == 0);
+                pkt[i] = read_UART_FIFO();
+            }
+
+            write_packet_buffer(&TXbuf, pkt, pkt_len);
+            putchar(TXbuf.flags);
+            state = WAIT;
+            break;
+        case BURST_WRITE_TX: //this is not its own buffer function due to RAM space constraints (cannot write all incoming data at once)
+            while (get_UART_FIFO_size() < 2); //await data
+            pkt_len = read_UART_FIFO();
+            pkt_num = read_UART_FIFO();
+
+            for(i=0;i<pkt_num;i++) {
+                for(j=0;j<pkt_len;j++) {
+                    while (get_UART_FIFO_size() == 0);
+                    pkt[i] = read_UART_FIFO();
+                }
+                write_packet_buffer(&TXbuf, pkt, pkt_len);
+            }
+
+            putchar(TXbuf.flags);
             state = WAIT;
             break;
         }

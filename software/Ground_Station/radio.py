@@ -76,3 +76,25 @@ class Radio():
         packets = self.port.read(packetsize * packetnum)
         self.last_packet = time.time()
         return packets
+        
+    def poll_tx(self):
+        self.port.write(b'e')
+        reply = self.port.read(5)
+        return reply
+        
+    def write_packet(self, packetsize, packet):
+        self.port.write(b'f')
+        self.port.write(packetsize.to_bytes(1, byteorder='big'))
+        self.port.write(bytearray(packet))
+        flags = self.port.read(1)
+        return flags
+        
+    def burst_write(self, packetsize, packetnum, packets):
+        self.port.write(b'g')
+        self.port.write(packetsize.to_bytes(1, byteorder='big'))
+        self.port.write(packetnum.to_bytes(1, byteorder='big'))
+        self.port.write(packets)
+        flags = self.port.read(1)
+        return flags
+        
+        
