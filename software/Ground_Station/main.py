@@ -436,7 +436,7 @@ class MainWindow():
                 
                 if self.SBand.port.is_open:
                     try:
-                        sband_info = self.SBand.get_info()
+                        sband_info = self.SBand.get_radio_info()
                         radio_status['SBand_frequency'] = sband_info['frequency'].lstrip('0') + " Hz"
                     except(serial.serialutil.SerialException, IndexError):
                         pass
@@ -448,7 +448,7 @@ class MainWindow():
             try:
                 #get packets
                 if self.SBand.port.is_open:
-                    status = self.SBand.poll_rx()
+                    status = self.SBand.get_rx_buffer_state()
                     if status[1] != 0: #if packet
                         radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])

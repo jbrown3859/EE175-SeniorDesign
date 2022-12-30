@@ -131,26 +131,6 @@ void main_loop(void) {
     unsigned int i = 0;
     unsigned int j = 0;
 
-    /* test */
-    char packet[32];
-
-
-    packet[0] = 'R';
-
-    packet[1] = 32;
-    packet[2] = 8;
-    packet[3] = 128;
-    packet[31] = 0x04;
-
-    /*
-    packet[0] = 0x80;
-    packet[1] = 0;
-    for (i=2;i<18;i++) {
-        packet[i] = 0x03; //blue
-    }
-    i=0;
-    */
-
     /* RX buffer */
     char RXbuf_data[RX_SIZE];
     unsigned int RXbuf_ptrs[RX_PACKETS];
@@ -219,40 +199,23 @@ void main_loop(void) {
                 case 0x69: //flush TX buffer
                     state = FLUSH_TX;
                     break;
-                case 0x70:
+                case 0x70: //write RX buffer (debug)
                     state = WRITE_RX_BUF;
                     break;
-                case 0x71:
+                case 0x71: //read TX buffer (debug)
                     state = READ_TX_BUF;
+                    break;
+                case 0x72:
+                    state = CLEAR_RX_FLAGS;
+                    break;
+                case 0x73:
+                    state = CLEAR_TX_FLAGS;
                     break;
                 default:
                     state = WAIT;
                     break;
                 }
             }
-
-            if (timeout_flag == 1) {
-
-                for(i=0;i<4;i++) {
-                    packet[i+1] = (char)((timestamp >> (8*(3-i))) & 0xFF);
-                }
-
-                packet[5] ^= 0x40;
-                /*
-                packet[0] = 0x80 | (char)((i >> 8) & 0xFF);
-                packet[1] = (char)(i & 0xFF);
-                write_packet_buffer(&RXbuf, packet, 18);
-                i++;
-                if (i >= 1200) {
-                    i = 0;
-                }
-                */
-                write_packet_buffer(&RXbuf, packet, 32);
-
-                timestamp++;
-                timeout_flag = 0;
-            }
-
             break;
         case GET_RADIO_INFO:
             putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
@@ -368,11 +331,22 @@ void main_loop(void) {
 
             write_packet_buffer(&RXbuf, pkt, pkt_len);
             putchar(RXbuf.flags);
+            state = WAIT;
             break;
         case READ_TX_BUF:
             pkt_len = read_packet_buffer(&TXbuf, pkt);
             pkt[pkt_len] = '\0';
             putchars(pkt);
+            state = WAIT;
+            break;
+        case CLEAR_RX_FLAGS:
+            RXbuf.flags = 0x00;
+            putchar(RXbuf.flags);
+            state = WAIT;
+            break;
+        case CLEAR_TX_FLAGS:
+            TXbuf.flags = 0x00;
+            putchar(TXbuf.flags);
             state = WAIT;
             break;
         }

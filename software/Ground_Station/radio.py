@@ -48,7 +48,7 @@ class Radio():
             if self.port.is_open:
                 self.port.close()
                 
-    def get_info(self):
+    def get_radio_info(self):
         info = {}
         self.port.write(b'a') #send info request
         reply = self.port.read(13)
@@ -57,12 +57,12 @@ class Radio():
         
         return info
         
-    def poll_rx(self): #poll rx to get the number of packets in queue
+    def get_rx_buffer_state(self): #poll rx to get the number of packets in queue
         self.port.write(b'b') #get rx info
         reply = self.port.read(5)
         return reply
             
-    def get_packet(self, size):
+    def read_rx_buffer(self, size):
         self.port.write(b'c')
         packet = self.port.read(size)
         self.last_packet = time.time()
@@ -80,12 +80,12 @@ class Radio():
         self.port.write(b'e')
         return self.port.read(10000)
         
-    def poll_tx(self):
+    def get_tx_buffer_state(self):
         self.port.write(b'f')
         reply = self.port.read(5)
         return reply
         
-    def write_packet(self, packet):
+    def write_tx_buffer(self, packet):
         self.port.write(b'g')
         self.port.write(len(packet).to_bytes(1, byteorder='big'))
         self.port.write(bytearray(packet))
@@ -104,14 +104,24 @@ class Radio():
         self.port.write(b'i')
         return self.port.read(10000)
         
-    def write_rx(self, packet):
+    def write_rx_buffer(self, packet):
         self.port.write(b'p')
         self.port.write(len(packet).to_bytes(1, byteorder='big'))
         self.port.write(bytearray(packet))
         flags = self.port.read(1)
         return flags
         
-    def read_tx(self, size):
+    def read_tx_buffer(self, size):
         self.port.write(b'q')
         packet = self.port.read(size)
-        return packet       
+        return packet
+        
+    def clear_rx_flags(self):
+        self.port.write(b'r')
+        flags = self.port.read(1)
+        return flags
+        
+    def clear_tx_flags(self):
+        self.port.write(b's')
+        flags = self.port.read(1)
+        return flags
