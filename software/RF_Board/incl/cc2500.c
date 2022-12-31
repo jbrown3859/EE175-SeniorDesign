@@ -3,6 +3,25 @@
 #include <msp430.h>
 #include <serial.h>
 
+extern char RX_done;
+
+/* ISR for RX detection */
+#pragma vector=PORT2_VECTOR
+__interrupt void PORT2_ISR(void) {
+    RX_done = 1;
+    P2IFG &= ~(0x04);
+}
+
+/* init GDO gpio pins (P2.0->GDO0 and P2.2->GDO2) */
+void cc2500_init_gpio(void) {
+    P2SEL0 &= ~(0b101); //set pins 0 and 2 to GPIO
+    P2DIR &= ~(0b101); //set to input
+    P2REN &= ~(0b101); //disable pullup/pulldown
+
+    P2IES &= ~(0x04); //trigger P2.2 on rising edge
+    P2IE |= 0x04; //enable interrupt
+}
+
 /* read register */
 char cc2500_read(const unsigned char addr) {
     if (addr >= 0x30 && addr <= 0x3D) { //status registers require burst bit to be set
@@ -66,4 +85,63 @@ void cc2500_command_strobe(const unsigned char strobe) {
     if (strobe >= 0x30 && strobe <= 0x3D) {
         SPI_TX(strobe, 0x00);
     }
+}
+
+
+/* VCO settings */
+void cc2500_set_vco_autocal(const unsigned char autocal) {
+    char MCSM0 = cc2500_read(0x18) & ~(0x30);
+    cc2500_write(0x18, MCSM0 | autocal);
+}
+
+/* FIFO settings */
+/* Consult datasheet for splits:
+ * 0x00 == 61 TX, 4 RX
+ * 0x07 == 33 TX, 32 RX
+ * 0x0F == 1 TX, 64 RX
+ */
+void cc2500_set_fifo_thresholds(const unsigned char threshold) {
+    cc2500_write(0x03, threshold);
+}
+
+/* GDO configuration */
+void cc2500_configure_gdo(const unsigned char pin, const unsigned char config) {
+    if (pin <= 0x02) {
+        cc2500_write(pin, config);
+    }
+}
+
+/* Transmit */
+void cc2500_transmit(const char* data, const char size) {
+    unsigned char i;
+
+    cc2500_configure_gdo(GDO0, TX_RX_ACTIVE); //set I/O pin to detect when transmit is complete
+
+    cc2500_write(0x3f, size); //write size for variable length mode
+    for (i=0;i<size;i++) {
+        cc2500_write(0x3f, data[i]); //write data
+    }
+
+    cc2500_command_strobe(STROBE_STX); //enter transmit mode
+    while ((P2IN & 0x01) != 0x01); //detect start of transmit
+    while ((P2IN & 0x01) == 0x01); //wait for end
+    cc2500_command_strobe(STROBE_SFTX); //reset and enter IDLE
+}
+
+/* recieve */
+unsigned char cc2500_recieve(char* buffer) {
+    unsigned char len;
+    unsigned char i;
+
+    if ((cc2500_read(0x3b) & 0x7F) != 0) { //if RX is not empty
+        len = cc2500_read(0xbf); //FIFO RX access
+
+        cc2500_command_strobe(STROBE_SFRX);
+        return len;
+    }
+    else { //reset to IDLE if no data in buffer
+        cc2500_command_strobe(STROBE_SFRX);
+        return 0;
+    }
+
 }

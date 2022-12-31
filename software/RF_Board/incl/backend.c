@@ -9,6 +9,13 @@
 #define TX_SIZE 1024
 #define TX_PACKETS 128
 
+#ifdef RADIOTYPE_SBAND
+#include <cc2500.h>
+#endif
+#ifdef RADIOTYPE_UHF
+#include <rfm95w.h>
+#endif
+
 /* UART data structure */
 char UART_RXBUF[256];
 unsigned char UART_RX_PTR = 0;
