@@ -59,16 +59,33 @@
 #define STATE_RXTX_SWITCH 0x15
 #define STATE_TXFIFO_UNDERFLOW 0x16
 
-/* Data whitening */
+/* data whitening */
 #define WHITE_OFF 0x00
 #define WHITE_ON 0x40
 
-/* control functions */
+/* data rates */
+#define MAN_9600 131
+#define EXP_9600 8
+
+#define MAN_19200 131
+#define EXP_19200 9
+
+#define MAN_38400 131
+#define EXP_38400 10
+
+#define MAN_76800 131
+#define EXP_76800 11
+
+/* I/O functions */
 void cc2500_init_gpio(void);
 char cc2500_read(const unsigned char addr);
+void cc2500_burst_read_fifo(char* buffer, unsigned char len);
 void cc2500_write(const unsigned char addr, const char data);
+void cc2500_burst_write_fifo(const char* buffer, unsigned char len);
 void cc2500_display_register(const char addr);
 void cc2500_register_dump(void);
+
+/* control functions */
 void cc2500_set_base_frequency(const unsigned long long freq);
 void cc2500_set_IF_frequency(const unsigned long long freq);
 void cc2500_set_channel(const unsigned char channel);
@@ -81,7 +98,10 @@ void cc2500_set_data_whitening(const unsigned char white);
 void cc2500_set_sync_word(const unsigned short sync);
 void cc2500_configure_gdo(const unsigned char pin, const unsigned char config);
 
+/* TX/RX functions */
 void cc2500_transmit(const char* data, const char size);
+void cc2500_burst_tx(const char* data, const char size);
 unsigned char cc2500_receive(char* buffer);
+unsigned char cc2500_burst_rx(char* buffer);
 
 #endif

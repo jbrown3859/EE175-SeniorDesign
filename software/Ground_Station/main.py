@@ -136,6 +136,25 @@ class MainWindow():
         tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
         
         '''
+        Radio Programming
+        '''
+        self.widgets['sband_program'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
+        self.widgets['sband_program'].grid(row=5,column=0, sticky='N')
+        
+        self.widgets['sband_freq_label'] = tk.Label(self.widgets['sband_program'], text="Frequency", font=("Arial", 12))
+        self.widgets['sband_freq_label'].grid(row=0,column=0)
+        
+        self.widgets['sband_freq'] = tk.Entry(self.widgets['sband_program'], width = 16)
+        self.widgets['sband_freq'].grid(row=1,column=0,pady=5,padx=5)
+        
+        self.widgets['sband_rate_label'] = tk.Label(self.widgets['sband_program'], text="Data Rate", font=("Arial", 12))
+        self.widgets['sband_rate_label'].grid(row=0,column=1)
+        
+        self.widgets['sband_rate'] = tk.OptionMenu(self.widgets['sband_program'], None, None)
+        self.widgets['sband_rate'].grid(row=1,column=1)
+        self.widgets['sband_rate'].config(width=10,padx=5)
+        
+        '''
         Command Center
         '''
         self.num_args = 6

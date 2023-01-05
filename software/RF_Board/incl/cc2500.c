@@ -32,9 +32,53 @@ char cc2500_read(const unsigned char addr) {
     }
 }
 
+/* burst read FIFO */
+void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
+    unsigned char i;
+
+    P4OUT &= ~(1 << 4); //NSS low
+    __no_operation();
+
+    while ((UCB1IFG & UCTXIFG) == 0);
+    UCB1TXBUF = 0xFF; //burst RX FIFO address
+
+    while ((UCB1IFG & UCRXIFG) == 0); //wait until addr byte data shifted out
+
+    for(i=0;i<len;i++) {
+        while ((UCB1IFG & UCTXIFG) == 0);
+        UCB1TXBUF = 0x00; //transmit nothing
+
+        while ((UCB1IFG & UCRXIFG) == 0);
+        buffer[i] = UCB1RXBUF; //get next byte
+    }
+
+    __no_operation();
+    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    P4OUT |= (1 << 4); //NSS high
+}
+
 /* write register */
 void cc2500_write(const unsigned char addr, const char data) {
     SPI_TX((addr & 0x3F), data);
+}
+
+/* burst write fifo */
+void cc2500_burst_write_fifo(const char* buffer, unsigned char len) {
+    unsigned char i;
+
+    P4OUT &= ~(1 << 4); //NSS low
+    __no_operation();
+
+    while ((UCB1IFG & UCTXIFG) == 0);
+    UCB1TXBUF = 0x7F; //burst TX FIFO address
+
+    for(i=0;i<len;i++) {
+        while ((UCB1IFG & UCTXIFG) == 0);
+        UCB1TXBUF = buffer[i];
+    }
+
+    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    P4OUT |= (1 << 4); //NSS high
 }
 
 /* display register addr and value over uart for debug */
@@ -132,7 +176,7 @@ void cc2500_configure_gdo(const unsigned char pin, const unsigned char config) {
     }
 }
 
-/* Transmit */
+/* transmit */
 void cc2500_transmit(const char* data, const char size) {
     unsigned char i;
 
@@ -143,6 +187,21 @@ void cc2500_transmit(const char* data, const char size) {
     for (i=0;i<size;i++) {
         cc2500_write(0x3f, data[i]); //write data
     }
+
+    cc2500_command_strobe(STROBE_STX); //enter transmit mode
+    while ((P2IN & 0x01) != 0x01); //detect start of transmit
+    while ((P2IN & 0x01) == 0x01); //wait for end
+    cc2500_command_strobe(STROBE_SFTX); //reset and enter IDLE
+
+    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //RX detect
+}
+
+void cc2500_burst_tx(const char* data, const char size) {
+    cc2500_configure_gdo(GDO2, GDO_HI_Z); //disable GDO2 to avoid interrupt
+    cc2500_configure_gdo(GDO0, TX_RX_ACTIVE); //set I/O pin to detect when transmit is complete
+
+    cc2500_write(0x3f, size); //write size
+    cc2500_burst_write_fifo(data, size);
 
     cc2500_command_strobe(STROBE_STX); //enter transmit mode
     while ((P2IN & 0x01) != 0x01); //detect start of transmit
@@ -175,5 +234,20 @@ unsigned char cc2500_receive(char* buffer) {
         cc2500_command_strobe(STROBE_SFRX);
         return 0;
     }
+}
 
+/* burst RX */
+unsigned char cc2500_burst_rx(char* buffer) {
+    unsigned char len;
+
+    if ((cc2500_read(0x3B) & 0x7F) != 0) { //if RX is not empty
+        len = cc2500_read(0xbf); //FIFO RX access
+        cc2500_burst_read_fifo(buffer, len);
+        cc2500_command_strobe(STROBE_SFRX);
+        return len;
+    }
+    else {
+        cc2500_command_strobe(STROBE_SFRX);
+        return 0;
+    }
 }

@@ -50,10 +50,8 @@ int main(void) {
 	for(;;){
 	    /*
 	    putchars("Transmitting\n\r");
-	    cc2500_transmit("I have never met Napoleon", 25);
-	    hardware_delay(1000);
-	    cc2500_transmit("But I plan to find the time", 27);
-	    hardware_delay(1000);
+	    cc2500_burst_tx("I have never met Napoleon", 25);
+	    cc2500_burst_tx("But I plan to find the time", 27);
         */
 	    /*
         print_binary(cc2500_read(0x38)); //for debug
@@ -62,12 +60,12 @@ int main(void) {
         putchars("\n\n\r");
         */
 
-
 	    if (RX_done == 1) {
 	        //putchars("Packet Detected, RX buffer: ");
 	        //print_hex(cc2500_read(0x3B));
 	        //putchars("\n\r");
-	        len = cc2500_receive(buffer);
+	        //len = cc2500_receive(buffer);
+	        len = cc2500_burst_rx(buffer);
 	        buffer[len] = '\0';
 	        //putchars("Got Packet, length=");
 	        //print_hex(len);
@@ -77,7 +75,6 @@ int main(void) {
 	        cc2500_command_strobe(STROBE_SRX);
 	        RX_done = 0;
 	    }
-
 
 
 	    __no_operation();
