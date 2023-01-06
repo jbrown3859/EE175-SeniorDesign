@@ -31,11 +31,13 @@ int main(void) {
     cc2500_set_vco_autocal(AUTOCAL_FROM_IDLE);
     cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //RX detect
     cc2500_configure_gdo(GDO0, GDO_HI_Z);
-    //cc2500_set_packet_length(32);
+    cc2500_set_packet_length(32);
     cc2500_set_data_whitening(WHITE_OFF);
     //cc2500_set_sync_word(0xBAAD);
-    cc2500_set_data_rate(131,8); //9600 baud
+    cc2500_set_data_rate(MAN_76800,EXP_76800);
+    cc2500_set_crc(CRC_ENABLED, CRC_AUTOFLUSH, CRC_APPEND);
     cc2500_write(0x26, 0x11); //value from smartrf studio
+    cc2500_set_tx_power(0xC6);
     cc2500_register_dump();
 
     cc2500_init_gpio(); //init after programming to avoid false interrupts
@@ -47,35 +49,23 @@ int main(void) {
 
     putchars("Entering main loop\n\r");
     cc2500_command_strobe(STROBE_SRX);
-	for(;;){
+	for(;;) {
+	    char message[] = "Radio Test Packet #0";
 	    /*
-	    putchars("Transmitting\n\r");
-	    cc2500_burst_tx("I have never met Napoleon", 25);
-	    cc2500_burst_tx("But I plan to find the time", 27);
-        */
-	    /*
-        print_binary(cc2500_read(0x38)); //for debug
-        putchars("\n\r");
-        print_hex(cc2500_read(0x3B));
-        putchars("\n\n\r");
-        */
-
+	    for (i=0;i<10;i++) {
+	        message[19] = 48 + i;
+	        cc2500_transmit(message, 20);
+	    }
+	    */
 	    if (RX_done == 1) {
-	        //putchars("Packet Detected, RX buffer: ");
-	        //print_hex(cc2500_read(0x3B));
-	        //putchars("\n\r");
-	        //len = cc2500_receive(buffer);
-	        len = cc2500_burst_rx(buffer);
+	        len = cc2500_receive(buffer);
+	        cc2500_command_strobe(STROBE_SRX);
 	        buffer[len] = '\0';
-	        //putchars("Got Packet, length=");
-	        //print_hex(len);
-	        //putchars("\n\r");
+	        RX_done = 0;
+
 	        putchars(buffer);
 	        putchars("\n\r");
-	        cc2500_command_strobe(STROBE_SRX);
-	        RX_done = 0;
 	    }
-
 
 	    __no_operation();
 	}

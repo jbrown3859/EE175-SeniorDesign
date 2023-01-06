@@ -2,7 +2,7 @@
 
 #include <msp430.h>
 
-extern char timeout_flag; //must be reset by user
+char timeout_flag;
 
 /* timeout vector */
 #pragma vector=TIMER0_B0_VECTOR

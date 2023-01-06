@@ -76,6 +76,11 @@
 #define MAN_76800 131
 #define EXP_76800 11
 
+/* CRC */
+#define CRC_ENABLED 0x04
+#define CRC_AUTOFLUSH 0x08
+#define CRC_APPEND 0x04
+
 /* I/O functions */
 void cc2500_init_gpio(void);
 char cc2500_read(const unsigned char addr);
@@ -96,12 +101,12 @@ void cc2500_set_fifo_thresholds(const unsigned char threshold);
 void cc2500_set_packet_length(const unsigned char pktlen);
 void cc2500_set_data_whitening(const unsigned char white);
 void cc2500_set_sync_word(const unsigned short sync);
+void cc2500_set_crc(const char crc_en, const char crc_autoflush, const char crc_append);
 void cc2500_configure_gdo(const unsigned char pin, const unsigned char config);
+void cc2500_set_tx_power(const unsigned char power);
 
 /* TX/RX functions */
 void cc2500_transmit(const char* data, const char size);
-void cc2500_burst_tx(const char* data, const char size);
 unsigned char cc2500_receive(char* buffer);
-unsigned char cc2500_burst_rx(char* buffer);
 
 #endif

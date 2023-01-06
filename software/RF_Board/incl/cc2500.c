@@ -2,8 +2,10 @@
 
 #include <msp430.h>
 #include <serial.h>
+#include <util.h>
 
 extern char RX_done;
+//char timeout_flag;
 
 /* ISR for RX detection */
 #pragma vector=PORT2_VECTOR
@@ -36,25 +38,30 @@ char cc2500_read(const unsigned char addr) {
 void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
     unsigned char i;
 
+    hardware_timeout(100);
+
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    while ((UCB1IFG & UCTXIFG) == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 && timeout_flag == 0);
     UCB1TXBUF = 0xFF; //burst RX FIFO address
 
-    while ((UCB1IFG & UCRXIFG) == 0); //wait until addr byte data shifted out
+    while ((UCB1IFG & UCRXIFG) == 0 && timeout_flag == 0); //wait until addr byte data shifted out
 
     for(i=0;i<len;i++) {
-        while ((UCB1IFG & UCTXIFG) == 0);
+        while ((UCB1IFG & UCTXIFG) == 0 && timeout_flag == 0);
         UCB1TXBUF = 0x00; //transmit nothing
 
-        while ((UCB1IFG & UCRXIFG) == 0);
+        while ((UCB1IFG & UCRXIFG) == 0 && timeout_flag == 0);
         buffer[i] = UCB1RXBUF; //get next byte
     }
 
     __no_operation();
     while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
+
+    timeout_flag = 0;
+    hardware_timeout(0);
 }
 
 /* write register */
@@ -169,6 +176,13 @@ void cc2500_set_sync_word(const unsigned short sync) {
     cc2500_write(0x05, (char)(sync & 0xFF));
 }
 
+void cc2500_set_crc(const char crc_en, const char crc_autoflush, const char crc_append) {
+    char PKTCTRL0 = cc2500_read(0x08) & ~(0x04);
+    char PKTCTRL1 = cc2500_read(0x07) & ~(0x0C);
+    cc2500_write(0x08, PKTCTRL0 | crc_en);
+    cc2500_write(0x07, PKTCTRL1 | crc_autoflush | crc_append);
+}
+
 /* GDO configuration */
 void cc2500_configure_gdo(const unsigned char pin, const unsigned char config) {
     if (pin <= 0x02) {
@@ -176,27 +190,19 @@ void cc2500_configure_gdo(const unsigned char pin, const unsigned char config) {
     }
 }
 
-/* transmit */
-void cc2500_transmit(const char* data, const char size) {
-    unsigned char i;
-
-    cc2500_configure_gdo(GDO2, GDO_HI_Z); //disable GDO2 to avoid interrupt
-    cc2500_configure_gdo(GDO0, TX_RX_ACTIVE); //set I/O pin to detect when transmit is complete
-
-    cc2500_write(0x3f, size); //write size for variable length mode
-    for (i=0;i<size;i++) {
-        cc2500_write(0x3f, data[i]); //write data
-    }
-
-    cc2500_command_strobe(STROBE_STX); //enter transmit mode
-    while ((P2IN & 0x01) != 0x01); //detect start of transmit
-    while ((P2IN & 0x01) == 0x01); //wait for end
-    cc2500_command_strobe(STROBE_SFTX); //reset and enter IDLE
-
-    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //RX detect
+/* output power setting (programs PATABLE index 0 only, will not work for OOK)
+ *  0x00 = undefined, -55 dBm or less
+ *  0x50 = -30 dBm
+ *  0xFF = +1 dBm
+ */
+void cc2500_set_tx_power(const unsigned char power) {
+    char FREND0 = cc2500_read(0x22) & 0xF8;
+    cc2500_write(0x3E, power);
+    cc2500_write(0x22, FREND0); //sets PA_POWER to 0x00
 }
 
-void cc2500_burst_tx(const char* data, const char size) {
+/* transmit */
+void cc2500_transmit(const char* data, const char size) {
     cc2500_configure_gdo(GDO2, GDO_HI_Z); //disable GDO2 to avoid interrupt
     cc2500_configure_gdo(GDO0, TX_RX_ACTIVE); //set I/O pin to detect when transmit is complete
 
@@ -213,31 +219,6 @@ void cc2500_burst_tx(const char* data, const char size) {
 
 /* receive */
 unsigned char cc2500_receive(char* buffer) {
-    unsigned char len;
-    unsigned char i;
-
-    if ((cc2500_read(0x3B) & 0x7F) != 0) { //if RX is not empty
-        len = cc2500_read(0xbf); //FIFO RX access
-
-        for(i=0;i<len;i++) {
-            if (cc2500_read(0x3B) & 0x7F == 0x00) {
-                len = i;
-                break; //leave loop if there are no more bytes to grab
-            }
-            buffer[i] = cc2500_read(0xbf);
-        }
-
-        cc2500_command_strobe(STROBE_SFRX);
-        return len;
-    }
-    else { //reset to IDLE if no data in buffer
-        cc2500_command_strobe(STROBE_SFRX);
-        return 0;
-    }
-}
-
-/* burst RX */
-unsigned char cc2500_burst_rx(char* buffer) {
     unsigned char len;
 
     if ((cc2500_read(0x3B) & 0x7F) != 0) { //if RX is not empty

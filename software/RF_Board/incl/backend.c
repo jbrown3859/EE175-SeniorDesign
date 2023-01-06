@@ -21,7 +21,6 @@ char UART_RXBUF[256];
 unsigned char UART_RX_PTR = 0;
 unsigned char UART_RX_BASE = 0;
 
-char timeout_flag = 0;
 unsigned long long timestamp = 0;
 
 /* helper functions */
