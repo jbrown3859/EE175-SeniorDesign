@@ -9,6 +9,9 @@
 #define TX_SIZE 1024
 #define TX_PACKETS 128
 
+struct packet_buffer RXbuf;
+struct packet_buffer TXbuf;
+
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
 #endif
@@ -16,12 +19,7 @@
 #include <rfm95w.h>
 #endif
 
-/* UART data structure */
-char UART_RXBUF[256];
-unsigned char UART_RX_PTR = 0;
-unsigned char UART_RX_BASE = 0;
-
-unsigned long long timestamp = 0;
+char RX_done = 0;
 
 /* helper functions */
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
@@ -123,6 +121,22 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
     }
 }
 
+/* ISR for RX detection */
+#pragma vector=PORT2_VECTOR
+__interrupt void PORT2_ISR(void) {
+    #ifdef RADIOTYPE_SBAND
+    char pkt[64];
+    unsigned int pkt_len;
+
+    pkt_len = cc2500_receive(pkt);
+    if (pkt_len > 0) { //filter failed CRCs
+        write_packet_buffer(&RXbuf, pkt, pkt_len);
+    }
+    cc2500_command_strobe(STROBE_SRX);
+    #endif
+    P2IFG &= ~(0x04);
+}
+
 void main_loop(void) {
     enum State state = INIT;
     unsigned int temp;
@@ -140,7 +154,7 @@ void main_loop(void) {
     /* RX buffer */
     char RXbuf_data[RX_SIZE];
     unsigned int RXbuf_ptrs[RX_PACKETS];
-    struct packet_buffer RXbuf;
+    //struct packet_buffer RXbuf;
     RXbuf.data = RXbuf_data;
     RXbuf.max_data = RX_SIZE;
     RXbuf.pointers = RXbuf_ptrs;
@@ -154,7 +168,7 @@ void main_loop(void) {
     /* TX buffer */
     char TXbuf_data[TX_SIZE];
     unsigned int TXbuf_ptrs[TX_PACKETS];
-    struct packet_buffer TXbuf;
+    //struct packet_buffer TXbuf;
     TXbuf.data = TXbuf_data;
     TXbuf.max_data = TX_SIZE;
     TXbuf.pointers = TXbuf_ptrs;
@@ -166,12 +180,20 @@ void main_loop(void) {
     TXbuf.flags = 0;
 
     for (;;) {
-        //state actions
+        /* background tasks */
+
+        /* state machine */
         switch(state) {
         case INIT:
-            hardware_timeout(100);
+            //hardware_timeout(100);
             info.frequency = 2450000000;
             state = WAIT;
+
+            #ifdef RADIOTYPE_SBAND
+            P2IES |= 0x04; //trigger P2.2 on falling edge
+            P2IE |= 0x04; //enable interrupt
+            cc2500_command_strobe(STROBE_SRX);
+            #endif
             break;
         case WAIT:
             if (get_UART_FIFO_size() != 0) { //await command
@@ -286,7 +308,6 @@ void main_loop(void) {
             else {
                 putchar(0x00);
             }
-
             state = WAIT;
             break;
         case WRITE_TX_BUF:

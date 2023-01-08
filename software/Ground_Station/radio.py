@@ -7,7 +7,7 @@ class Radio():
         self.type = type #radio type string
         self.port = serial.Serial()
         self.port.baudrate = baudrate
-        self.port.timeout = 0.5 #seconds
+        self.port.timeout = 0.2 #seconds
         self.portname = None
         self.frequency = None
         self.last_packet = None

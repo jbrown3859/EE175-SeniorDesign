@@ -4,24 +4,13 @@
 #include <serial.h>
 #include <util.h>
 
-extern char RX_done;
-//char timeout_flag;
-
-/* ISR for RX detection */
-#pragma vector=PORT2_VECTOR
-__interrupt void PORT2_ISR(void) {
-    RX_done = 1;
-    P2IFG &= ~(0x04);
-}
-
 /* init GDO gpio pins (P2.0->GDO0 and P2.2->GDO2) */
 void cc2500_init_gpio(void) {
     P2SEL0 &= ~(0b101); //set pins 0 and 2 to GPIO
     P2DIR &= ~(0b101); //set to input
     P2REN &= ~(0b101); //disable pullup/pulldown
 
-    P2IES |= 0x04; //trigger P2.2 on falling edge
-    P2IE |= 0x04; //enable interrupt
+    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
 }
 
 /* read register */
@@ -38,7 +27,7 @@ char cc2500_read(const unsigned char addr) {
 void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
     unsigned char i;
 
-    hardware_timeout(100);
+    hardware_timeout(10);
 
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
@@ -47,6 +36,7 @@ void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
     UCB1TXBUF = 0xFF; //burst RX FIFO address
 
     while ((UCB1IFG & UCRXIFG) == 0 && timeout_flag == 0); //wait until addr byte data shifted out
+    buffer[0] = UCB1RXBUF; //throwaway
 
     for(i=0;i<len;i++) {
         while ((UCB1IFG & UCTXIFG) == 0 && timeout_flag == 0);
@@ -203,32 +193,28 @@ void cc2500_set_tx_power(const unsigned char power) {
 
 /* transmit */
 void cc2500_transmit(const char* data, const char size) {
-    cc2500_configure_gdo(GDO2, GDO_HI_Z); //disable GDO2 to avoid interrupt
-    cc2500_configure_gdo(GDO0, TX_RX_ACTIVE); //set I/O pin to detect when transmit is complete
-
-    cc2500_write(0x3f, size); //write size
+    cc2500_write(0x3F, size); //write size
     cc2500_burst_write_fifo(data, size);
 
     cc2500_command_strobe(STROBE_STX); //enter transmit mode
-    while ((P2IN & 0x01) != 0x01); //detect start of transmit
-    while ((P2IN & 0x01) == 0x01); //wait for end
+    while ((P2IN & 0x04) != 0x04); //detect start of transmit
+    while ((P2IN & 0x04) == 0x04); //wait for end
     cc2500_command_strobe(STROBE_SFTX); //reset and enter IDLE
-
-    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //RX detect
 }
 
 /* receive */
 unsigned char cc2500_receive(char* buffer) {
     unsigned char len;
+    char status;
 
-    if ((cc2500_read(0x3B) & 0x7F) != 0) { //if RX is not empty
+    status = cc2500_read(0x3B);
+
+    if ((status & 0x7F) != 0) { //if RX is not empty
         len = cc2500_read(0xbf); //FIFO RX access
         cc2500_burst_read_fifo(buffer, len);
-        cc2500_command_strobe(STROBE_SFRX);
         return len;
     }
     else {
-        cc2500_command_strobe(STROBE_SFRX);
         return 0;
     }
 }

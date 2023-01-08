@@ -70,6 +70,9 @@
 #define MAN_19200 131
 #define EXP_19200 9
 
+#define MAN_28800 35
+#define EXP_28800 10
+
 #define MAN_38400 131
 #define EXP_38400 10
 
@@ -80,6 +83,9 @@
 #define CRC_ENABLED 0x04
 #define CRC_AUTOFLUSH 0x08
 #define CRC_APPEND 0x04
+
+/* global variables */
+extern char cc2500_TXRX_done;
 
 /* I/O functions */
 void cc2500_init_gpio(void);

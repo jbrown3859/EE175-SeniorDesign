@@ -6,6 +6,7 @@ import numpy as np
 from mss import mss
 import time
 import json
+import math
 
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import (
@@ -249,9 +250,8 @@ class MainWindow():
             try:
                 for i in range(0,16):
                     self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
-            except IndexError:
-                print("Error decoding image packet")
-
+            except IndexError as e:
+                print("Error decoding image packet: " + str(packet))
     
         frame = imaging.GRB422toBGR(self.frame, res[0], res[1])
         frame = cv.resize(frame, (self.width, self.height)) 
@@ -434,20 +434,22 @@ class MainWindow():
             if self.SBand.port.is_open and self.SBand.port.port not in portnames: #close port if disconnected
                 self.SBand.port.close()
                 self.write_console("S-Band Modem Disconnected")
+            
             if self.UHF.port.is_open and self.UHF.port.port not in portnames: #close port if disconnected
                 self.UHF.port.close()
-                self.write_console("UHF Modem Disconnected")
+                self.write_console("UHF Modem Disconnected")      
             
             for port in portnames:
                 if not self.SBand.port.is_open: #if port is closed
                     self.SBand.attempt_connection(port)
                     if self.SBand.port.is_open:
                         self.write_console("S-Band Modem Connection Accepted")
+                '''
                 if not self.UHF.port.is_open:
                     self.UHF.attempt_connection(port)
                     if self.UHF.port.is_open:
                         self.write_console("UHF Modem Connection Accepted")
-            
+                '''
             #get radio info          
             if self.status_queue.empty():
                 radio_status['SBand_open'] = self.SBand.port.is_open
@@ -471,10 +473,11 @@ class MainWindow():
                     if status[1] != 0: #if packet
                         radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])
-                        
+                        print(status.hex())
                         if (status[4] == 18): #if image packet
-                            for i in range(0, status[1]):
+                            for i in range(0, math.floor(len(packets)/18)):
                                 packet = packets[(18*i):(18*(i+1))]
+                                #print(packet)
                                 self.img_queue.put(packet)
                         
                         elif (status[4] == 32): #if telemetry packet

@@ -6,6 +6,11 @@
 
 char SPI_TIMEOUT = 0; //set in ISR
 
+/* UART data structure */
+char UART_RXBUF[256];
+unsigned char UART_RX_PTR = 0;
+unsigned char UART_RX_BASE = 0;
+
 /* This function is from the TI MSP430 example code. Things work without it but I'm not taking any chances */
 void Software_Trim() {
     unsigned int oldDcoTap = 0xffff;
