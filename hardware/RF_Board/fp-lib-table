@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "RF_Board_Footprints")(type "KiCad")(uri "${KIPRJMOD}/RF_Board_Footprints.pretty")(options "")(descr ""))
+)
