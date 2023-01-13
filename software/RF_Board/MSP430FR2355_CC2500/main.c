@@ -15,6 +15,7 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
 
+
     putchars("\n\rResetting Chip\n\r");
     cc2500_command_strobe(STROBE_SRES); //reset chip
     cc2500_register_dump();
@@ -46,13 +47,12 @@ int main(void) {
 
     for (;;) {
         //hardware_delay(2000);
+        putchars("Transmitting\n\r");
         image_packet[0] = ((img_ptr >> 8) & 0xFF) | 0x80;
         image_packet[1] = (img_ptr) & 0xFF;
         cc2500_transmit(image_packet, 18);
         img_ptr = (img_ptr < 1200) ? img_ptr + 1 : 0;
     }
-
-
     /*
     cc2500_command_strobe(STROBE_SRX);
 	for(;;) {
