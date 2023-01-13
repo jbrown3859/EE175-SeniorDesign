@@ -254,6 +254,16 @@ void init_SPI_master(void) {
     TB1CTL = TBSSEL__SMCLK | ID_0 | TBCLR; //fast peripheral clock, no division, clear at start
 }
 
+/* set SPI polarity/phase */
+void set_SPI_mode(char phase, char polarity) {
+    UCB1CTLW0 |= UCSWRST; //enable editing
+    UCB1CTLW0 &= 0x3FFF; //clear bits 14 and 15 
+    
+    UCB1CTLW0 |= ((phase & 0x01) << 15);
+    UCB1CTLW0 |= ((polarity & 0x01) << 14);
+    
+    UCB1CTLW0 &= ~UCSWRST; //release for operation
+}
 
 void set_SPI_timer(char mode) {
     if (mode == 1) { //enable timer
@@ -264,7 +274,6 @@ void set_SPI_timer(char mode) {
         TB1CTL &= ~(0b11 << 4); //stop timer
     }
 }
-
 
 #pragma vector=TIMER1_B0_VECTOR
 __interrupt void TIMER1_B0_VECTOR_ISR (void) {

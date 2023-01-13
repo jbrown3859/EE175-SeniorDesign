@@ -27,6 +27,7 @@ void print_dec(const long long data, const unsigned char len);
 
 /* SPI functions */
 void init_SPI_master(void);
+void set_SPI_mode(char phase, char polarity);
 void set_SPI_timer(char mode);
 
 //int SPI_RX(void);
