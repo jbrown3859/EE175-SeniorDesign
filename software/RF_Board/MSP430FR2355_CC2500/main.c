@@ -15,7 +15,7 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
 
-
+    /*
     putchars("\n\rResetting Chip\n\r");
     cc2500_command_strobe(STROBE_SRES); //reset chip
     cc2500_register_dump();
@@ -35,11 +35,28 @@ int main(void) {
     cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
     cc2500_register_dump();
-
     cc2500_init_gpio(); //init after programming to avoid false interrupts
+    */
 
 	/* infinite loop */
     putchars("Entering main loop\n\r");
+
+    //SPI test
+    unsigned int i;
+    for (;;) {
+        putchars("SPI mode 00\n\r");
+        set_SPI_mode(0,0);
+
+        putchars("SPI mode 01\n\r");
+        set_SPI_mode(0,1);
+        SPI_RX(0xAA);
+        putchars("SPI mode 10\n\r");
+        set_SPI_mode(1,0);
+        SPI_RX(0xAA);
+        putchars("SPI mode 11\n\r");
+        set_SPI_mode(1,1);
+        SPI_RX(0xAA);
+    }
 
 
     char image_packet[18] = {0,0,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64};
