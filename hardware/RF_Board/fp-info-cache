@@ -1,4 +1,102 @@
-1673309133367
+38495880817456
+RF_Board_Footprints
+C_0402_1005Metric
+Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+capacitor
+0
+2
+2
+RF_Board_Footprints
+C_0603_1608Metric
+Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+capacitor
+0
+2
+2
+RF_Board_Footprints
+C_0805_2012Metric
+Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator
+capacitor
+0
+2
+2
+RF_Board_Footprints
+C_1206_3216Metric
+Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+capacitor
+0
+2
+2
+RF_Board_Footprints
+DEA202450BT-1213C1
+
+
+0
+4
+4
+RF_Board_Footprints
+HMC574AMS8E
+
+
+0
+8
+8
+RF_Board_Footprints
+LED_0603_1608Metric
+LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+LED
+0
+2
+2
+RF_Board_Footprints
+LFCN-2500&plus_
+
+
+0
+4
+4
+RF_Board_Footprints
+L_0402_1005Metric
+Inductor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+RF_Board_Footprints
+L_0603_1608Metric
+Inductor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+RF_Board_Footprints
+L_0805_2012Metric
+Inductor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+RF_Board_Footprints
+L_1206_3216Metric
+Inductor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+inductor
+0
+2
+2
+RF_Board_Footprints
+MountingHole_4.3mm_M4_Pad_Via
+Mounting Hole 4.3mm, M4
+mounting hole 4.3mm m4
+0
+9
+1
+RF_Board_Footprints
+QFN-16-1EP_4x4mm_P0.65mm_EP2.5x2.5mm
+QFN, 16 Pin (http://ww1.microchip.com/downloads/en/PackagingSpec/00000049BQ.pdf#page=266), generated with kicad-footprint-generator ipc_noLead_generator.py
+QFN NoLead
+0
+21
+17
 RF_Board_Footprints
 QFP50P900X900X160-48N
 
@@ -6,3 +104,59 @@ QFP50P900X900X160-48N
 0
 48
 48
+RF_Board_Footprints
+QPL9504TR7
+
+
+0
+9
+9
+RF_Board_Footprints
+R_0402_1005Metric
+Resistor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+resistor
+0
+2
+2
+RF_Board_Footprints
+R_0603_1608Metric
+Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+resistor
+0
+2
+2
+RF_Board_Footprints
+R_0805_2012Metric
+Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+resistor
+0
+2
+2
+RF_Board_Footprints
+R_1206_3216Metric
+Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+resistor
+0
+2
+2
+RF_Board_Footprints
+SMA_Amphenol_901-144_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/7023/product/3103/901_144_customer_drawing.pdf
+SMA THT Female Jack Vertical
+0
+5
+2
+RF_Board_Footprints
+Texas_S-PVQFN-N20_EP2.4x2.4mm
+QFN, 20 Pin (http://www.ti.com/lit/ds/symlink/cc1101.pdf#page=101), generated with kicad-footprint-generator ipc_noLead_generator.py
+QFN NoLead
+0
+25
+21
+RF_Board_Footprints
+YAT-1A&plus_
+
+
+0
+7
+7
