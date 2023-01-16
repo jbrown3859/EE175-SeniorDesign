@@ -46,7 +46,6 @@ int main(void) {
     for (;;) {
         putchars("SPI mode 00\n\r");
         set_SPI_mode(0,0);
-
         putchars("SPI mode 01\n\r");
         set_SPI_mode(0,1);
         SPI_RX(0xAA);
