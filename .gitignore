@@ -11,4 +11,5 @@ targetConfigs/
 dvt/
 RemoteSystemsTempFiles/
 hardware/RF_Board/RF_Board-backups
+hardware/SBand_Antenna/SBand_Antenna-backups
 hardware/FlightComputer/FlightComputer-backups
