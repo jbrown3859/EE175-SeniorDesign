@@ -3,8 +3,27 @@
 #include <util.h>
 #include <serial.h>
 #include <cc2500.h>
+//#include <rfm95w.h>
+//#include <backend.h>
 
-#include <backend.h>
+
+/* ISR for RX detection */
+#pragma vector=PORT2_VECTOR
+__interrupt void PORT2_ISR(void) {
+    char buffer[64];
+    unsigned int len;
+
+   len = cc2500_receive(buffer);
+    if (len > 0) { //filter failed CRCs
+        buffer[len] = '\0';
+
+        putchars(buffer);
+        putchars("\n\r");
+    }
+
+    cc2500_command_strobe(STROBE_SRX);
+    P2IFG &= ~(0x04);
+}
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
@@ -15,7 +34,7 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
 
-    /*
+
     putchars("\n\rResetting Chip\n\r");
     cc2500_command_strobe(STROBE_SRES); //reset chip
     cc2500_register_dump();
@@ -36,28 +55,9 @@ int main(void) {
     cc2500_set_tx_power(0xFF);
     cc2500_register_dump();
     cc2500_init_gpio(); //init after programming to avoid false interrupts
-    */
-
-	/* infinite loop */
-    putchars("Entering main loop\n\r");
-
-    //SPI test
-    unsigned int i;
-    for (;;) {
-        putchars("SPI mode 00\n\r");
-        set_SPI_mode(0,0);
-        putchars("SPI mode 01\n\r");
-        set_SPI_mode(0,1);
-        SPI_RX(0xAA);
-        putchars("SPI mode 10\n\r");
-        set_SPI_mode(1,0);
-        SPI_RX(0xAA);
-        putchars("SPI mode 11\n\r");
-        set_SPI_mode(1,1);
-        SPI_RX(0xAA);
-    }
 
 
+    /*
     char image_packet[18] = {0,0,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64};
     unsigned int img_ptr = 0;
 
@@ -69,30 +69,30 @@ int main(void) {
         cc2500_transmit(image_packet, 18);
         img_ptr = (img_ptr < 1200) ? img_ptr + 1 : 0;
     }
-    /*
-    cc2500_command_strobe(STROBE_SRX);
+    */
+
+    char len;
+    char buffer[64];
+    unsigned int i;
+    //cc2500_command_strobe(STROBE_SRX);
+
+
+    //P2IES |= 0x04; //trigger P2.2 on falling edge
+    //P2IE |= 0x04; //enable interrupt
 	for(;;) {
+
 	    char message[] = "Radio Test Packet #0";
 
 	    for (i=0;i<10;i++) {
 	        message[19] = 48 + i;
 	        cc2500_transmit(message, 20);
-	    }
-
-	    if (cc2500_TXRX_done == 1) {
-	        len = cc2500_receive(buffer);
-	        cc2500_command_strobe(STROBE_SRX);
-	        buffer[len] = '\0';
-	        cc2500_TXRX_done = 0;
-
-	        putchars(buffer);
-	        putchars("\n\r");
+	        putchars("Transmitted Packet\n\r");
 	    }
 
 	    __no_operation();
 	}
-    */
-    main_loop();
+
+    //main_loop();
 
 	return 0;
 }
