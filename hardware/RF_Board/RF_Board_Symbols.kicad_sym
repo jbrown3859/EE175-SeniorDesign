@@ -3332,7 +3332,7 @@
       )
     )
     (symbol "YAT-5A+_1_1"
-      (pin power_in line (at 0 -11.43 90) (length 2.54)
+      (pin power_in line (at -1.27 -11.43 90) (length 2.54)
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
@@ -3340,11 +3340,11 @@
         (name "RF_IN" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27))))
       )
-      (pin power_in line (at 0 -11.43 90) (length 2.54) hide
+      (pin power_in line (at -1.27 -11.43 90) (length 2.54) hide
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "3" (effects (font (size 1.27 1.27))))
       )
-      (pin power_in line (at 0 -11.43 90) (length 2.54) hide
+      (pin power_in line (at -1.27 -11.43 90) (length 2.54) hide
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "4" (effects (font (size 1.27 1.27))))
       )
@@ -3352,9 +3352,13 @@
         (name "RF_OUT" (effects (font (size 1.27 1.27))))
         (number "5" (effects (font (size 1.27 1.27))))
       )
-      (pin power_in line (at 0 -11.43 90) (length 2.54) hide
+      (pin power_in line (at -1.27 -11.43 90) (length 2.54) hide
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin power_in line (at 1.27 -11.43 90) (length 2.54)
+        (name "PAD" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
       )
     )
   )

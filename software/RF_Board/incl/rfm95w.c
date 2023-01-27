@@ -10,6 +10,7 @@ extern char RX_done;
 extern char TX_timeout;
 
 /* timeout vector */
+/*
 #pragma vector=TIMER0_B0_VECTOR
 __interrupt void TIMER0_B0_VECTOR_ISR (void) {
     TX_timeout = 1;
@@ -29,6 +30,7 @@ void set_TX_timer(char mode) {
         TB0CTL &= ~(0b11 << 4); //stop timer
     }
 }
+*/
 
 /* vector for interrupt on P2.0 triggered by DIO0 on LoRa */
 #pragma vector=PORT2_VECTOR
@@ -56,16 +58,22 @@ void rfm95w_init(void) {
     P2IES &= ~(0x01); //trigger on rising edge
     P2IE |= 0x01; //enable interrupt
 
-    P2DIR |= (1 << 2); //set P2.2 to output
-    P2REN &= ~(1 << 2); //disable pull resistors
-    P2OUT |= (1 << 2); //set reset high
+    //P2DIR |= (1 << 2); //set P2.2 to output
+    //P2REN &= ~(1 << 2); //disable pull resistors
+    //P2OUT |= (1 << 2); //set reset high
+
+    P1DIR |= (1 << 4); //reset pin init
+    P1REN &= ~(1 << 4);
+    P1OUT |= (1 << 4);
 }
 
 /* reset the radio */
 void rfm95w_reset(void) {
-    P2OUT &= ~(1 << 2); //pull reset low
+    //P2OUT &= ~(1 << 2); //pull reset low
+    P1OUT &= ~(1 << 4);
     hardware_delay(1000);
-    P2OUT |= (1 << 2); //pull high
+    //P2OUT |= (1 << 2); //pull high
+    P1OUT |= (1 << 4);
     hardware_delay(1000);
 }
 

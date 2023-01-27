@@ -31,46 +31,6 @@ void init_GPIO(void) {
     P1SEL0 &= ~(0b1 << 5); //set P1.5 to GPIO
 }
 
-/* ISRs must be defined for serial controllers or a trap will be thrown */
-/* UART ISR vector */
-#pragma vector=USCI_A0_VECTOR
-__interrupt void USCI_A0_ISR(void) {
-    switch(__even_in_range(UCA0IV,USCI_UART_UCTXCPTIFG))
-    {
-        case USCI_NONE: break;
-        case USCI_UART_UCRXIFG:
-                //while(!(UCA0IFG&UCTXIFG));
-                //rxchar = UCA0RXBUF;
-                /*
-                rxbuf[rx_ptr] = UCA0RXBUF;
-                if (rx_ptr < 31){
-                    rx_ptr++;
-                }
-                __no_operation();
-                */
-              break;
-        case USCI_UART_UCTXIFG:
-            break;
-        case USCI_UART_UCSTTIFG: break;
-        case USCI_UART_UCTXCPTIFG: break;
-    }
-}
-
-/* SPI vector */
-#pragma vector=USCI_B1_VECTOR
-__interrupt void USCI_B1_ISR(void) {
-    switch(__even_in_range(UCB1IV,USCI_UART_UCTXCPTIFG))
-    {
-        case USCI_NONE: break;
-        case USCI_UART_UCRXIFG: //this is always set on every transmit
-             break;
-        case USCI_UART_UCTXIFG:
-            break;
-        case USCI_UART_UCSTTIFG: break;
-        case USCI_UART_UCTXCPTIFG: break;
-    }
-}
-
 
 /**
  * main.c
@@ -85,8 +45,11 @@ int main(void) {
     rfm95w_init();
     __bis_SR_register(GIE); //enable interrupts
 
-    putchars("\n\rProgramming LoRa Registers\n\r");
+    putchars("Resetting Chip\n\r");
     rfm95w_reset();
+    rfm95w_register_dump();
+
+    putchars("Programming LoRa Registers\n\r");
     rfm95w_set_lora_mode(MODE_LORA);
     rfm95w_set_frequency_mode(0x00);
     rfm95w_set_carrier_frequency(433500000);
@@ -134,9 +97,11 @@ int main(void) {
                 //msg[6] = (i + 48); //make digit
                 rfm95w_transmit_fixed_packet(msg); //len = 8
 
-                set_TX_timer(1); //enable timeout
-                while(TX_done == 0 && TX_timeout == 0);
-                set_TX_timer(0); //disable timeout
+                //set_TX_timer(1); //enable timeout
+                hardware_timeout(32000);
+                while(TX_done == 0 && timeout_flag == 0);
+                hardware_timeout(0);
+                //set_TX_timer(0); //disable timeout
 
                 TX_timeout = 0; //reset flag
                 TX_done = 0; //reset

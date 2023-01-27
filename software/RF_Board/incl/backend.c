@@ -122,6 +122,7 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 }
 
 /* ISR for RX detection */
+/*
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
     #ifdef RADIOTYPE_SBAND
@@ -136,6 +137,7 @@ __interrupt void PORT2_ISR(void) {
     #endif
     P2IFG &= ~(0x04);
 }
+*/
 
 void main_loop(void) {
     enum State state = INIT;
