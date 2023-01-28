@@ -298,18 +298,22 @@ __interrupt void USCI_B1_ISR(void) {
 
 /* Transmit address + char */
 void SPI_TX(char addr, char c) {
+    set_SPI_timer(1); //enable timeout
+
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    while ((UCB1IFG & UCTXIFG) == 0 );
+    while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
     UCB1TXBUF = addr;
 
-    while ((UCB1IFG & UCTXIFG) == 0 );
+    while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
     UCB1TXBUF = c;
 
     __no_operation();
-    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 && SPI_TIMEOUT == 0); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
+
+    set_SPI_timer(0); //disable timeout
 }
 
 /* send 8 bit address to slave in order to get data back */

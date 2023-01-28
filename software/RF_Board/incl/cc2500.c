@@ -130,10 +130,25 @@ void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char expo
 }
 
 /* issue command strobe */
-void cc2500_command_strobe(const unsigned char strobe) {
+char cc2500_command_strobe(const unsigned char strobe) {
+    char status_byte;
+
     if (strobe >= 0x30 && strobe <= 0x3D) {
-        SPI_TX(strobe, 0x00);
+       P4OUT &= ~(1 << 4); //NSS low
+       __no_operation();
+
+       while ((UCB1IFG & UCTXIFG) == 0);
+       UCB1TXBUF = strobe;
+
+       while ((UCB1IFG & UCRXIFG) == 0);
+       status_byte = UCB1RXBUF;
+
+       __no_operation();
+       while ((UCB1STATW & UCBUSY) == 1); //wait until not busy
+       P4OUT |= (1 << 4); //NSS high
     }
+
+    return status_byte;
 }
 
 /* VCO settings */

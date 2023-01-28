@@ -4,10 +4,11 @@
 #include <serial.h>
 #include <cc2500.h>
 //#include <rfm95w.h>
-//#include <backend.h>
+#include <backend.h>
 
 
 /* ISR for RX detection */
+/*
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
     char buffer[64];
@@ -24,9 +25,11 @@ __interrupt void PORT2_ISR(void) {
     cc2500_command_strobe(STROBE_SRX);
     P2IFG &= ~(0x04);
 }
+*/
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    //WDTCTL = WDTPW | 0b1011 | (1 << 5); //reset after 16s
     PM5CTL0 &= ~LOCKLPM5; //disable high-impedance GPIO mode
     __bis_SR_register(GIE); //enable interrupts
 
@@ -35,10 +38,11 @@ int main(void) {
     init_SPI_master();
 
 
-    putchars("\n\rResetting Chip\n\r");
+    //putchars("\n\rResetting Chip\n\r");
     cc2500_command_strobe(STROBE_SRES); //reset chip
-    cc2500_register_dump();
-    putchars("\n\rRegister Dump\n\r");
+    hardware_delay(100);
+    //cc2500_register_dump();
+    //putchars("\n\rRegister Dump\n\r");
     //cc2500_set_base_frequency(2405000000);
     //cc2500_set_IF_frequency(457000);
     cc2500_set_vco_autocal(AUTOCAL_FROM_IDLE);
@@ -53,7 +57,7 @@ int main(void) {
     cc2500_set_crc(0x00,0x00,0x00);
     cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
-    cc2500_register_dump();
+    //cc2500_register_dump();
     cc2500_init_gpio(); //init after programming to avoid false interrupts
 
 
@@ -71,14 +75,15 @@ int main(void) {
     }
     */
 
-    char len;
-    char buffer[64];
+    //char len;
+    //char buffer[64];
     unsigned int i;
     //cc2500_command_strobe(STROBE_SRX);
 
 
-    //P2IES |= 0x04; //trigger P2.2 on falling edge
-    //P2IE |= 0x04; //enable interrupt
+    P2IES |= 0x04; //trigger P2.2 on falling edge
+    P2IE |= 0x04; //enable interrupt
+    /*
 	for(;;) {
 
 	    char message[] = "Radio Test Packet #0";
@@ -91,8 +96,9 @@ int main(void) {
 
 	    __no_operation();
 	}
+    */
 
-    //main_loop();
+    main_loop();
 
 	return 0;
 }

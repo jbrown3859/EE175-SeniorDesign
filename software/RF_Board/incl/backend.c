@@ -122,7 +122,6 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 }
 
 /* ISR for RX detection */
-/*
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
     #ifdef RADIOTYPE_SBAND
@@ -135,9 +134,11 @@ __interrupt void PORT2_ISR(void) {
     }
     cc2500_command_strobe(STROBE_SRX);
     #endif
+
+   // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
     P2IFG &= ~(0x04);
 }
-*/
+
 
 void main_loop(void) {
     enum State state = INIT;
@@ -148,10 +149,15 @@ void main_loop(void) {
     char pkt[256];
     unsigned int pkt_len = 0;
     unsigned int pkt_num = 0;
-    char command;
+    unsigned char command;
 
     unsigned int i = 0;
     unsigned int j = 0;
+
+    char addr;
+    char data;
+
+    char radio_state;
 
     /* RX buffer */
     char RXbuf_data[RX_SIZE];
@@ -187,65 +193,15 @@ void main_loop(void) {
         /* state machine */
         switch(state) {
         case INIT:
-            //hardware_timeout(100);
             info.frequency = 2450000000;
-            state = WAIT;
 
             #ifdef RADIOTYPE_SBAND
             P2IES |= 0x04; //trigger P2.2 on falling edge
             P2IE |= 0x04; //enable interrupt
             cc2500_command_strobe(STROBE_SRX);
             #endif
-            break;
-        case WAIT:
-            if (get_UART_FIFO_size() != 0) { //await command
-                command = read_UART_FIFO();
 
-                switch(command) {
-                case 0x61: //get info
-                    state = GET_RADIO_INFO;
-                    break;
-                case 0x62: //send RX buffer size
-                    state = GET_RX_BUF_STATE;
-                    break;
-                case 0x63: //read RX packet
-                    state = READ_RX_BUF;
-                    break;
-                case 0x64: //burst read RX packets
-                    state = BURST_READ_RX;
-                    break;
-                case 0x65: //flush RX buffer
-                    state = FLUSH_RX;
-                    break;
-                case 0x66: //send TX buffer state
-                    state = GET_TX_BUF_STATE;
-                    break;
-                case 0x67: //write to TX
-                    state = WRITE_TX_BUF;
-                    break;
-                case 0x68: //burst write TX packets
-                    state = BURST_WRITE_TX;
-                    break;
-                case 0x69: //flush TX buffer
-                    state = FLUSH_TX;
-                    break;
-                case 0x70: //write RX buffer (debug)
-                    state = WRITE_RX_BUF;
-                    break;
-                case 0x71: //read TX buffer (debug)
-                    state = READ_TX_BUF;
-                    break;
-                case 0x72:
-                    state = CLEAR_RX_FLAGS;
-                    break;
-                case 0x73:
-                    state = CLEAR_TX_FLAGS;
-                    break;
-                default:
-                    state = WAIT;
-                    break;
-                }
-            }
+            state = WAIT;
             break;
         case GET_RADIO_INFO:
             putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
@@ -377,6 +333,134 @@ void main_loop(void) {
             TXbuf.flags = 0x00;
             putchar(TXbuf.flags);
             state = WAIT;
+            break;
+        case PROG_RADIO_REG:
+            while (get_UART_FIFO_size() < 2);
+            addr = read_UART_FIFO();
+            data = read_UART_FIFO();
+
+            #ifdef RADIOTYPE_SBAND
+            cc2500_write(addr, data);
+            putchar(cc2500_read(addr));
+            #endif
+
+            state = WAIT;
+            break;
+        case READ_RADIO_REG:
+            while (get_UART_FIFO_size() == 0);
+            addr = read_UART_FIFO();
+
+            #ifdef RADIOTYPE_SBAND
+            data = cc2500_read(addr);
+            putchar(data);
+            #endif
+
+            state = WAIT;
+            break;
+        case DISABLE_RADIO:
+            #ifdef RADIOTYPE_SBAND
+            /*
+            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
+
+            if (radio_state == 0x60) {
+                cc2500_command_strobe(STROBE_SFRX);
+            }
+            else if (radio_state == 0x70) {
+                cc2500_command_strobe(STROBE_SFTX);
+            }
+            */
+
+            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
+
+            if (radio_state == 0x10 || radio_state == 0x60) {
+                cc2500_command_strobe(STROBE_SFRX); //this fixes it for some reason and I also don't know why
+            }
+            cc2500_command_strobe(STROBE_SIDLE); //CAUSES UART TO HANG SOMETIMES AND I DON'T KNOW WHY
+
+            //while (cc2500_command_strobe(STROBE_SNOP) & 0x70 != 0x00); // wait until in idle
+            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
+            putchar(radio_state);
+            /*
+            if (radio_state == 0x00) {
+                putchar(0x01);
+            }
+            else {
+                putchar(0x00);
+            }
+            */
+            #endif
+            state = WAIT;
+            break;
+        case ENABLE_RADIO:
+            #ifdef RADIOTYPE_SBAND
+            cc2500_command_strobe(STROBE_SRX);
+            #endif
+
+            putchar(0x01);
+            state = WAIT;
+            break;
+        default:
+        case WAIT:
+            if (get_UART_FIFO_size() != 0) { //await command
+                command = read_UART_FIFO();
+
+                switch(command) {
+                case 0x61: //get info
+                    state = GET_RADIO_INFO;
+                    break;
+                case 0x62: //send RX buffer size
+                    state = GET_RX_BUF_STATE;
+                    break;
+                case 0x63: //read RX packet
+                    state = READ_RX_BUF;
+                    break;
+                case 0x64: //burst read RX packets
+                    state = BURST_READ_RX;
+                    break;
+                case 0x65: //flush RX buffer
+                    state = FLUSH_RX;
+                    break;
+                case 0x66: //send TX buffer state
+                    state = GET_TX_BUF_STATE;
+                    break;
+                case 0x67: //write to TX
+                    state = WRITE_TX_BUF;
+                    break;
+                case 0x68: //burst write TX packets
+                    state = BURST_WRITE_TX;
+                    break;
+                case 0x69: //flush TX buffer
+                    state = FLUSH_TX;
+                    break;
+                case 0x70: //write RX buffer (debug)
+                    state = WRITE_RX_BUF;
+                    break;
+                case 0x71: //read TX buffer (debug)
+                    state = READ_TX_BUF;
+                    break;
+                case 0x72:
+                    state = CLEAR_RX_FLAGS;
+                    break;
+                case 0x73:
+                    state = CLEAR_TX_FLAGS;
+                    break;
+                case 0x80:
+                    state = PROG_RADIO_REG;
+                    break;
+                case 0x81:
+                    state = READ_RADIO_REG;
+                    break;
+                case 0x82:
+                    state = DISABLE_RADIO;
+                    break;
+                case 0x83:
+                    state = ENABLE_RADIO;
+                    break;
+                default:
+                    state = WAIT;
+                    break;
+                }
+            }
             break;
         }
     }

@@ -125,3 +125,26 @@ class Radio():
         self.port.write(b's')
         flags = self.port.read(1)
         return flags
+        
+    def program_radio_register(self, addr, data):
+        command = 0x80
+        self.port.write(command.to_bytes(1, byteorder='big'))
+        self.port.write(addr.to_bytes(1, byteorder='big'))
+        self.port.write(data.to_bytes(1, byteorder='big'))
+        return self.port.read(1) #return updated register value
+        
+    def read_radio_register(self, addr):
+        command = 0x81
+        self.port.write(command.to_bytes(1, byteorder='big'))
+        self.port.write(addr.to_bytes(1, byteorder='big'))
+        return self.port.read(1)
+        
+    def disable_radio(self):
+        command = 0x82
+        self.port.write(command.to_bytes(1, byteorder='big'))
+        return self.port.read(1)
+        
+    def enable_radio(self):
+        command = 0x83
+        self.port.write(command.to_bytes(1, byteorder='big'))
+        return self.port.read(1)

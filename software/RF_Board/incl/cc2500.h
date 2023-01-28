@@ -95,13 +95,13 @@ void cc2500_write(const unsigned char addr, const char data);
 void cc2500_burst_write_fifo(const char* buffer, unsigned char len);
 void cc2500_display_register(const char addr);
 void cc2500_register_dump(void);
+char cc2500_command_strobe(const unsigned char strobe);
 
 /* control functions */
 void cc2500_set_base_frequency(const unsigned long long freq);
 void cc2500_set_IF_frequency(const unsigned long long freq);
 void cc2500_set_channel(const unsigned char channel);
 void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char exponent);
-void cc2500_command_strobe(const unsigned char strobe);
 void cc2500_set_vco_autocal(const unsigned char autocal);
 void cc2500_set_fifo_thresholds(const unsigned char threshold);
 void cc2500_set_packet_length(const unsigned char pktlen);
