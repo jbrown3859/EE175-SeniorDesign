@@ -8,6 +8,7 @@ class Radio():
         self.port = serial.Serial()
         self.port.baudrate = baudrate
         self.port.timeout = 0.2 #seconds
+        self.port.inter_byte_timeout = 0.1
         self.portname = None
         self.frequency = None
         self.last_packet = None
@@ -89,16 +90,16 @@ class Radio():
         self.port.write(b'g')
         self.port.write(len(packet).to_bytes(1, byteorder='big'))
         self.port.write(bytearray(packet))
-        flags = self.port.read(1)
-        return flags
+        #flags = self.port.read(1)
+        #return flags
         
     def burst_write(self, packetsize, packetnum, packets):
         self.port.write(b'h')
         self.port.write(packetsize.to_bytes(1, byteorder='big'))
         self.port.write(packetnum.to_bytes(1, byteorder='big'))
         self.port.write(packets)
-        flags = self.port.read(1)
-        return flags
+        #flags = self.port.read(1)
+        #return flags
         
     def flush_tx(self):
         self.port.write(b'i')
@@ -108,8 +109,8 @@ class Radio():
         self.port.write(b'p')
         self.port.write(len(packet).to_bytes(1, byteorder='big'))
         self.port.write(bytearray(packet))
-        flags = self.port.read(1)
-        return flags
+        #flags = self.port.read(1)
+        #return flags
         
     def read_tx_buffer(self, size):
         self.port.write(b'q')
@@ -139,12 +140,17 @@ class Radio():
         self.port.write(addr.to_bytes(1, byteorder='big'))
         return self.port.read(1)
         
-    def disable_radio(self):
+    def radio_idle_mode(self):
         command = 0x82
         self.port.write(command.to_bytes(1, byteorder='big'))
         return self.port.read(1)
         
-    def enable_radio(self):
+    def radio_rx_mode(self):
         command = 0x83
+        self.port.write(command.to_bytes(1, byteorder='big'))
+        return self.port.read(1)
+        
+    def radio_tx_mode(self):
+        command = 0x84
         self.port.write(command.to_bytes(1, byteorder='big'))
         return self.port.read(1)

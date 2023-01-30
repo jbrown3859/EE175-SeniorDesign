@@ -6,10 +6,13 @@ enum State{INIT, WAIT, GET_RADIO_INFO,
             GET_TX_BUF_STATE, WRITE_TX_BUF, BURST_WRITE_TX, FLUSH_TX,
             WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS,
             PROG_RADIO_REG, READ_RADIO_REG,
-            DISABLE_RADIO, ENABLE_RADIO};
+            MODE_IDLE, MODE_RX, MODE_TX};
+
+enum RadioState{IDLE, RX_ACTIVE, RX_DONE, TX_WAIT, TX_ACTIVE};
 
 struct RadioInfo {
     unsigned long frequency;
+    enum RadioState radio_mode;
 };
 
 /* data structure for RX and TX packet buffers */

@@ -9,15 +9,17 @@
 #define TX_SIZE 1024
 #define TX_PACKETS 128
 
-struct packet_buffer RXbuf;
-struct packet_buffer TXbuf;
-
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
 #endif
 #ifdef RADIOTYPE_UHF
 #include <rfm95w.h>
 #endif
+
+/* Globals */
+struct packet_buffer RXbuf;
+struct packet_buffer TXbuf;
+struct RadioInfo info;
 
 char RX_done = 0;
 
@@ -121,29 +123,28 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
     }
 }
 
-/* ISR for RX detection */
+/* ISR for TX/RX detection */
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
     #ifdef RADIOTYPE_SBAND
-    char pkt[64];
-    unsigned int pkt_len;
 
-    pkt_len = cc2500_receive(pkt);
-    if (pkt_len > 0) { //filter failed CRCs
-        write_packet_buffer(&RXbuf, pkt, pkt_len);
+    if (info.radio_mode == RX_ACTIVE) {
+        info.radio_mode = RX_DONE;
     }
-    cc2500_command_strobe(STROBE_SRX);
+    else if (info.radio_mode == TX_ACTIVE) {
+        cc2500_command_strobe(STROBE_SFTX);
+        info.radio_mode = TX_WAIT;
+    }
+
     #endif
 
    // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
     P2IFG &= ~(0x04);
 }
 
-
 void main_loop(void) {
     enum State state = INIT;
     unsigned int temp;
-    struct RadioInfo info;
 
     /* temporary variables*/
     char pkt[256];
@@ -189,11 +190,38 @@ void main_loop(void) {
 
     for (;;) {
         /* background tasks */
+        //TX packet if buffer is not empty and radio is enabled
+        if (get_buffer_packet_count(&TXbuf) != 0) {
+            #ifdef RADIOTYPE_SBAND
+            if (info.radio_mode == TX_WAIT) { //if not already in TX
+                pkt_len = read_packet_buffer(&TXbuf, pkt);
+                cc2500_write(0x3F, pkt_len); //write packet size
+                cc2500_burst_write_fifo(pkt, pkt_len); //write packet
+
+                cc2500_command_strobe(STROBE_STX); //enter transmit mode
+                info.radio_mode = TX_ACTIVE;
+            }
+            #endif
+        }
+
+        //RX packet handling
+        if (info.radio_mode == RX_DONE) {
+            #ifdef RADIOTYPE_SBAND
+            pkt_len = cc2500_receive(pkt);
+            if (pkt_len > 0) { //filter failed CRCs
+                write_packet_buffer(&RXbuf, pkt, pkt_len);
+            }
+            cc2500_command_strobe(STROBE_SFRX);
+            cc2500_command_strobe(STROBE_SRX);
+            info.radio_mode = RX_ACTIVE;
+            #endif
+        }
 
         /* state machine */
         switch(state) {
         case INIT:
             info.frequency = 2450000000;
+            info.radio_mode = RX_ACTIVE;
 
             #ifdef RADIOTYPE_SBAND
             P2IES |= 0x04; //trigger P2.2 on falling edge
@@ -278,7 +306,7 @@ void main_loop(void) {
             }
 
             write_packet_buffer(&TXbuf, pkt, pkt_len);
-            putchar(TXbuf.flags);
+            //putchar(TXbuf.flags);
             state = WAIT;
             break;
         case BURST_WRITE_TX: //this is not its own buffer function due to RAM space constraints (cannot write all incoming data at once)
@@ -294,7 +322,7 @@ void main_loop(void) {
                 write_packet_buffer(&TXbuf, pkt, pkt_len);
             }
 
-            putchar(TXbuf.flags);
+            //putchar(TXbuf.flags);
             state = WAIT;
             break;
         case FLUSH_TX:
@@ -315,7 +343,7 @@ void main_loop(void) {
             }
 
             write_packet_buffer(&RXbuf, pkt, pkt_len);
-            putchar(RXbuf.flags);
+            //putchar(RXbuf.flags);
             state = WAIT;
             break;
         case READ_TX_BUF:
@@ -357,51 +385,47 @@ void main_loop(void) {
 
             state = WAIT;
             break;
-        case DISABLE_RADIO:
+        case MODE_IDLE:
             #ifdef RADIOTYPE_SBAND
-            /*
-            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
+            radio_state = cc2500_get_status();
 
-            if (radio_state == 0x60) {
-                cc2500_command_strobe(STROBE_SFRX);
-            }
-            else if (radio_state == 0x70) {
-                cc2500_command_strobe(STROBE_SFTX);
-            }
-            */
-
-            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
-
-            if (radio_state == 0x10 || radio_state == 0x60) {
+            if (radio_state == STATUS_STATE_RX || radio_state == STATUS_STATE_RXOVERFLOW) {
                 cc2500_command_strobe(STROBE_SFRX); //this fixes it for some reason and I also don't know why
             }
             cc2500_command_strobe(STROBE_SIDLE); //CAUSES UART TO HANG SOMETIMES AND I DON'T KNOW WHY
 
-            //while (cc2500_command_strobe(STROBE_SNOP) & 0x70 != 0x00); // wait until in idle
-            radio_state = cc2500_command_strobe(STROBE_SNOP) & 0x70;
+            radio_state = cc2500_get_status();
             putchar(radio_state);
-            /*
-            if (radio_state == 0x00) {
-                putchar(0x01);
-            }
-            else {
-                putchar(0x00);
-            }
-            */
-            #endif
-            state = WAIT;
-            break;
-        case ENABLE_RADIO:
-            #ifdef RADIOTYPE_SBAND
-            cc2500_command_strobe(STROBE_SRX);
             #endif
 
-            putchar(0x01);
+            info.radio_mode = IDLE;
+            state = WAIT;
+            break;
+        case MODE_RX:
+            #ifdef RADIOTYPE_SBAND
+            cc2500_command_strobe(STROBE_SFRX);
+            cc2500_command_strobe(STROBE_SRX);
+            radio_state = cc2500_get_status();
+            putchar(radio_state);
+            #endif
+
+            info.radio_mode = RX_ACTIVE;
+            state = WAIT;
+            break;
+        case MODE_TX:
+            #ifdef RADIOTYPE_SBAND
+            cc2500_command_strobe(STROBE_SFRX);
+            cc2500_command_strobe(STROBE_SIDLE);
+            radio_state = cc2500_get_status();
+            putchar(radio_state);
+            #endif
+
+            info.radio_mode = TX_WAIT;
             state = WAIT;
             break;
         default:
         case WAIT:
-            if (get_UART_FIFO_size() != 0) { //await command
+            if (get_UART_FIFO_size() != 0) { //handle command
                 command = read_UART_FIFO();
 
                 switch(command) {
@@ -451,10 +475,13 @@ void main_loop(void) {
                     state = READ_RADIO_REG;
                     break;
                 case 0x82:
-                    state = DISABLE_RADIO;
+                    state = MODE_IDLE;
                     break;
                 case 0x83:
-                    state = ENABLE_RADIO;
+                    state = MODE_RX;
+                    break;
+                case 0x84:
+                    state = MODE_TX;
                     break;
                 default:
                     state = WAIT;

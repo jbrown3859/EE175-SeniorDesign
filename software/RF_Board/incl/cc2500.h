@@ -24,6 +24,18 @@
 #define AUTOCAL_TO_IDLE 0x20
 #define AUTOCAL_FOURTH_IDLE 0x30
 
+/* rxoff settings */
+#define RXOFF_IDLE 0x00
+#define RXOFF_FSTXON 0x04
+#define RXOFF_TX 0x08
+#define RXOFF_RX 0x0C
+
+/* txoff settings */
+#define TXOFF_IDLE 0x00
+#define TXOFF_FSTXON 0x01
+#define TXOFF_TX 0x02
+#define TXOFF_RX 0x03
+
 /* gdo settings */
 #define GDO2 0x00
 #define GDO0 0x02
@@ -58,6 +70,16 @@
 #define STATE_TX_END 0x14
 #define STATE_RXTX_SWITCH 0x15
 #define STATE_TXFIFO_UNDERFLOW 0x16
+
+/* STATUS bytes states */
+#define STATUS_STATE_IDLE 0x00
+#define STATUS_STATE_RX 0x10
+#define STATUS_STATE_TX 0x20
+#define STATUS_STATE_FSTXON 0x30
+#define STATUS_STATE_CALIBRATE 0x40
+#define STATUS_STATE_SETTLING 0x50
+#define STATUS_STATE_RXOVERFLOW 0x60
+#define STATUS_STATE_TXUNDERFLOW 0x70
 
 /* data whitening */
 #define WHITE_OFF 0x00
@@ -96,6 +118,7 @@ void cc2500_burst_write_fifo(const char* buffer, unsigned char len);
 void cc2500_display_register(const char addr);
 void cc2500_register_dump(void);
 char cc2500_command_strobe(const unsigned char strobe);
+char cc2500_get_status(void);
 
 /* control functions */
 void cc2500_set_base_frequency(const unsigned long long freq);
@@ -103,6 +126,8 @@ void cc2500_set_IF_frequency(const unsigned long long freq);
 void cc2500_set_channel(const unsigned char channel);
 void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char exponent);
 void cc2500_set_vco_autocal(const unsigned char autocal);
+void cc2500_set_rxoff_mode(const char mode);
+void cc2500_set_txoff_mode(const char mode);
 void cc2500_set_fifo_thresholds(const unsigned char threshold);
 void cc2500_set_packet_length(const unsigned char pktlen);
 void cc2500_set_data_whitening(const unsigned char white);

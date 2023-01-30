@@ -10,6 +10,7 @@ void cc2500_init_gpio(void) {
     P2DIR &= ~(0b101); //set to input
     P2REN &= ~(0b101); //disable pullup/pulldown
 
+    cc2500_configure_gdo(GDO0, GDO_HI_Z);
     cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
 }
 
@@ -151,10 +152,27 @@ char cc2500_command_strobe(const unsigned char strobe) {
     return status_byte;
 }
 
+/* get chip status */
+char cc2500_get_status(void) {
+    return cc2500_command_strobe(STROBE_SNOP) & 0x70; //issue SNOP strobe to return state bits
+}
+
 /* VCO settings */
 void cc2500_set_vco_autocal(const unsigned char autocal) {
     char MCSM0 = cc2500_read(0x18) & ~(0x30);
     cc2500_write(0x18, MCSM0 | autocal);
+}
+
+/* RXOFF mode */
+void cc2500_set_rxoff_mode(const char mode) {
+    char MCSM1 = cc2500_read(0x17) & ~(0x0C);
+    cc2500_write(0x17, MCSM1 | mode);
+}
+
+/* TXOFF mode */
+void cc2500_set_txoff_mode(const char mode) {
+    char MCSM1 = cc2500_read(0x17) & ~(0x03);
+    cc2500_write(0x17, MCSM1 | mode);
 }
 
 /* FIFO and packet settings */

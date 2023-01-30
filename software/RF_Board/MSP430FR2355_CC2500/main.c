@@ -27,6 +27,27 @@ __interrupt void PORT2_ISR(void) {
 }
 */
 
+/*
+#pragma vector=PORT2_VECTOR
+__interrupt void PORT2_ISR(void) {
+    char pkt[64];
+    unsigned int pkt_len;
+    unsigned int i;
+
+    pkt_len = cc2500_receive(pkt);
+    if (pkt_len > 0) { //filter failed CRCs
+        for (i = 0; i < 16; i++) {
+            cc2500_transmit(pkt, pkt_len); //repeat message
+        }
+    }
+
+    cc2500_command_strobe(STROBE_SRX);
+
+   // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
+    P2IFG &= ~(0x04);
+}
+*/
+
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
     //WDTCTL = WDTPW | 0b1011 | (1 << 5); //reset after 16s
@@ -46,8 +67,6 @@ int main(void) {
     //cc2500_set_base_frequency(2405000000);
     //cc2500_set_IF_frequency(457000);
     cc2500_set_vco_autocal(AUTOCAL_FROM_IDLE);
-    //cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //RX detect
-    cc2500_configure_gdo(GDO0, GDO_HI_Z);
     cc2500_set_packet_length(40);
     cc2500_set_data_whitening(WHITE_OFF);
     cc2500_set_fifo_thresholds(0x0A);
@@ -58,9 +77,11 @@ int main(void) {
     cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
     //cc2500_register_dump();
+    //cc2500_set_rxoff_mode(RXOFF_IDLE);
+    //cc2500_set_txoff_mode(TXOFF_RX);
     cc2500_init_gpio(); //init after programming to avoid false interrupts
 
-
+    main_loop();
     /*
     char image_packet[18] = {0,0,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64};
     unsigned int img_ptr = 0;
@@ -81,9 +102,9 @@ int main(void) {
     //cc2500_command_strobe(STROBE_SRX);
 
 
-    P2IES |= 0x04; //trigger P2.2 on falling edge
-    P2IE |= 0x04; //enable interrupt
-    /*
+    //P2IES |= 0x04; //trigger P2.2 on falling edge
+    //P2IE |= 0x04; //enable interrupt
+
 	for(;;) {
 
 	    char message[] = "Radio Test Packet #0";
@@ -94,11 +115,7 @@ int main(void) {
 	        putchars("Transmitted Packet\n\r");
 	    }
 
-	    __no_operation();
 	}
-    */
-
-    main_loop();
 
 	return 0;
 }
