@@ -7,9 +7,7 @@ Vincent Le, vle059 at ucr dot edu
 
 ![Flight Computer Board Rev0.1](https://user-images.githubusercontent.com/33066482/215214906-0b76c4ee-a8ad-476b-9a1d-430e0c60eb7d.png)
 
-![deprecated](https://user-images.githubusercontent.com/33066482/215556383-7a1bc2a3-baec-4c9c-951e-eb2cec04e4ca.png)
 ![Radio Board](https://user-images.githubusercontent.com/33066482/215556990-a60d57f6-d5c3-474f-8659-27967438bbe1.png)
-
 
 ![System Diagram](https://user-images.githubusercontent.com/33066482/215556828-1d3fc741-1031-420e-9327-766225c7b27c.png)
 
