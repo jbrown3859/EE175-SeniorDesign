@@ -4511,6 +4511,11 @@
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
     )
+    (model "${KIPRJMOD}/3D_Models/73251-3140.stp"
+      (offset (xyz 0 0 6.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 -90 0))
+    )
   )
 
   (footprint "RF_Board_Footprints:C_0402_1005Metric" locked (layer "F.Cu")
@@ -6323,6 +6328,11 @@
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
+    )
+    (model "${KIPRJMOD}/3D_Models/73251-3140.stp"
+      (offset (xyz 0 0 6.5))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 -90 0))
     )
   )
 

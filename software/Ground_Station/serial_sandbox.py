@@ -48,6 +48,7 @@ for i in range(0,100):
 
 '''
 while True:
+    print("Setting to idle")
     status = 1
     while status != 0x0:
         time.sleep(1)
@@ -60,29 +61,33 @@ while True:
         tx_status = SBand.get_tx_buffer_state()
         print(tx_status.hex())
 
+    print("Setting to TX")
     status = 1
     while status != 0x0:
         time.sleep(1)
         status = int.from_bytes(SBand.radio_tx_mode(), "big")
         print(status)
 
-    for i in range(0,100):
+    for i in range(0,20):
         tx_status = SBand.get_tx_buffer_state()
         print(tx_status.hex())
-        
+    
+    print("Setting to RX")
     status = 1
     while status != 0x10:
         time.sleep(1)
         status = int.from_bytes(SBand.radio_rx_mode(), "big")
         print(status)
         
-    for i in range(0,100):
+    for i in range(0,500):
+        print("Requesting RX status")
         rx_status = SBand.get_rx_buffer_state()
             #tx_status = SBand.get_tx_buffer_state()
             #print(tx_status.hex())
             
         try:
             if rx_status and rx_status[1] != 0:
+                print(rx_status.hex())
                 print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
                 packets = SBand.burst_read(rx_status[4], rx_status[1])
                 print(packets)

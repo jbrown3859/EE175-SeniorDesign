@@ -34,6 +34,8 @@ unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned
 
 int read_UART_FIFO(void);
 unsigned int get_UART_FIFO_size(void);
+unsigned char get_UART_bytes(char* bytes, unsigned char size, unsigned int timeout);
+void flush_UART_FIFO(void);
 
 unsigned int get_buffer_data_size(struct packet_buffer* buffer);
 unsigned int get_buffer_packet_count(struct packet_buffer* buffer);

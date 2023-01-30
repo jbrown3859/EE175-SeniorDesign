@@ -46,6 +46,33 @@ int read_UART_FIFO(void) {
     }
 }
 
+/* Get n bytes and time out */
+unsigned char get_UART_bytes(char* bytes, unsigned char size, unsigned int timeout) {
+    unsigned char i;
+    unsigned char len = 0;
+
+    timeout_flag = 0;
+    hardware_timeout(timeout);
+    while (get_UART_FIFO_size() < size && timeout_flag == 0); //await data
+    hardware_timeout(0);
+
+    if (timeout_flag == 1) { //timed out before got all data
+        size = get_UART_FIFO_size(); //return as many bytes as we got
+        timeout_flag = 0;
+    }
+
+    for (i = 0; i < size; i++) {
+        bytes[i] = read_UART_FIFO();
+        len++;
+    }
+
+    return len;
+}
+
+void flush_UART_FIFO(void) {
+    UART_RX_PTR = UART_RX_BASE;
+}
+
 unsigned int get_UART_FIFO_size(void) {
     return get_buffer_distance(UART_RX_BASE, UART_RX_PTR, 256);
 }
@@ -126,17 +153,13 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 /* ISR for TX/RX detection */
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
-    #ifdef RADIOTYPE_SBAND
-
     if (info.radio_mode == RX_ACTIVE) {
         info.radio_mode = RX_DONE;
     }
     else if (info.radio_mode == TX_ACTIVE) {
-        cc2500_command_strobe(STROBE_SFTX);
         info.radio_mode = TX_WAIT;
     }
 
-    #endif
 
    // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
     P2IFG &= ~(0x04);
@@ -151,9 +174,10 @@ void main_loop(void) {
     unsigned int pkt_len = 0;
     unsigned int pkt_num = 0;
     unsigned char command;
+    char args[16];
 
     unsigned int i = 0;
-    unsigned int j = 0;
+    //unsigned int j = 0;
 
     char addr;
     char data;
@@ -163,7 +187,6 @@ void main_loop(void) {
     /* RX buffer */
     char RXbuf_data[RX_SIZE];
     unsigned int RXbuf_ptrs[RX_PACKETS];
-    //struct packet_buffer RXbuf;
     RXbuf.data = RXbuf_data;
     RXbuf.max_data = RX_SIZE;
     RXbuf.pointers = RXbuf_ptrs;
@@ -177,7 +200,6 @@ void main_loop(void) {
     /* TX buffer */
     char TXbuf_data[TX_SIZE];
     unsigned int TXbuf_ptrs[TX_PACKETS];
-    //struct packet_buffer TXbuf;
     TXbuf.data = TXbuf_data;
     TXbuf.max_data = TX_SIZE;
     TXbuf.pointers = TXbuf_ptrs;
@@ -194,6 +216,7 @@ void main_loop(void) {
         if (get_buffer_packet_count(&TXbuf) != 0) {
             #ifdef RADIOTYPE_SBAND
             if (info.radio_mode == TX_WAIT) { //if not already in TX
+                cc2500_command_strobe(STROBE_SFTX); //flush if not already cleared
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
                 cc2500_write(0x3F, pkt_len); //write packet size
                 cc2500_burst_write_fifo(pkt, pkt_len); //write packet
@@ -266,10 +289,13 @@ void main_loop(void) {
             state = WAIT;
             break;
         case BURST_READ_RX:
-            while (get_UART_FIFO_size() < 2); //await data
-            pkt_len = read_UART_FIFO(); //packet size
-            pkt_num = read_UART_FIFO(); //packet number
-            burst_read_packet_buffer(&RXbuf, pkt_len, pkt_num);
+            if (get_UART_bytes(args, 2, 10000) == 2) {
+                burst_read_packet_buffer(&RXbuf, args[0], args[1]);
+            }
+            else {
+                flush_UART_FIFO();
+            }
+
             state = WAIT;
             break;
         case FLUSH_RX:
@@ -297,32 +323,32 @@ void main_loop(void) {
             state = WAIT;
             break;
         case WRITE_TX_BUF:
-            while (get_UART_FIFO_size() == 0); //await data
-            pkt_len = read_UART_FIFO(); //packet size
+            if (get_UART_bytes(args, 1, 10000) == 1) {
+                pkt_len = args[0];
 
-            for(i=0;i<pkt_len;i++) {
-                while (get_UART_FIFO_size() == 0);
-                pkt[i] = read_UART_FIFO();
+                if (get_UART_bytes(pkt, pkt_len, 64000) == pkt_len) {
+                    write_packet_buffer(&TXbuf, pkt, pkt_len);
+                }
+                else {
+                    flush_UART_FIFO();
+                }
             }
-
-            write_packet_buffer(&TXbuf, pkt, pkt_len);
-            //putchar(TXbuf.flags);
             state = WAIT;
             break;
         case BURST_WRITE_TX: //this is not its own buffer function due to RAM space constraints (cannot write all incoming data at once)
-            while (get_UART_FIFO_size() < 2); //await data
-            pkt_len = read_UART_FIFO();
-            pkt_num = read_UART_FIFO();
+            if (get_UART_bytes(args, 2, 10000) == 2) {
+                pkt_len = args[0];
+                pkt_num = args[1];
 
-            for(i=0;i<pkt_num;i++) {
-                for(j=0;j<pkt_len;j++) {
-                    while (get_UART_FIFO_size() == 0);
-                    pkt[j] = read_UART_FIFO();
+                for(i=0;i<pkt_num;i++) {
+                    if (get_UART_bytes(pkt, pkt_len, 64000) == pkt_len) {
+                        write_packet_buffer(&TXbuf, pkt, pkt_len);
+                    }
                 }
-                write_packet_buffer(&TXbuf, pkt, pkt_len);
             }
-
-            //putchar(TXbuf.flags);
+            else {
+                flush_UART_FIFO();
+            }
             state = WAIT;
             break;
         case FLUSH_TX:
@@ -334,16 +360,16 @@ void main_loop(void) {
             state = WAIT;
             break;
         case WRITE_RX_BUF:
-            while (get_UART_FIFO_size() == 0); //await data
-            pkt_len = read_UART_FIFO(); //packet size
+            if (get_UART_bytes(args, 1, 10000) == 1) {
+                pkt_len = args[0];
 
-            for(i=0;i<pkt_len;i++) {
-                while (get_UART_FIFO_size() == 0);
-                pkt[i] = read_UART_FIFO();
+                if (get_UART_bytes(pkt, pkt_len, 64000) == pkt_len) {
+                    write_packet_buffer(&RXbuf, pkt, pkt_len);
+                }
+                else {
+                    flush_UART_FIFO();
+                }
             }
-
-            write_packet_buffer(&RXbuf, pkt, pkt_len);
-            //putchar(RXbuf.flags);
             state = WAIT;
             break;
         case READ_TX_BUF:
@@ -363,26 +389,28 @@ void main_loop(void) {
             state = WAIT;
             break;
         case PROG_RADIO_REG:
-            while (get_UART_FIFO_size() < 2);
-            addr = read_UART_FIFO();
-            data = read_UART_FIFO();
+            if (get_UART_bytes(args, 2, 10000) == 2) {
+                addr = args[0];
+                data = args[1];
 
-            #ifdef RADIOTYPE_SBAND
-            cc2500_write(addr, data);
-            putchar(cc2500_read(addr));
-            #endif
+                #ifdef RADIOTYPE_SBAND
+                cc2500_write(addr, data);
+                putchar(cc2500_read(addr));
+                #endif
+            }
+            else {
+                flush_UART_FIFO();
+            }
 
             state = WAIT;
             break;
         case READ_RADIO_REG:
-            while (get_UART_FIFO_size() == 0);
-            addr = read_UART_FIFO();
-
-            #ifdef RADIOTYPE_SBAND
-            data = cc2500_read(addr);
-            putchar(data);
-            #endif
-
+            if (get_UART_bytes(args, 1, 10000) == 1) {
+                #ifdef RADIOTYPE_SBAND
+                data = cc2500_read(args[0]);
+                putchar(data);
+                #endif
+            }
             state = WAIT;
             break;
         case MODE_IDLE:
@@ -484,6 +512,7 @@ void main_loop(void) {
                     state = MODE_TX;
                     break;
                 default:
+                    flush_UART_FIFO(); //flush to avoid hanging
                     state = WAIT;
                     break;
                 }
