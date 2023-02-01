@@ -134,21 +134,24 @@ void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char expo
 char cc2500_command_strobe(const unsigned char strobe) {
     char status_byte;
 
+    set_SPI_timer(1);
     if (strobe >= 0x30 && strobe <= 0x3D) {
        P4OUT &= ~(1 << 4); //NSS low
        __no_operation();
 
-       while ((UCB1IFG & UCTXIFG) == 0);
+       while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
        UCB1TXBUF = strobe;
+       SPI_TIMEOUT = 0;
 
-       while ((UCB1IFG & UCRXIFG) == 0);
+       while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
        status_byte = UCB1RXBUF;
+       SPI_TIMEOUT = 0;
 
        __no_operation();
        while ((UCB1STATW & UCBUSY) == 1); //wait until not busy
        P4OUT |= (1 << 4); //NSS high
     }
-
+    set_SPI_timer(0);
     return status_byte;
 }
 

@@ -210,6 +210,10 @@ void main_loop(void) {
     TXbuf.ptr_head = 0;
     TXbuf.flags = 0;
 
+    /* debug only */
+    P1DIR |= 0b1; //set P1.0 to output
+    P1OUT &= ~(0b1); //set P1.0 to zero
+
     for (;;) {
         /* background tasks */
         //TX packet if buffer is not empty and radio is enabled
@@ -234,8 +238,10 @@ void main_loop(void) {
             if (pkt_len > 0) { //filter failed CRCs
                 write_packet_buffer(&RXbuf, pkt, pkt_len);
             }
+            P1OUT |= (0b1);
             cc2500_command_strobe(STROBE_SFRX);
             cc2500_command_strobe(STROBE_SRX);
+            P1OUT &= ~(0b1);
             info.radio_mode = RX_ACTIVE;
             #endif
         }
@@ -453,6 +459,7 @@ void main_loop(void) {
             break;
         default:
         case WAIT:
+            timeout_flag = 0;
             if (get_UART_FIFO_size() != 0) { //handle command
                 command = read_UART_FIFO();
 

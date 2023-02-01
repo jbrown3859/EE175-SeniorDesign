@@ -77,8 +77,8 @@ int main(void) {
     cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
     //cc2500_register_dump();
-    //cc2500_set_rxoff_mode(RXOFF_IDLE);
-    //cc2500_set_txoff_mode(TXOFF_RX);
+    cc2500_set_rxoff_mode(RXOFF_IDLE);
+    cc2500_set_txoff_mode(TXOFF_IDLE);
     cc2500_init_gpio(); //init after programming to avoid false interrupts
 
     main_loop();

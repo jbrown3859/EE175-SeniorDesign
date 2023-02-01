@@ -166,7 +166,6 @@ void putchar(char c) {
     while (( UCA0IFG & UCTXIFG ) == 0 );
 
     /* Transmit data */
-
     UCA0TXBUF = c;
     __no_operation();
 }
@@ -284,15 +283,9 @@ __interrupt void TIMER1_B0_VECTOR_ISR (void) {
 /* SPI vector */
 #pragma vector=USCI_B1_VECTOR
 __interrupt void USCI_B1_ISR(void) {
-    switch(__even_in_range(UCB1IV,USCI_UART_UCTXCPTIFG))
-    {
+    switch(__even_in_range(UCB1IV,USCI_UART_UCTXCPTIFG)){
         case USCI_NONE: break;
-        case USCI_UART_UCRXIFG: //this is always set on every transmit
-             break;
-        case USCI_UART_UCTXIFG:
-            break;
-        case USCI_UART_UCSTTIFG: break;
-        case USCI_UART_UCTXCPTIFG: break;
+        default: break;
     }
 }
 
@@ -305,12 +298,14 @@ void SPI_TX(char addr, char c) {
 
     while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
     UCB1TXBUF = addr;
+    SPI_TIMEOUT = 0;
 
     while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
     UCB1TXBUF = c;
+    SPI_TIMEOUT = 0;
 
     __no_operation();
-    while ((UCB1STATW & UCBUSY) == 1 && SPI_TIMEOUT == 0); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
 
     set_SPI_timer(0); //disable timeout
