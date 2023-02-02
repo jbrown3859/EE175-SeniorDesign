@@ -71,7 +71,7 @@ int main(void) {
     cc2500_set_data_whitening(WHITE_OFF);
     cc2500_set_fifo_thresholds(0x0A);
     //cc2500_set_sync_word(0xBAAD);
-    cc2500_set_data_rate(MAN_28800,EXP_28800);
+    cc2500_set_data_rate(MAN_38400,EXP_38400);
     //cc2500_set_crc(CRC_ENABLED, CRC_AUTOFLUSH, 0x00);
     cc2500_set_crc(0x00,0x00,0x00);
     cc2500_write(0x26, 0x11); //value from smartrf studio
@@ -79,43 +79,49 @@ int main(void) {
     //cc2500_register_dump();
     cc2500_set_rxoff_mode(RXOFF_IDLE);
     cc2500_set_txoff_mode(TXOFF_IDLE);
-    cc2500_init_gpio(); //init after programming to avoid false interrupts
+    cc2500_configure_gdo(GDO0, GDO_HI_Z);
+    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
+
+    cc2500_init_gpio(INT_GDO2); //init after programming to avoid false interrupts
+    //cc2500_init_gpio(INT_NONE);
 
     main_loop();
-    /*
+
+    /* for test only */
     char image_packet[18] = {0,0,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64};
     unsigned int img_ptr = 0;
 
+    unsigned int i;
     for (;;) {
-        //hardware_delay(2000);
+        hardware_delay(200);
         putchars("Transmitting\n\r");
+
+        for (i=2;i<18;i++) {
+            if (img_ptr > 100 && img_ptr < 300 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
+                image_packet[i] = 0xF3;
+            }
+            else if (img_ptr > 300 && img_ptr < 500 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
+                image_packet[i] = 0x0F;
+            }
+            else if (img_ptr > 500 && img_ptr < 700 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
+                image_packet[i] = 0x0C;
+            }
+            else if (img_ptr > 700 && img_ptr < 900 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
+                image_packet[i] = 0x03;
+            }
+            else if (img_ptr > 900 && img_ptr < 1100 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
+                image_packet[i] = 0xFC;
+            }
+            else {
+                image_packet[i] = 0xF0;
+            }
+        }
         image_packet[0] = ((img_ptr >> 8) & 0xFF) | 0x80;
         image_packet[1] = (img_ptr) & 0xFF;
         cc2500_transmit(image_packet, 18);
+
         img_ptr = (img_ptr < 1200) ? img_ptr + 1 : 0;
     }
-    */
-
-    //char len;
-    //char buffer[64];
-    unsigned int i;
-    //cc2500_command_strobe(STROBE_SRX);
-
-
-    //P2IES |= 0x04; //trigger P2.2 on falling edge
-    //P2IE |= 0x04; //enable interrupt
-
-	for(;;) {
-
-	    char message[] = "Radio Test Packet #0";
-
-	    for (i=0;i<10;i++) {
-	        message[19] = 48 + i;
-	        cc2500_transmit(message, 20);
-	        putchars("Transmitted Packet\n\r");
-	    }
-
-	}
 
 	return 0;
 }

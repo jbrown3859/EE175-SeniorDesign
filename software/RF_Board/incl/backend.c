@@ -153,13 +153,25 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 /* ISR for TX/RX detection */
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
-    if (info.radio_mode == RX_ACTIVE) {
-        info.radio_mode = RX_DONE;
+    unsigned char pkt_len;
+    char pkt[256];
+
+    if (info.radio_mode == RX) {
+        #ifdef RADIOTYPE_SBAND
+        pkt_len = cc2500_receive(pkt);
+        if (pkt_len > 0) { //filter failed CRCs
+           write_packet_buffer(&RXbuf, pkt, pkt_len);
+        }
+        P1OUT |= (0b1);
+        cc2500_command_strobe(STROBE_SFRX);
+        cc2500_command_strobe(STROBE_SRX);
+        P1OUT &= ~(0b1);
+        #endif
+        info.radio_mode = RX;
     }
     else if (info.radio_mode == TX_ACTIVE) {
         info.radio_mode = TX_WAIT;
     }
-
 
    // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
     P2IFG &= ~(0x04);
@@ -215,46 +227,38 @@ void main_loop(void) {
     P1OUT &= ~(0b1); //set P1.0 to zero
 
     for (;;) {
-        /* background tasks */
-        //TX packet if buffer is not empty and radio is enabled
-        if (get_buffer_packet_count(&TXbuf) != 0) {
-            #ifdef RADIOTYPE_SBAND
-            if (info.radio_mode == TX_WAIT) { //if not already in TX
+
+        /* Radio state machine*/
+        switch(info.radio_mode) {
+        case IDLE:
+            break;
+        case RX:
+            break;
+        case TX_WAIT:
+            if (get_buffer_packet_count(&TXbuf) != 0) {
+                #ifdef RADIOTYPE_SBAND
                 cc2500_command_strobe(STROBE_SFTX); //flush if not already cleared
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
                 cc2500_write(0x3F, pkt_len); //write packet size
                 cc2500_burst_write_fifo(pkt, pkt_len); //write packet
 
                 cc2500_command_strobe(STROBE_STX); //enter transmit mode
+                #endif
+
                 info.radio_mode = TX_ACTIVE;
             }
-            #endif
+            break;
+        case TX_ACTIVE:
+            break;
         }
 
-        //RX packet handling
-        if (info.radio_mode == RX_DONE) {
-            #ifdef RADIOTYPE_SBAND
-            pkt_len = cc2500_receive(pkt);
-            if (pkt_len > 0) { //filter failed CRCs
-                write_packet_buffer(&RXbuf, pkt, pkt_len);
-            }
-            P1OUT |= (0b1);
-            cc2500_command_strobe(STROBE_SFRX);
-            cc2500_command_strobe(STROBE_SRX);
-            P1OUT &= ~(0b1);
-            info.radio_mode = RX_ACTIVE;
-            #endif
-        }
-
-        /* state machine */
+        /* UART state machine */
         switch(state) {
         case INIT:
             info.frequency = 2450000000;
-            info.radio_mode = RX_ACTIVE;
+            info.radio_mode = RX;
 
             #ifdef RADIOTYPE_SBAND
-            P2IES |= 0x04; //trigger P2.2 on falling edge
-            P2IE |= 0x04; //enable interrupt
             cc2500_command_strobe(STROBE_SRX);
             #endif
 
@@ -443,7 +447,7 @@ void main_loop(void) {
             putchar(radio_state);
             #endif
 
-            info.radio_mode = RX_ACTIVE;
+            info.radio_mode = RX;
             state = WAIT;
             break;
         case MODE_TX:

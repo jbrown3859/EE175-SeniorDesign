@@ -46,6 +46,8 @@
 #define TX_RX_ACTIVE 0x06
 #define GDO_HI_Z 0x2E
 
+enum cc2500_interrupt_setting{INT_NONE,INT_GDO0,INT_GDO2,INT_BOTH};
+
 /* MARCSTATEs */
 #define STATE_SLEEP 0x00
 #define STATE_IDLE 0x01
@@ -110,7 +112,7 @@
 extern char cc2500_TXRX_done;
 
 /* I/O functions */
-void cc2500_init_gpio(void);
+void cc2500_init_gpio(enum cc2500_interrupt_setting interrupts);
 char cc2500_read(const unsigned char addr);
 void cc2500_burst_read_fifo(char* buffer, unsigned char len);
 void cc2500_write(const unsigned char addr, const char data);

@@ -5,13 +5,34 @@
 #include <util.h>
 
 /* init GDO gpio pins (P2.0->GDO0 and P2.2->GDO2) */
-void cc2500_init_gpio(void) {
+void cc2500_init_gpio(enum cc2500_interrupt_setting interrupts) {
     P2SEL0 &= ~(0b101); //set pins 0 and 2 to GPIO
     P2DIR &= ~(0b101); //set to input
     P2REN &= ~(0b101); //disable pullup/pulldown
 
-    cc2500_configure_gdo(GDO0, GDO_HI_Z);
-    cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
+    //P2IES |= 0x04; //trigger P2.2 on falling edge
+    //P2IE |= 0x04; //enable interrupt
+
+    switch(interrupts) {
+    case INT_NONE:
+        P2IE &= ~(0x05); //disable interrupts
+        break;
+    case INT_GDO0:
+        P2IES |= 0x01; //trigger P2.0 on falling edge
+        P2IE |= 0x01; //enable interrupt
+        break;
+    case INT_GDO2:
+        P2IES |= 0x04; //trigger P2.2 on falling edge
+        P2IE |= 0x04; //enable interrupt
+        break;
+    case INT_BOTH:
+        P2IES |= 0x05; //trigger both on falling edge
+        P2IE |= 0x05; //enable interrupt
+        break;
+    }
+
+    //cc2500_configure_gdo(GDO0, GDO_HI_Z);
+    //cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
 }
 
 /* read register */

@@ -249,7 +249,7 @@ void init_SPI_master(void) {
 
     /* Timeout clock init */
     TB1CCTL0 = CCIE; //interrupt mode
-    TB1CCR0 = 1000; //trigger value
+    TB1CCR0 = 500; //trigger value
     TB1CTL = TBSSEL__SMCLK | ID_0 | TBCLR; //fast peripheral clock, no division, clear at start
 }
 

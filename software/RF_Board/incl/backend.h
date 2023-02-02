@@ -8,7 +8,7 @@ enum State{INIT, WAIT, GET_RADIO_INFO,
             PROG_RADIO_REG, READ_RADIO_REG,
             MODE_IDLE, MODE_RX, MODE_TX};
 
-enum RadioState{IDLE, RX_ACTIVE, RX_DONE, TX_WAIT, TX_ACTIVE};
+enum RadioState{IDLE, RX, TX_WAIT, TX_ACTIVE};
 
 struct RadioInfo {
     unsigned long frequency;
