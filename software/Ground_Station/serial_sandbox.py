@@ -34,6 +34,7 @@ for i in range(0,0x30):
     print("{}: {}".format(hex(i), SBand.read_radio_register(i).hex()))
 
 
+'''
 print("Setting to RX")
 status = 1
 while status != 0x10:
@@ -58,8 +59,8 @@ while True:
             
     except IndexError:
         print(rx_status)
-
 '''
+
 while True:
     print("Setting to idle")
     status = 1
@@ -107,4 +108,3 @@ while True:
                     print(packets)
         except IndexError:
             print(rx_status)
-'''

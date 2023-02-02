@@ -244,6 +244,7 @@ class MainWindow():
             packet = self.img_queue.get()
             index = int.from_bytes(packet[0:2], 'big')
             index &= ~0x8000
+            #print(index)
             if (index == 0): #clear new frame
                 self.frame.fill(0)
             
@@ -473,7 +474,7 @@ class MainWindow():
                     if status[1] != 0: #if packet
                         radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])
-                        print(status.hex())
+                        #print(status.hex())
                         if (status[4] == 18): #if image packet
                             for i in range(0, math.floor(len(packets)/18)):
                                 packet = packets[(18*i):(18*(i+1))]
