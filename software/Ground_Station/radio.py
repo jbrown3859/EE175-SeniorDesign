@@ -25,7 +25,7 @@ class Radio():
             self.port.open()
             self.port.reset_input_buffer() #flush buffer
             self.port.write(b'a') #send info request
-            reply = self.port.read(13) #get returned info
+            reply = self.port.read(19) #get returned info
             #print(reply)
             
             if len(reply) >= 3 and reply[0] == 170 and reply[1] == 170: #valid preamble
@@ -52,9 +52,10 @@ class Radio():
     def get_radio_info(self):
         info = {}
         self.port.write(b'a') #send info request
-        reply = self.port.read(13)
+        reply = self.port.read(19)
         if reply[0] == 170 and reply[1] == 170:
             info["frequency"] = reply[3:13].decode("utf-8")
+            info["data_rate"] = reply[13:19].decode("utf-8")
         
         return info
         

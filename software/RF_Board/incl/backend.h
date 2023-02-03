@@ -12,6 +12,7 @@ enum RadioState{IDLE, RX, TX_WAIT, TX_ACTIVE};
 
 struct RadioInfo {
     unsigned long frequency;
+    unsigned long data_rate;
     enum RadioState radio_mode;
 };
 

@@ -124,6 +124,10 @@ class MainWindow():
         self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
         self.widgets['sband_frequency'].grid(row=3,column=1)
         
+        tk.Label(self.widgets['sband_status'], text="Data Rate:", font=("Arial", 15)).grid(row=4,column=0)
+        self.widgets['sband_rate'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['sband_rate'].grid(row=4,column=1)
+        
         self.widgets['uhf_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['uhf_status'].grid(row=4,column=1,sticky='NSEW')
         tk.Label(self.widgets['uhf_status'], text="UHF Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
@@ -136,8 +140,12 @@ class MainWindow():
         tk.Label(self.widgets['uhf_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
         tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
         
+        tk.Label(self.widgets['uhf_status'], text="Data Rate:", font=("Arial", 15)).grid(row=4,column=0)
+        tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=4,column=1)
+        
         '''
         Radio Programming
+        '''
         '''
         self.widgets['sband_program'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['sband_program'].grid(row=5,column=0, sticky='N')
@@ -154,6 +162,7 @@ class MainWindow():
         self.widgets['sband_rate'] = tk.OptionMenu(self.widgets['sband_program'], None, None)
         self.widgets['sband_rate'].grid(row=1,column=1)
         self.widgets['sband_rate'].config(width=10,padx=5)
+        '''
         
         '''
         Command Center
@@ -220,7 +229,9 @@ class MainWindow():
         self.telem_queue = queue.Queue()
         self.img_queue = queue.Queue()
         self.status_queue = queue.Queue(maxsize = 1)
-        self.command_queue = queue.Queue()
+        
+        self.SBand_command_queue = queue.Queue()
+        self.UHF_command_queue = queue.Queue()
         
         self.thread_running = 1
         self.thread = threading.Thread(target=self.serial_thread)
@@ -390,8 +401,10 @@ class MainWindow():
                     except ValueError:
                         self.write_console("Error: invalid command data")
                         return
-            
-            self.write_console("Command hex: {}".format(command_bytes.hex()))
+                        
+            if ch == "S-Band":
+                self.SBand_command_queue.put(command_bytes)
+                self.write_console("Command hex: {}".format(command_bytes.hex()))
     
     def update_radio_status(self):
         if not self.status_queue.empty():
@@ -400,6 +413,7 @@ class MainWindow():
             self.widgets['sband_connected'].destroy()
             self.widgets['sband_last'].destroy()
             self.widgets['sband_frequency'].destroy()
+            self.widgets['sband_rate'].destroy()
             
             if status['SBand_open']:
                 self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Connected", font=("Arial", 15), fg="green")
@@ -418,6 +432,9 @@ class MainWindow():
             
             self.widgets['sband_frequency'] = tk.Label(self.widgets['sband_status'], text=status['SBand_frequency'], font=("Arial", 15), fg=sband_color)
             self.widgets['sband_frequency'].grid(row=3,column=1)
+            
+            self.widgets['sband_rate'] = tk.Label(self.widgets['sband_status'], text=status['SBand_rate'], font=("Arial", 15), fg=sband_color)
+            self.widgets['sband_rate'].grid(row=4,column=1)
             
         self.window.after(1000, self.update_radio_status)
             
@@ -460,15 +477,17 @@ class MainWindow():
                     try:
                         sband_info = self.SBand.get_radio_info()
                         radio_status['SBand_frequency'] = sband_info['frequency'].lstrip('0') + " Hz"
+                        radio_status['SBand_rate'] = sband_info['data_rate'].lstrip('0') + " Baud"
                     except(serial.serialutil.SerialException, IndexError):
                         pass
                 else:
                     radio_status['SBand_frequency'] = "N/A"
+                    radio_status['SBand_rate'] = "N/A"
                 
                 self.status_queue.put(radio_status)
             
+            #get packets
             try:
-                #get packets
                 if self.SBand.port.is_open:
                     status = self.SBand.get_rx_buffer_state()
                     if status[1] != 0: #if packet
@@ -480,7 +499,7 @@ class MainWindow():
                                 packet = packets[(18*i):(18*(i+1))]
                                 #print(packet)
                                 self.img_queue.put(packet)
-                        
+                        '''
                         elif (status[4] == 32): #if telemetry packet
                             for i in range(0, status[1]):
                                 packet = list(packets[(32*i):(32*(i+1))])
@@ -491,10 +510,41 @@ class MainWindow():
                                 packet_data['Angular Rate'] = packet[8:11]
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 self.telem_queue.put(packet_data)
-                        
+                        '''
             except (serial.serialutil.SerialException, IndexError):
                 pass
-        
+                
+            #transmit packets
+            if not self.SBand_command_queue.empty():
+                while not self.SBand_command_queue.empty(): #fill buffer
+                    command = self.SBand_command_queue.get()
+                    self.SBand.write_tx_buffer(command)
+                
+                self.write_console("S-Band Entering Transmit Mode")
+                status = 1
+                while status != 0x0:
+                    time.sleep(0.1)
+                    status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
+                    print(status)
+                
+                tx_packets = 255 
+                while(tx_packets != 0): #wait until empty
+                    try:
+                        tx_packets = self.SBand.get_tx_buffer_state()[1]
+                        if (tx_packets != 0):
+                            self.SBand.radio_tx_mode()
+                    except IndexError:
+                        tx_packets = 255
+                    print("TX packets: {}".format(tx_packets))
+                
+                while status != 0x10:
+                    time.sleep(0.1)
+                    status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
+                    print(status)
+                
+                self.write_console("S-Band Transmission Complete")
+                
+                
     def close_window(self):
         #self.write_console("Closing window")
         self.thread_running = 0

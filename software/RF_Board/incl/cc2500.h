@@ -142,4 +142,8 @@ void cc2500_set_tx_power(const unsigned char power);
 void cc2500_transmit(const char* data, const char size);
 unsigned char cc2500_receive(char* buffer);
 
+/* getters */
+unsigned long long cc2500_get_frequency(void);
+unsigned long long cc2500_get_data_rate(void);
+
 #endif

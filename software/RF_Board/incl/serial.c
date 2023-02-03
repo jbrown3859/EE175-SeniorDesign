@@ -4,7 +4,7 @@
 
 #define MCLK_FREQ_MHZ 8                     // MCLK = 8MHz
 
-char SPI_TIMEOUT = 0; //set in ISR
+char SERIAL_TIMEOUT = 0; //set in ISR
 
 /* UART data structure */
 char UART_RXBUF[256];
@@ -95,6 +95,30 @@ void init_clock() {
 }
 
 
+/* serial timeout */
+#pragma vector=TIMER1_B0_VECTOR
+__interrupt void TIMER1_B0_VECTOR_ISR (void) {
+    SERIAL_TIMEOUT = 1;
+    TB1CCTL0 &= ~CCIFG; //reset interrupt
+}
+
+/* Timeout clock init */
+void init_serial_timer(unsigned int timeout) {
+    TB1CCTL0 = CCIE; //interrupt mode
+    TB1CCR0 = timeout; //trigger value
+    TB1CTL = TBSSEL__SMCLK | ID_0 | TBCLR; //fast peripheral clock, no division, clear at start
+}
+
+void set_serial_timer(char mode) {
+    if (mode == 1) { //enable timer
+        TB1CTL |= MC__UP | TBCLR;
+    }
+    else { //disable timer
+        TB1CTL |= TBCLR;
+        TB1CTL &= ~(0b11 << 4); //stop timer
+    }
+}
+
 /* init UART to a standard baud rate */
 void init_UART(unsigned long baud) {
     // Configure UART pins
@@ -162,12 +186,15 @@ int getchar() {
 
 /* Wait until the TX buffer is empty and load a char to it */
 void putchar(char c) {
+    set_serial_timer(1);
     /* wait until transmit buffer is ready (THIS LINE IS VERY IMPORTANT AND UART WILL BREAK WITHOUT IT) */
-    while (( UCA0IFG & UCTXIFG ) == 0 );
+    while (( UCA0IFG & UCTXIFG ) == 0 && SERIAL_TIMEOUT == 0);
 
     /* Transmit data */
     UCA0TXBUF = c;
-    __no_operation();
+
+    set_serial_timer(0);
+    SERIAL_TIMEOUT = 0;
 }
 
 
@@ -246,11 +273,6 @@ void init_SPI_master(void) {
 
     UCB1CTLW0 &= ~UCSWRST;
     UCB1IE |= UCRXIE;
-
-    /* Timeout clock init */
-    TB1CCTL0 = CCIE; //interrupt mode
-    TB1CCR0 = 500; //trigger value
-    TB1CTL = TBSSEL__SMCLK | ID_0 | TBCLR; //fast peripheral clock, no division, clear at start
 }
 
 /* set SPI polarity/phase */
@@ -264,22 +286,6 @@ void set_SPI_mode(char phase, char polarity) {
     UCB1CTLW0 &= ~UCSWRST; //release for operation
 }
 
-void set_SPI_timer(char mode) {
-    if (mode == 1) { //enable timer
-        TB1CTL |= MC__UP | TBCLR;
-    }
-    else { //disable timer
-        TB1CTL |= TBCLR;
-        TB1CTL &= ~(0b11 << 4); //stop timer
-    }
-}
-
-#pragma vector=TIMER1_B0_VECTOR
-__interrupt void TIMER1_B0_VECTOR_ISR (void) {
-    SPI_TIMEOUT = 1;
-    TB1CCTL0 &= ~CCIFG; //reset interrupt
-}
-
 /* SPI vector */
 #pragma vector=USCI_B1_VECTOR
 __interrupt void USCI_B1_ISR(void) {
@@ -291,53 +297,51 @@ __interrupt void USCI_B1_ISR(void) {
 
 /* Transmit address + char */
 void SPI_TX(char addr, char c) {
-    set_SPI_timer(1); //enable timeout
+    set_serial_timer(1); //enable timeout
 
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 && SERIAL_TIMEOUT == 0);
     UCB1TXBUF = addr;
-    SPI_TIMEOUT = 0;
 
-    while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 && SERIAL_TIMEOUT == 0);
     UCB1TXBUF = c;
-    SPI_TIMEOUT = 0;
 
     __no_operation();
-    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 && SERIAL_TIMEOUT == 0); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
 
-    set_SPI_timer(0); //disable timeout
+    set_serial_timer(0); //disable timeout
+    SERIAL_TIMEOUT = 0;
 }
 
 /* send 8 bit address to slave in order to get data back */
 char SPI_RX(char addr) {
     char r;
 
-    set_SPI_timer(1); //enable timeout
+    set_serial_timer(1); //enable timeout
 
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    while ((UCB1IFG & UCTXIFG) == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 && SERIAL_TIMEOUT == 0);
     UCB1TXBUF = addr;
 
-    while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
+    while ((UCB1IFG & UCRXIFG) == 0 && SERIAL_TIMEOUT == 0);
     r = UCB1RXBUF;
-    SPI_TIMEOUT = 0;
 
-    while ((UCB1IFG & UCTXIFG) == 0 );
+    while ((UCB1IFG & UCTXIFG) == 0 && SERIAL_TIMEOUT == 0);
     UCB1TXBUF = 0x00; //transmit nothing
 
-    while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
+    while ((UCB1IFG & UCRXIFG) == 0 && SERIAL_TIMEOUT == 0);
     r = UCB1RXBUF;
-    SPI_TIMEOUT = 0;
 
     __no_operation();
-    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 && SERIAL_TIMEOUT == 0); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
 
-    set_SPI_timer(0); //disable timeout
+    set_serial_timer(0); //disable timeout
+    SERIAL_TIMEOUT = 0;
     return r;
 }

@@ -11,7 +11,11 @@
 void Software_Trim(void);
 void init_clock(void);
 
-extern char SPI_TIMEOUT;
+extern char SERIAL_TIMEOUT;
+
+/* Serial Timer */
+void init_serial_timer(unsigned int timeout);
+void set_serial_timer(char mode);
 
 /* UART Functions and Variables */
 extern char UART_RXBUF[256];
@@ -30,7 +34,6 @@ void print_dec(const long long data, const unsigned char len);
 /* SPI functions */
 void init_SPI_master(void);
 void set_SPI_mode(char phase, char polarity);
-void set_SPI_timer(char mode);
 
 //int SPI_RX(void);
 void SPI_TX(char addr, char c);

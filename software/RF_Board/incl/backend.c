@@ -162,10 +162,8 @@ __interrupt void PORT2_ISR(void) {
         if (pkt_len > 0) { //filter failed CRCs
            write_packet_buffer(&RXbuf, pkt, pkt_len);
         }
-        P1OUT |= (0b1);
         cc2500_command_strobe(STROBE_SFRX);
         cc2500_command_strobe(STROBE_SRX);
-        P1OUT &= ~(0b1);
         #endif
         info.radio_mode = RX;
     }
@@ -226,8 +224,8 @@ void main_loop(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
-    for (;;) {
 
+    for (;;) {
         /* Radio state machine*/
         switch(info.radio_mode) {
         case IDLE:
@@ -255,7 +253,8 @@ void main_loop(void) {
         /* UART state machine */
         switch(state) {
         case INIT:
-            info.frequency = 2450000000;
+            info.frequency = cc2500_get_frequency();
+            info.data_rate = cc2500_get_data_rate();
             info.radio_mode = RX;
 
             #ifdef RADIOTYPE_SBAND
@@ -265,6 +264,9 @@ void main_loop(void) {
             state = WAIT;
             break;
         case GET_RADIO_INFO:
+            info.frequency = cc2500_get_frequency();
+            info.data_rate = cc2500_get_data_rate();
+
             putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
             putchar(0xAA);
             #ifdef RADIOTYPE_UHF
@@ -274,6 +276,7 @@ void main_loop(void) {
             putchar('S');
             #endif
             print_dec(info.frequency, 10);
+            print_dec(info.data_rate, 6);
             state = WAIT;
             break;
         case GET_RX_BUF_STATE:

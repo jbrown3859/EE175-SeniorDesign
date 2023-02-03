@@ -49,7 +49,7 @@ char cc2500_read(const unsigned char addr) {
 void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
     unsigned char i;
 
-    hardware_timeout(10);
+    hardware_timeout(10); //hardware timeout instead of serial timeout because bursts can take longer
 
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
@@ -69,11 +69,11 @@ void cc2500_burst_read_fifo(char* buffer, unsigned char len) {
     }
 
     __no_operation();
-    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 && timeout_flag == 0); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
 
-    timeout_flag = 0;
     hardware_timeout(0);
+    timeout_flag = 0;
 }
 
 /* write register */
@@ -85,19 +85,24 @@ void cc2500_write(const unsigned char addr, const char data) {
 void cc2500_burst_write_fifo(const char* buffer, unsigned char len) {
     unsigned char i;
 
+    hardware_timeout(10);
+
     P4OUT &= ~(1 << 4); //NSS low
     __no_operation();
 
-    while ((UCB1IFG & UCTXIFG) == 0);
+    while ((UCB1IFG & UCTXIFG) == 0 && timeout_flag == 0);
     UCB1TXBUF = 0x7F; //burst TX FIFO address
 
     for(i=0;i<len;i++) {
-        while ((UCB1IFG & UCTXIFG) == 0);
+        while ((UCB1IFG & UCTXIFG) == 0 && timeout_flag == 0);
         UCB1TXBUF = buffer[i];
     }
 
-    while ((UCB1STATW & UCBUSY) == 1 ); //wait until not busy
+    while ((UCB1STATW & UCBUSY) == 1 && timeout_flag == 0); //wait until not busy
     P4OUT |= (1 << 4); //NSS high
+
+    hardware_timeout(0);
+    timeout_flag = 0;
 }
 
 /* display register addr and value over uart for debug */
@@ -155,24 +160,26 @@ void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char expo
 char cc2500_command_strobe(const unsigned char strobe) {
     char status_byte;
 
-    set_SPI_timer(1);
+    P1OUT |= (0b1);
+    set_serial_timer(1);
     if (strobe >= 0x30 && strobe <= 0x3D) {
        P4OUT &= ~(1 << 4); //NSS low
        __no_operation();
 
-       while ((UCB1IFG & UCTXIFG) == 0 && SPI_TIMEOUT == 0);
+       while ((UCB1IFG & UCTXIFG) == 0 && SERIAL_TIMEOUT == 0);
        UCB1TXBUF = strobe;
-       SPI_TIMEOUT = 0;
 
-       while ((UCB1IFG & UCRXIFG) == 0 && SPI_TIMEOUT == 0);
+       while ((UCB1IFG & UCRXIFG) == 0 && SERIAL_TIMEOUT == 0);
        status_byte = UCB1RXBUF;
-       SPI_TIMEOUT = 0;
 
        __no_operation();
-       while ((UCB1STATW & UCBUSY) == 1); //wait until not busy
+       while ((UCB1STATW & UCBUSY) == 1 && SERIAL_TIMEOUT == 0); //wait until not busy
        P4OUT |= (1 << 4); //NSS high
     }
-    set_SPI_timer(0);
+    set_serial_timer(0);
+    SERIAL_TIMEOUT = 0;
+
+    P1OUT &= ~(0b1);
     return status_byte;
 }
 
@@ -274,4 +281,27 @@ unsigned char cc2500_receive(char* buffer) {
     else {
         return 0;
     }
+}
+
+/* calculate operating frequency from register settings */
+unsigned long long cc2500_get_frequency(void) {
+    unsigned long long high = ((unsigned long long)cc2500_read(0x0D) << 16);
+    unsigned long long med = ((unsigned long long)cc2500_read(0x0E) << 8);
+    unsigned long long low = cc2500_read(0x0F);
+    unsigned long long freq = high | med | low;
+
+    unsigned long long chan = cc2500_read(0x0A);
+
+    long long chanspc_e = cc2500_read(0x13) & 0x03;
+    unsigned long long chanspc_m = cc2500_read(0x14);
+
+    return (XTAL_FREQ / 65536) * (freq + chan * ((256 + chanspc_m) * pow(2, chanspc_e - 2)));
+}
+
+/* calculate data rate from register settings */
+unsigned long long cc2500_get_data_rate(void) {
+    unsigned long drate_e = cc2500_read(0x10) & 0x0F;
+    unsigned long drate_m = cc2500_read(0x11);
+
+    return (((256 + drate_m) * pow(2, drate_e))* XTAL_FREQ)/268435456;
 }
