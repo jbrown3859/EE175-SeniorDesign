@@ -1,14 +1,5 @@
 import cv2 as cv
-import PIL
-from PIL import ImageTk
-from PIL import Image
 import numpy as np
-from mss import mss
-import time
-import json
-import math
-
-from bitstring import BitArray
 
 filename = str(input("filename:"))
 mode = int(input("Mode (1 = B/W, 2 = color, 3 = red, 4 = green, 5 = blue):"))
@@ -44,7 +35,7 @@ for i in range(0, (width * height)):
     blue = blue << 3
     
     if (mode == 1):
-        avg = int(((red << 3) + (green << 2) + (blue << 3))/3)
+        avg = int((red + green + blue)/3)
         
         for j in range(0, 3):
             frame[int(i / width)][i % width][j] = avg
