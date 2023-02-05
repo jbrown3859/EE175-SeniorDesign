@@ -186,6 +186,7 @@ int getchar() {
 
 /* Wait until the TX buffer is empty and load a char to it */
 void putchar(char c) {
+    P1OUT |= (0x02);
     set_serial_timer(1);
     /* wait until transmit buffer is ready (THIS LINE IS VERY IMPORTANT AND UART WILL BREAK WITHOUT IT) */
     while (( UCA0IFG & UCTXIFG ) == 0 && SERIAL_TIMEOUT == 0);
@@ -195,6 +196,7 @@ void putchar(char c) {
 
     set_serial_timer(0);
     SERIAL_TIMEOUT = 0;
+    P1OUT &= ~(0x02);
 }
 
 

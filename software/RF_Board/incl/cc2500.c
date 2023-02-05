@@ -158,9 +158,9 @@ void cc2500_set_data_rate(const unsigned char mantissa, const unsigned char expo
 
 /* issue command strobe */
 char cc2500_command_strobe(const unsigned char strobe) {
+    P1OUT |= (0b1);
     char status_byte;
 
-    P1OUT |= (0b1);
     set_serial_timer(1);
     if (strobe >= 0x30 && strobe <= 0x3D) {
        P4OUT &= ~(1 << 4); //NSS low

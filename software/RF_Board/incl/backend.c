@@ -171,7 +171,6 @@ __interrupt void PORT2_ISR(void) {
         info.radio_mode = TX_WAIT;
     }
 
-   // WDTCTL = WDTPW | WDTCNTCL; //reset watchdog count
     P2IFG &= ~(0x04);
 }
 
@@ -224,6 +223,11 @@ void main_loop(void) {
     P1DIR |= 0b1; //set P1.0 to output
     P1OUT &= ~(0b1); //set P1.0 to zero
 
+    P1DIR |= 0x02; //set P1.0 to output
+    P1OUT &= ~(0x02); //set P1.0 to zero
+
+    /* watchdog timer */
+    WDTCTL = WDTPW | 0b1011; //| (1 << 5); //reset after 16s
 
     for (;;) {
         /* Radio state machine*/
@@ -533,5 +537,6 @@ void main_loop(void) {
             }
             break;
         }
+        WDTCTL |= WDTPW | WDTCNTCL; //reset watchdog count
     }
 }
