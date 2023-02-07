@@ -3,7 +3,9 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
+
 #define RX_SIZE 1024
 #define RX_PACKETS 128
 #define TX_SIZE 1024
@@ -165,16 +167,32 @@ __interrupt void PORT2_ISR(void) {
         cc2500_command_strobe(STROBE_SFRX);
         cc2500_command_strobe(STROBE_SRX);
         #endif
+        #ifdef RADIOTYPE_UHF
+        pkt_len = rfm95w_read_fifo(pkt);
+        if (pkt_len > 0) {
+            write_packet_buffer(&RXbuf, pkt, pkt_len);
+        }
+        rfm95w_clear_flag(FLAG_RXDONE);
+        rfm95w_clear_flag(FLAG_VALIDHEADER);
+        #endif
+
         info.radio_mode = RX;
     }
     else if (info.radio_mode == TX_ACTIVE) {
+        #ifdef RADIOTYPE_UHF
+        rfm95w_clear_flag(FLAG_TXDONE);
+        #endif
+
         info.radio_mode = TX_WAIT;
     }
 
-    P2IFG &= ~(0x04);
+    P2IFG &= ~(0x05); //reset interrupt flags
+    //P2IFG &= ~(0x01);
 }
 
 void main_loop(void) {
+    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_3; //watchdog on, slow clock source, reset watchdog, 16s expiration
+
     enum State state = INIT;
     unsigned int temp;
 
@@ -219,16 +237,6 @@ void main_loop(void) {
     TXbuf.ptr_head = 0;
     TXbuf.flags = 0;
 
-    /* debug only */
-    P1DIR |= 0b1; //set P1.0 to output
-    P1OUT &= ~(0b1); //set P1.0 to zero
-
-    P1DIR |= 0x02; //set P1.0 to output
-    P1OUT &= ~(0x02); //set P1.0 to zero
-
-    /* watchdog timer */
-    WDTCTL = WDTPW | 0b1011; //| (1 << 5); //reset after 16s
-
     for (;;) {
         /* Radio state machine*/
         switch(info.radio_mode) {
@@ -247,6 +255,13 @@ void main_loop(void) {
                 cc2500_command_strobe(STROBE_STX); //enter transmit mode
                 #endif
 
+                #ifdef RADIOTYPE_UHF
+                pkt_len = read_packet_buffer(&TXbuf, pkt);
+                pkt[pkt_len] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
+                pkt[pkt_len + 1] = '\0'; //null-terminate
+                rfm95w_transmit_chars(pkt);
+                #endif
+
                 info.radio_mode = TX_ACTIVE;
             }
             break;
@@ -257,28 +272,33 @@ void main_loop(void) {
         /* UART state machine */
         switch(state) {
         case INIT:
-            info.frequency = cc2500_get_frequency();
-            info.data_rate = cc2500_get_data_rate();
-            info.radio_mode = RX;
+            info.frequency = 0; //dummy value, should never actually be this
+            info.data_rate = 0;
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);
             #endif
+            #ifdef RADIOTYPE_UHF
+            rfm95w_set_DIO_mode(DIO0_RXDONE);
+            rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
+            #endif
 
+            info.radio_mode = RX;
             state = WAIT;
             break;
         case GET_RADIO_INFO:
-            info.frequency = cc2500_get_frequency();
-            info.data_rate = cc2500_get_data_rate();
-
             putchar(0xAA); //send preamble to reduce the chance of the groundstation application getting a false positive on device detection
             putchar(0xAA);
+
+            #ifdef RADIOTYPE_SBAND
+            info.frequency = cc2500_get_frequency();
+            info.data_rate = cc2500_get_data_rate();
+            putchar('S');
+            #endif
             #ifdef RADIOTYPE_UHF
             putchar('U');
             #endif
-            #ifdef RADIOTYPE_SBAND
-            putchar('S');
-            #endif
+
             print_dec(info.frequency, 10);
             print_dec(info.data_rate, 6);
             state = WAIT;
@@ -414,6 +434,10 @@ void main_loop(void) {
                 cc2500_write(addr, data);
                 putchar(cc2500_read(addr));
                 #endif
+                #ifdef RADIOTYPE_UHF
+                rfm95w_write(addr, data);
+                putchar(rfm95w_read(addr));
+                #endif
             }
             else {
                 flush_UART_FIFO();
@@ -425,6 +449,10 @@ void main_loop(void) {
             if (get_UART_bytes(args, 1, 10000) == 1) {
                 #ifdef RADIOTYPE_SBAND
                 data = cc2500_read(args[0]);
+                putchar(data);
+                #endif
+                #ifdef RADIOTYPE_UHF
+                data = rfm95w_read(args[0]);
                 putchar(data);
                 #endif
             }
@@ -442,6 +470,11 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
             putchar(radio_state);
             #endif
+            #ifdef RADIOTYPE_UHF
+            rfm95w_set_mode(OP_MODE_STDBY);
+            radio_state = rfm95w_read(0x18); //status register
+            putchar(radio_state);
+            #endif
 
             info.radio_mode = IDLE;
             state = WAIT;
@@ -451,6 +484,12 @@ void main_loop(void) {
             cc2500_command_strobe(STROBE_SFRX);
             cc2500_command_strobe(STROBE_SRX);
             radio_state = cc2500_get_status();
+            putchar(radio_state);
+            #endif
+            #ifdef RADIOTYPE_UHF
+            rfm95w_set_DIO_mode(DIO0_RXDONE);
+            rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
+            radio_state = rfm95w_read(0x18); //status register
             putchar(radio_state);
             #endif
 
@@ -464,13 +503,18 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
             putchar(radio_state);
             #endif
+            #ifdef RADIOTYPE_UHF
+            rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO
+            rfm95w_set_mode(OP_MODE_STDBY);
+            radio_state = rfm95w_read(0x18); //status register
+            putchar(radio_state);
+            #endif
 
             info.radio_mode = TX_WAIT;
             state = WAIT;
             break;
         default:
         case WAIT:
-            timeout_flag = 0;
             if (get_UART_FIFO_size() != 0) { //handle command
                 command = read_UART_FIFO();
 
@@ -537,6 +581,6 @@ void main_loop(void) {
             }
             break;
         }
-        WDTCTL |= WDTPW | WDTCNTCL; //reset watchdog count
+        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_3; //reset watchdog count
     }
 }

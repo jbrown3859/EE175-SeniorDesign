@@ -14,6 +14,10 @@ char RX_done;
 
 char TX_timeout = 0;
 
+char DIO0_mode;
+char TX_done;
+char RX_done;
+
 void init_GPIO(void) {
     PM5CTL0 &= ~LOCKLPM5; //disable high-impedance GPIO mode
 
@@ -29,6 +33,24 @@ void init_GPIO(void) {
     //P1OUT = 0x00;
     P1DIR &= ~(0b1 << 5); //set P1.5 to input
     P1SEL0 &= ~(0b1 << 5); //set P1.5 to GPIO
+}
+
+#pragma vector=PORT2_VECTOR
+__interrupt void PORT2_ISR(void) {
+    switch(DIO0_mode) {
+    case DIO0_RXDONE:
+        rfm95w_clear_flag(FLAG_RXDONE);
+        rfm95w_clear_flag(FLAG_VALIDHEADER);
+        RX_done = 1;
+        break;
+    case DIO0_TXDONE:
+        rfm95w_clear_flag(FLAG_TXDONE);
+        TX_done = 1;
+        break;
+    case DIO0_CADDONE:
+        break;
+    }
+    P2IFG &= ~(0x01); //clear interrupt flag
 }
 
 
@@ -79,12 +101,12 @@ int main(void) {
 
     if (((P1IN >> 5) & 0xb1) == 0) { //TX mode
         rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO
-        rfm95w_set_mode(MODE_STDBY);
+        rfm95w_set_mode(OP_MODE_STDBY);
         mode = 0;
     }
     if (((P1IN >> 5) & 0xb1) == 1) { //RX mode
         rfm95w_set_DIO_mode(DIO0_RXDONE);
-        rfm95w_set_mode(MODE_RXCONTINUOUS);
+        rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
         mode = 1;
     }
 
@@ -97,11 +119,9 @@ int main(void) {
                 //msg[6] = (i + 48); //make digit
                 rfm95w_transmit_fixed_packet(msg); //len = 8
 
-                //set_TX_timer(1); //enable timeout
-                hardware_timeout(32000);
+                hardware_timeout(64000);
                 while(TX_done == 0 && timeout_flag == 0);
                 hardware_timeout(0);
-                //set_TX_timer(0); //disable timeout
 
                 TX_timeout = 0; //reset flag
                 TX_done = 0; //reset

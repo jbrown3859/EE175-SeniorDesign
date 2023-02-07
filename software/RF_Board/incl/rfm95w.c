@@ -3,36 +3,14 @@
 #include <rfm95w.h>
 #include <util.h>
 
-extern char DIO0_mode;
-extern char TX_done;
-extern char RX_done;
+char DIO0_mode;
+//extern char TX_done;
+//extern char RX_done;
 
-extern char TX_timeout;
-
-/* timeout vector */
-/*
-#pragma vector=TIMER0_B0_VECTOR
-__interrupt void TIMER0_B0_VECTOR_ISR (void) {
-    TX_timeout = 1;
-    TB0CCTL0 &= ~CCIFG; //reset interrupt
-}
-
-void set_TX_timer(char mode) {
-    if (mode == 1) { //enable timer
-        TB0CTL |= MC__UP | TBCLR;
-
-        TB0CCTL0 = CCIE; //interrupt mode
-        TB0CCR0 = 65535; //trigger value
-        TB0CTL = TBSSEL__ACLK | MC__UP | ID_3 | TBCLR; //slow clock, count up, divide by 8, clear at start
-    }
-    else { //disable timer
-        TB0CTL |= TBCLR;
-        TB0CTL &= ~(0b11 << 4); //stop timer
-    }
-}
-*/
+//extern char TX_timeout;
 
 /* vector for interrupt on P2.0 triggered by DIO0 on LoRa */
+/*
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
     switch(DIO0_mode) {
@@ -50,6 +28,7 @@ __interrupt void PORT2_ISR(void) {
     }
     P2IFG &= ~(0x01); //clear interrupt flag
 }
+*/
 
 /* init */
 void rfm95w_init(void) {
@@ -120,13 +99,13 @@ void rfm95w_set_mode(const char mode) {
 
 /* set register 0x01 to configure radio modulation and put radio into standby */
 void rfm95w_set_lora_mode(const char lora_mode) {
-    rfm95w_set_mode(MODE_SLEEP); //device must be in sleep to change modulation
+    rfm95w_set_mode(OP_MODE_SLEEP); //device must be in sleep to change modulation
 
     char r = rfm95w_read(0x01) & ~(0b10000000); //clear lora bit
     r |= lora_mode; //set lora mode
     rfm95w_write(0x01, r);
 
-    rfm95w_set_mode(MODE_STDBY);
+    rfm95w_set_mode(OP_MODE_STDBY);
 }
 
 void rfm95w_set_frequency_mode(const char m) {
@@ -138,7 +117,7 @@ void rfm95w_set_frequency_mode(const char m) {
 void rfm95w_set_carrier_frequency(const unsigned long long frequency) {
     const unsigned long long frf = ((frequency * 524288)/F_XOSC); //from datasheet formula
 
-    rfm95w_set_mode(MODE_STDBY); //must be in standby or sleep to program frequency
+    rfm95w_set_mode(OP_MODE_STDBY); //must be in standby or sleep to program frequency
 
     rfm95w_write(0x06, (char)((frf >> 16) & 0xFF)); //MSB
     rfm95w_write(0x07, (char)((frf >> 8) & 0xFF)); //middle byte
@@ -277,7 +256,7 @@ void rfm95w_transmit_chars(const char* data) {
     char tx_ptr = rfm95w_read(0x0E);
     rfm95w_write(0x0D, tx_ptr); //set FIFO pointer to transmit buffer region
 
-    rfm95w_set_mode(MODE_STDBY); //must be in stdby to fill fifo
+    rfm95w_set_mode(OP_MODE_STDBY); //must be in stdby to fill fifo
 
     c = data[i];
     while(c != '\0') {
@@ -287,7 +266,7 @@ void rfm95w_transmit_chars(const char* data) {
     }
 
     rfm95w_set_payload_length(i);
-    rfm95w_set_mode(MODE_TX); //set to transmit mode
+    rfm95w_set_mode(OP_MODE_TX); //set to transmit mode
 }
 
 /* transmit fixed size payload in implicit header mode */
@@ -298,13 +277,13 @@ void rfm95w_transmit_fixed_packet(const char* data) {
     rfm95w_write(0x0D, tx_ptr); //set FIFO pointer to transmit buffer region
     l = rfm95w_get_payload_length();
 
-    rfm95w_set_mode(MODE_STDBY); //must be in stdby to fill fifo
+    rfm95w_set_mode(OP_MODE_STDBY); //must be in stdby to fill fifo
 
     for (i=0;i<l;i++) {
         rfm95w_write_fifo(data[i]);
     }
 
-    rfm95w_set_mode(MODE_TX); //set to transmit mode
+    rfm95w_set_mode(OP_MODE_TX); //set to transmit mode
 }
 
 /* read fifo into provided buffer following a successful RX (returns buffer length) */
@@ -316,8 +295,7 @@ unsigned char rfm95w_read_fifo(char* buffer) {
     current_addr = rfm95w_read(0x10);
     rfm95w_write(0x0d, current_addr); //write current address to pointer
 
-    num_bytes = (unsigned char)rfm95w_read(0x13);
-
+    num_bytes = (unsigned char)rfm95w_read(0x13); //num bytes register
 
     for (i=0;i<num_bytes;i++) { //read fifo num_bytes times
         buffer[i] = rfm95w_read(0x00);

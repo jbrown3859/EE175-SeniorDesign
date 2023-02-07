@@ -1,6 +1,14 @@
 import cv2 as cv
 import numpy as np
 
+def mirror_bits(var, len):
+    temp = 0
+    for i in range(0, len):
+        old = var >> ((len-1) - i) & 0x01
+        temp |= old << i
+        
+    return temp
+
 filename = str(input("filename:"))
 mode = int(input("Mode (1 = B/W, 2 = color, 3 = red, 4 = green, 5 = blue):"))
 endianness = int(input("Endianness (1 = big, 2 = little):"))
@@ -19,12 +27,14 @@ print("lines=", len(data)/(width*2))
 for i in range(0, (width * height)):
     if (endianness == 1):
         high = (data[2*i])
-        low = (data[2*i - 1])
+        low = (data[2*i + 1])
     elif (endianness == 2):
         low = (data[2*i])
         high = (data[2*i + 1])
     
+    #print("========")
     temp = ((high << 8) & 0xFF00) | (low & 0xFF)
+    #print(format(temp, '016b'))
     
     red = (temp >> 11) & 0x1f#(temp & 0xF800) >> 11
     green = (temp >> 5) & 0x3f#(temp & 0x03F0) >> 5
@@ -33,6 +43,12 @@ for i in range(0, (width * height)):
     red = red << 3
     green = green << 2
     blue = blue << 3
+    
+    '''
+    print(format(red, '08b'))
+    print(format(green, '08b'))
+    print(format(blue, '08b'))
+    '''
     
     if (mode == 1):
         avg = int((red + green + blue)/3)

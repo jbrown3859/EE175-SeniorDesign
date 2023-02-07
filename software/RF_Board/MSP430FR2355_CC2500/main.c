@@ -2,36 +2,20 @@
 
 #include <util.h>
 #include <serial.h>
-#include <cc2500.h>
-//#include <rfm95w.h>
 #include <backend.h>
 
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
-char send = 0;
-
-/* ISR for RX detection */
-/*
-#pragma vector=PORT2_VECTOR
-__interrupt void PORT2_ISR(void) {
-    char buffer[64];
-    unsigned int len;
-
-   len = cc2500_receive(buffer);
-    if (len > 0) { //filter failed CRCs
-        if (buffer[0] == 0x20 && buffer[1] == 0x01 && buffer[2] == 0x01 && buffer[3] == 0x02) {
-            send = 1;
-        }
-    }
-
-    cc2500_command_strobe(STROBE_SFRX);
-    cc2500_command_strobe(STROBE_SRX);
-    P2IFG &= ~(0x04);
-}
-*/
+#ifdef RADIOTYPE_SBAND
+#include <cc2500.h>
+#endif
+#ifdef RADIOTYPE_UHF
+#include <rfm95w.h>
+#endif
 
 int main(void) {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-    //WDTCTL = WDTPW | 0b1011 | (1 << 5); //reset after 16s
     PM5CTL0 &= ~LOCKLPM5; //disable high-impedance GPIO mode
     __bis_SR_register(GIE); //enable interrupts
 
@@ -40,11 +24,9 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
 
-    //putchars("\n\rResetting Chip\n\r");
+    #ifdef RADIOTYPE_SBAND
     cc2500_command_strobe(STROBE_SRES); //reset chip
     hardware_delay(100);
-    //cc2500_register_dump();
-    //putchars("\n\rRegister Dump\n\r");
     //cc2500_set_base_frequency(2450000000);
     //cc2500_set_IF_frequency(457000);
     cc2500_set_vco_autocal(AUTOCAL_FROM_IDLE);
@@ -57,68 +39,39 @@ int main(void) {
     cc2500_set_crc(0x00,0x00,0x00);
     //cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
-    //cc2500_register_dump();
     cc2500_set_rxoff_mode(RXOFF_IDLE);
     cc2500_set_txoff_mode(TXOFF_IDLE);
     cc2500_configure_gdo(GDO0, GDO_HI_Z);
     cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
 
     cc2500_init_gpio(INT_GDO2); //init after programming to avoid false interrupts
+    #endif
+
+    #ifdef RADIOTYPE_UHF
+    rfm95w_init();
+    rfm95w_reset();
+
+    rfm95w_set_lora_mode(MODE_LORA);
+    rfm95w_set_frequency_mode(0x00);
+    rfm95w_set_carrier_frequency(433500000);
+
+    rfm95w_set_tx_power(PA_BOOST, 0x0, 0x0);
+    rfm95w_agc_auto_on(AGC_ON);
+
+    rfm95w_set_lora_bandwidth(BW_41_7);
+    rfm95w_set_spreading_factor(12);
+    rfm95w_LDR_optimize(LDR_ENABLE);
+
+    rfm95w_set_preamble_length(0x0010);
+    rfm95w_set_crc(CRC_DISABLE);
+    rfm95w_set_coding_rate(CR_4_5);
+    rfm95w_set_header_mode(EXPLICIT_HEADER);
+    //rfm95w_set_payload_length(0x08);
+    rfm95w_set_max_payload_length(0x20);
+    rfm95w_set_sync_word(0x34);
+    #endif
 
     main_loop();
-
-    /* for test only */
-
-    char image_packet[18] = {0,0,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64};
-    unsigned int img_ptr = 0;
-
-    unsigned int i;
-
-    cc2500_command_strobe(STROBE_SRX);
-    for (;;) {
-        if (send == 1) {
-            cc2500_init_gpio(INT_NONE); //disable interrupts
-            hardware_delay(64000);
-            for (i=0;i<16;i++) {
-                cc2500_transmit(image_packet, 18);
-            }
-
-            for (img_ptr=0;img_ptr<1200;img_ptr++) {
-                hardware_delay(200);
-                putchars("Transmitting\n\r");
-
-                for (i=2;i<18;i++) {
-                    if (img_ptr > 100 && img_ptr < 300 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
-                        image_packet[i] = 0xF3;
-                    }
-                    else if (img_ptr > 300 && img_ptr < 500 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
-                        image_packet[i] = 0x0F;
-                    }
-                    else if (img_ptr > 500 && img_ptr < 700 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
-                        image_packet[i] = 0x0C;
-                    }
-                    else if (img_ptr > 700 && img_ptr < 900 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
-                        image_packet[i] = 0x03;
-                    }
-                    else if (img_ptr > 900 && img_ptr < 1100 && img_ptr % 10 >= 2 && img_ptr % 10 <= 7) {
-                        image_packet[i] = 0xFC;
-                    }
-                    else {
-                        image_packet[i] = 0xF0;
-                    }
-                }
-                image_packet[0] = ((img_ptr >> 8) & 0xFF) | 0x80;
-                image_packet[1] = (img_ptr) & 0xFF;
-                cc2500_transmit(image_packet, 18);
-
-            //img_ptr = (img_ptr < 1200) ? img_ptr + 1 : 0;
-            }
-            cc2500_init_gpio(INT_GDO2);
-            cc2500_command_strobe(STROBE_SRX);
-            send = 0;
-        }
-    }
-
 
 	return 0;
 }

@@ -518,7 +518,8 @@ class MainWindow():
             if not self.SBand_command_queue.empty():
                 while not self.SBand_command_queue.empty(): #fill buffer
                     command = self.SBand_command_queue.get()
-                    self.SBand.write_tx_buffer(command)
+                    for i in range(0, 3): #repeat command (maybe remove later)
+                        self.SBand.write_tx_buffer(command)
                 
                 self.write_console("S-Band Entering Transmit Mode")
                 status = 1

@@ -6,14 +6,14 @@
 #define MODE_FSK 0x00
 #define MODE_LORA 0x80
 
-#define MODE_SLEEP 0b000
-#define MODE_STDBY 0b001
-#define MODE_FSTX 0b010
-#define MODE_TX 0b011
-#define MODE_FSRX 0b100
-#define MODE_RXCONTINUOUS 0b101
-#define MODE_RXSINGLE 0b110
-#define MODE_CAD 0b111
+#define OP_MODE_SLEEP 0b000
+#define OP_MODE_STDBY 0b001
+#define OP_MODE_FSTX 0b010
+#define OP_MODE_TX 0b011
+#define OP_MODE_FSRX 0b100
+#define OP_MODE_RXCONTINUOUS 0b101
+#define OP_MODE_RXSINGLE 0b110
+#define OP_MODE_CAD 0b111
 
 #define PA_RFO 0x00
 #define PA_BOOST 0x80
@@ -74,6 +74,11 @@
 
 #define MODE_LF 0x08
 #define MODE_HF 0x00
+
+/* globals */
+extern char DIO0_mode;
+//extern char TX_done;
+//extern char RX_done;
 
 /* TX interrupt */
 void set_TX_timer(char mode);
