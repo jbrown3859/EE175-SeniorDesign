@@ -395,7 +395,7 @@
       "idf": "",
       "netlist": "FlightComputer.net",
       "specctra_dsn": "",
-      "step": "../Gerbers/FCU/FCU STEP/FlightComputer.step",
+      "step": "C:/Users/Joey/Downloads/FlightComputer.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
