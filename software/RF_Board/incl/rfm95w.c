@@ -292,10 +292,12 @@ unsigned char rfm95w_read_fifo(char* buffer) {
     unsigned char num_bytes;
     unsigned char i;
 
+    num_bytes = (unsigned char)rfm95w_read(0x13); //num bytes register
+
     current_addr = rfm95w_read(0x10);
     rfm95w_write(0x0d, current_addr); //write current address to pointer
 
-    num_bytes = (unsigned char)rfm95w_read(0x13); //num bytes register
+    //num_bytes = (unsigned char)rfm95w_read(0x13); //num bytes register
 
     for (i=0;i<num_bytes;i++) { //read fifo num_bytes times
         buffer[i] = rfm95w_read(0x00);

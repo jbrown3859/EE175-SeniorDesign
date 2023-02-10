@@ -9,8 +9,8 @@ char rx_ptr = 0;
 char rx_len = 0;
 
 char DIO0_mode;
-char TX_done;
-char RX_done;
+char TX_done = 0;
+char RX_done = 0;
 
 char TX_timeout = 0;
 
@@ -37,8 +37,20 @@ void init_GPIO(void) {
 
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
+    unsigned char rx_len = 0;
+    char rxbuf[256];
+    unsigned int i = 0;
+
     switch(DIO0_mode) {
     case DIO0_RXDONE:
+        rx_len = rfm95w_read_fifo(rxbuf); //get data
+        rxbuf[rx_len] = '\0'; //null-terminate
+        putchars(rxbuf); //print msg
+        putchars("\n\r");
+        putchars("pkt len=");
+        print_hex(rx_len);
+        putchars("\n\r");
+
         rfm95w_clear_flag(FLAG_RXDONE);
         rfm95w_clear_flag(FLAG_VALIDHEADER);
         RX_done = 1;
@@ -87,8 +99,8 @@ int main(void) {
     rfm95w_set_crc(CRC_DISABLE);
     rfm95w_set_coding_rate(CR_4_5);
     rfm95w_set_header_mode(EXPLICIT_HEADER);
-    rfm95w_set_payload_length(0x08);
-    rfm95w_set_max_payload_length(0xFF);
+    //rfm95w_set_payload_length(0x08);
+    rfm95w_set_max_payload_length(0x20);
     rfm95w_set_sync_word(0x34);
 
     rfm95w_register_dump();
@@ -116,21 +128,22 @@ int main(void) {
     for(;;) {
         if (mode == 0) {
             for (i=0;i<10;i++) {
-                //msg[6] = (i + 48); //make digit
+                msg[6] = (i + 48); //make digit
                 rfm95w_transmit_fixed_packet(msg); //len = 8
 
                 hardware_timeout(64000);
                 while(TX_done == 0 && timeout_flag == 0);
                 hardware_timeout(0);
 
-                TX_timeout = 0; //reset flag
                 TX_done = 0; //reset
+                timeout_flag = 0;
 
                 putchars("Transmission Complete\n\r");
                 hardware_delay(30000);
             }
         }
         else if (mode == 1) {
+            /*
             while(RX_done == 0) {
                 //rfm95w_display_register(0x12);
                 //rfm95w_display_register(0x13);
@@ -138,13 +151,17 @@ int main(void) {
                 //rfm95w_display_register(0x18);
                 //rfm95w_display_register(0x1B); //rssi
             }
-            putchars("Got Packet#: ");
-            print_hex(pkt);
-            putchars("\n\r");
+            //putchars("Got Packet#: ");
+            //print_hex(pkt);
+            //putchars("\n\r");
             rx_len = rfm95w_read_fifo(rxbuf); //get data
             rxbuf[rx_len] = '\0'; //null-terminate
             putchars(rxbuf); //print msg
-            putchars("\n\rHamming Distance: ");
+            putchars("\n\r");
+            putchars("pkt len = ");
+            print_hex(rx_len);
+            putchars("\n\r");
+            putchars("Hamming Distance: ");
             print_hex(hamming_distance(rxbuf, msg, 8));
             putchars(" RSSI: ");
             print_hex(rfm95w_get_packet_rssi());
@@ -152,6 +169,7 @@ int main(void) {
             clear_bytes(rxbuf, 8);
             pkt++;
             RX_done = 0;
+            */
         }
     }
 
