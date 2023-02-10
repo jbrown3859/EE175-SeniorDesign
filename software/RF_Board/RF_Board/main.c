@@ -58,9 +58,9 @@ int main(void) {
     rfm95w_set_tx_power(PA_BOOST, 0x0, 0x0);
     rfm95w_agc_auto_on(AGC_ON);
 
-    rfm95w_set_lora_bandwidth(BW_41_7);
-    rfm95w_set_spreading_factor(12);
-    rfm95w_LDR_optimize(LDR_ENABLE);
+    rfm95w_set_lora_bandwidth(BW_125);
+    rfm95w_set_spreading_factor(9);
+    //rfm95w_LDR_optimize(LDR_ENABLE);
 
     rfm95w_set_preamble_length(0x0010);
     rfm95w_set_crc(CRC_DISABLE);

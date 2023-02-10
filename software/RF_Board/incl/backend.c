@@ -272,8 +272,8 @@ void main_loop(void) {
         /* UART state machine */
         switch(state) {
         case INIT:
-            info.frequency = 0; //dummy value, should never actually be this
-            info.data_rate = 0;
+            info.frequency = 435000000; //dummy value, should never actually be this
+            info.data_rate = 9600;
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);

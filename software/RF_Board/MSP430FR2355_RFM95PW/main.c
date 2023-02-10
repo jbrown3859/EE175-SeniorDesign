@@ -91,16 +91,16 @@ int main(void) {
     rfm95w_set_tx_power(PA_BOOST, 0x0, 0x0);
     rfm95w_agc_auto_on(AGC_ON);
 
-    rfm95w_set_lora_bandwidth(BW_41_7);
-    rfm95w_set_spreading_factor(12);
-    rfm95w_LDR_optimize(LDR_ENABLE);
+    rfm95w_set_lora_bandwidth(BW_125);
+    rfm95w_set_spreading_factor(9);
+    //rfm95w_LDR_optimize(LDR_ENABLE);
 
     rfm95w_set_preamble_length(0x0010);
     rfm95w_set_crc(CRC_DISABLE);
     rfm95w_set_coding_rate(CR_4_5);
     rfm95w_set_header_mode(EXPLICIT_HEADER);
-    //rfm95w_set_payload_length(0x08);
-    rfm95w_set_max_payload_length(0x20);
+    rfm95w_set_payload_length(0x20); //KEEP ME
+    rfm95w_set_max_payload_length(0x21);
     rfm95w_set_sync_word(0x34);
 
     rfm95w_register_dump();
@@ -122,13 +122,28 @@ int main(void) {
         mode = 1;
     }
 
-    char msg[8] = {'H','e','l','l','o','!','!','\n'};
+    char msg[32];
     int i;
     char pkt = 0;
+
+
+    unsigned long timestamp = 0;
     for(;;) {
         if (mode == 0) {
             for (i=0;i<10;i++) {
-                msg[6] = (i + 48); //make digit
+                msg[0] = 'T';
+                msg[1] = (timestamp >> 24) & 0xFF;
+                msg[2] = (timestamp >> 16) & 0xFF;
+                msg[3] = (timestamp >> 8) & 0xFF;
+                msg[4] = (timestamp) & 0xFF;
+                msg[5] = 48;
+                msg[6] = 128;
+                msg[8] = 32 + (timestamp % 4) * 48;
+
+                msg[12] = 128 - (timestamp % 8) * 16;
+                msg[31] = '\n';
+
+
                 rfm95w_transmit_fixed_packet(msg); //len = 8
 
                 hardware_timeout(64000);
@@ -139,7 +154,9 @@ int main(void) {
                 timeout_flag = 0;
 
                 putchars("Transmission Complete\n\r");
-                hardware_delay(30000);
+                hardware_delay(5000);
+
+                timestamp++;
             }
         }
         else if (mode == 1) {

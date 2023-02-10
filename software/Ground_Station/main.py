@@ -106,6 +106,7 @@ class MainWindow():
         '''
         Radio Status
         '''
+        #S-Band
         self.widgets['status_title'] = tk.Label(self.window, text="Radio Status", font=("Arial", 25))
         self.widgets['status_title'].grid(row=3,column=0,columnspan=2)
         
@@ -128,20 +129,25 @@ class MainWindow():
         self.widgets['sband_rate'] = tk.Label(self.widgets['sband_status'], text="N/A", font=("Arial", 15), fg="red")
         self.widgets['sband_rate'].grid(row=4,column=1)
         
+        #UHF
         self.widgets['uhf_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['uhf_status'].grid(row=4,column=1,sticky='NSEW')
         tk.Label(self.widgets['uhf_status'], text="UHF Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
         tk.Label(self.widgets['uhf_status'], text="Serial:", font=("Arial", 15)).grid(row=1,column=0)
-        tk.Label(self.widgets['uhf_status'], text="Not Connected", font=("Arial", 15), fg="red").grid(row=1,column=1)
+        self.widgets['uhf_connected'] = tk.Label(self.widgets['uhf_status'], text="Not Connected", font=("Arial", 15), fg="red")
+        self.widgets['uhf_connected'].grid(row=1,column=1)
         
         tk.Label(self.widgets['uhf_status'], text="Last Packet:", font=("Arial", 15)).grid(row=2,column=0)
-        tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=2,column=1)
+        self.widgets['uhf_last'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_last'].grid(row=2,column=1)
         
         tk.Label(self.widgets['uhf_status'], text="Frequency:", font=("Arial", 15)).grid(row=3,column=0)
-        tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=3,column=1)
+        self.widgets['uhf_frequency'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_frequency'].grid(row=3,column=1)
         
         tk.Label(self.widgets['uhf_status'], text="Data Rate:", font=("Arial", 15)).grid(row=4,column=0)
-        tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red").grid(row=4,column=1)
+        self.widgets['uhf_rate'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_rate'].grid(row=4,column=1)
         
         '''
         Radio Programming
@@ -278,14 +284,14 @@ class MainWindow():
     def animate_plot(self, i):
         try:
             while not self.telem_queue.empty():
-                if (len(self.telemetry_packets) == 100):
+                if (len(self.telemetry_packets) >= 100):
                     self.telemetry_packets.pop(0)
                 
                 telem = self.telem_queue.get()
                 self.telemetry_packets.append(telem)
 
             for packet in self.telemetry_packets:
-                if (len(self.a_x) == 100):
+                if (len(self.a_x) >= 100):
                     self.a_x.pop(0)
                     self.a_y.pop(0)
                     self.a_z.pop(0)
@@ -300,33 +306,34 @@ class MainWindow():
                     
                     self.t.pop(0)
                 
-                self.t.append(packet['Timestamp'])
-                
-                #adjust x scale to match packet timestamps
-                self.mag_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
-                self.accel_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
-                self.gyro_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
-                
-                self.a_x.append(packet['Acceleration'][0])
-                self.a_y.append(packet['Acceleration'][1])
-                self.a_z.append(packet['Acceleration'][2])
-                self.accel_x.set_data(self.t, self.a_x)
-                self.accel_y.set_data(self.t, self.a_y)
-                self.accel_z.set_data(self.t, self.a_z)
-                
-                self.g_x.append(packet['Angular Rate'][0])
-                self.g_y.append(packet['Angular Rate'][1])
-                self.g_z.append(packet['Angular Rate'][2])
-                self.gyro_x.set_data(self.t, self.g_x)
-                self.gyro_y.set_data(self.t, self.g_y)
-                self.gyro_z.set_data(self.t, self.g_z)
-                
-                self.m_x.append(packet['Magnetic Field'][0])
-                self.m_y.append(packet['Magnetic Field'][1])
-                self.m_z.append(packet['Magnetic Field'][2])
-                self.mag_x.set_data(self.t, self.m_x)
-                self.mag_y.set_data(self.t, self.m_y)
-                self.mag_z.set_data(self.t, self.m_z)
+                if (packet['Timestamp'] not in self.t):
+                    self.t.append(packet['Timestamp'])
+                    
+                    #adjust x scale to match packet timestamps
+                    self.mag_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                    self.accel_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                    self.gyro_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                    
+                    self.a_x.append(packet['Acceleration'][0])
+                    self.a_y.append(packet['Acceleration'][1])
+                    self.a_z.append(packet['Acceleration'][2])
+                    self.accel_x.set_data(self.t, self.a_x)
+                    self.accel_y.set_data(self.t, self.a_y)
+                    self.accel_z.set_data(self.t, self.a_z)
+                    
+                    self.g_x.append(packet['Angular Rate'][0])
+                    self.g_y.append(packet['Angular Rate'][1])
+                    self.g_z.append(packet['Angular Rate'][2])
+                    self.gyro_x.set_data(self.t, self.g_x)
+                    self.gyro_y.set_data(self.t, self.g_y)
+                    self.gyro_z.set_data(self.t, self.g_z)
+                    
+                    self.m_x.append(packet['Magnetic Field'][0])
+                    self.m_y.append(packet['Magnetic Field'][1])
+                    self.m_z.append(packet['Magnetic Field'][2])
+                    self.mag_x.set_data(self.t, self.m_x)
+                    self.mag_y.set_data(self.t, self.m_y)
+                    self.mag_z.set_data(self.t, self.m_z)
         except (IndexError, ValueError):
             pass
     
@@ -410,6 +417,7 @@ class MainWindow():
         if not self.status_queue.empty():
             status = self.status_queue.get()
             
+            #SBand
             self.widgets['sband_connected'].destroy()
             self.widgets['sband_last'].destroy()
             self.widgets['sband_frequency'].destroy()
@@ -436,11 +444,39 @@ class MainWindow():
             self.widgets['sband_rate'] = tk.Label(self.widgets['sband_status'], text=status['SBand_rate'], font=("Arial", 15), fg=sband_color)
             self.widgets['sband_rate'].grid(row=4,column=1)
             
+            #UHF
+            self.widgets['uhf_connected'].destroy()
+            self.widgets['uhf_last'].destroy()
+            self.widgets['uhf_frequency'].destroy()
+            self.widgets['uhf_rate'].destroy()
+            
+            if status['UHF_open']:
+                self.widgets['uhf_connected'] = tk.Label(self.widgets['uhf_status'], text="Connected", font=("Arial", 15), fg="green")
+                self.widgets['uhf_connected'].grid(row=1,column=1)
+                sband_color = "green"
+                
+                self.widgets['uhf_last'] = tk.Label(self.widgets['uhf_status'], text=str(int(time.time() - status['UHF_last_packet'])) + "s", font=("Arial", 15), fg="green")
+                self.widgets['uhf_last'].grid(row=2,column=1)
+            else:
+                self.widgets['uhf_connected'] = tk.Label(self.widgets['uhf_status'], text="Not Connected", font=("Arial", 15), fg="red")
+                self.widgets['uhf_connected'].grid(row=1,column=1)
+                sband_color = "red"
+                
+                self.widgets['uhf_last'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+                self.widgets['uhf_last'].grid(row=2,column=1)
+                
+            self.widgets['uhf_frequency'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_frequency'], font=("Arial", 15), fg=sband_color)
+            self.widgets['uhf_frequency'].grid(row=3,column=1)
+            
+            self.widgets['uhf_rate'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_rate'], font=("Arial", 15), fg=sband_color)
+            self.widgets['uhf_rate'].grid(row=4,column=1)
+            
         self.window.after(1000, self.update_radio_status)
             
     def serial_thread(self):
         radio_status = {}
         radio_status['SBand_last_packet'] = 0
+        radio_status['UHF_last_packet'] = 0
         while self.thread_running == 1:
             #attempt to connect ports
             ports = serial.tools.list_ports.comports()
@@ -462,12 +498,12 @@ class MainWindow():
                     self.SBand.attempt_connection(port)
                     if self.SBand.port.is_open:
                         self.write_console("S-Band Modem Connection Accepted")
-                '''
+                
                 if not self.UHF.port.is_open:
                     self.UHF.attempt_connection(port)
                     if self.UHF.port.is_open:
                         self.write_console("UHF Modem Connection Accepted")
-                '''
+                
             #get radio info          
             if self.status_queue.empty():
                 radio_status['SBand_open'] = self.SBand.port.is_open
@@ -483,6 +519,17 @@ class MainWindow():
                 else:
                     radio_status['SBand_frequency'] = "N/A"
                     radio_status['SBand_rate'] = "N/A"
+                    
+                if self.UHF.port.is_open:
+                    try:
+                        uhf_info = self.UHF.get_radio_info()
+                        radio_status['UHF_frequency'] = uhf_info['frequency'].lstrip('0') + " Hz"
+                        radio_status['UHF_rate'] = uhf_info['data_rate'].lstrip('0') + " Baud"
+                    except(serial.serialutil.SerialException, IndexError):
+                        pass
+                else:
+                    radio_status['UHF_frequency'] = "N/A"
+                    radio_status['UHF_rate'] = "N/A"
                 
                 self.status_queue.put(radio_status)
             
@@ -493,14 +540,20 @@ class MainWindow():
                     if status[1] != 0: #if packet
                         radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])
-                        #print(status.hex())
+                        
                         if (status[4] == 18): #if image packet
                             for i in range(0, math.floor(len(packets)/18)):
                                 packet = packets[(18*i):(18*(i+1))]
                                 #print(packet)
                                 self.img_queue.put(packet)
-                        '''
-                        elif (status[4] == 32): #if telemetry packet
+                                
+                if self.UHF.port.is_open:
+                    status = self.UHF.get_rx_buffer_state()
+                    if status[1] != 0: #if packet
+                        radio_status['UHF_last_packet'] = time.time()
+                        packets = self.UHF.burst_read(status[4], status[1])
+                        
+                        if (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
                             for i in range(0, status[1]):
                                 packet = list(packets[(32*i):(32*(i+1))])
                                 
@@ -510,7 +563,8 @@ class MainWindow():
                                 packet_data['Angular Rate'] = packet[8:11]
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 self.telem_queue.put(packet_data)
-                        '''
+                        
+                        
             except (serial.serialutil.SerialException, IndexError):
                 pass
                 
