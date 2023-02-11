@@ -109,6 +109,7 @@ void rfm95w_agc_auto_on(const char a);
 void rfm95w_set_lna_gain(const char gain, const char boost_lf, const char boost_hf);
 void rfm95w_LDR_optimize(const char ldr);
 void rfm95w_clear_flag(const char f);
+void rfm95w_clear_all_flags(void);
 char rfm95w_read_flag(const char f);
 void rfm95w_set_DIO_mode(const char m);
 void rfm95w_set_payload_length(const char l);

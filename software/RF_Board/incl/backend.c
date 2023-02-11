@@ -471,8 +471,9 @@ void main_loop(void) {
             putchar(radio_state);
             #endif
             #ifdef RADIOTYPE_UHF
+            rfm95w_clear_all_flags();
             rfm95w_set_mode(OP_MODE_STDBY);
-            radio_state = rfm95w_read(0x18); //status register
+            radio_state = rfm95w_read(0x01); //mode register
             putchar(radio_state);
             #endif
 
@@ -487,9 +488,10 @@ void main_loop(void) {
             putchar(radio_state);
             #endif
             #ifdef RADIOTYPE_UHF
+            rfm95w_clear_all_flags();
             rfm95w_set_DIO_mode(DIO0_RXDONE);
             rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
-            radio_state = rfm95w_read(0x18); //status register
+            radio_state = rfm95w_read(0x01); //mode register
             putchar(radio_state);
             #endif
 
@@ -504,9 +506,10 @@ void main_loop(void) {
             putchar(radio_state);
             #endif
             #ifdef RADIOTYPE_UHF
+            rfm95w_clear_all_flags();
             rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO
             rfm95w_set_mode(OP_MODE_STDBY);
-            radio_state = rfm95w_read(0x18); //status register
+            radio_state = rfm95w_read(0x01); //mode register
             putchar(radio_state);
             #endif
 

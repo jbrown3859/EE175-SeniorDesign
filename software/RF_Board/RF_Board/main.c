@@ -24,6 +24,11 @@ int main(void) {
     init_UART(115200);
     init_SPI_master();
 
+    //debug
+    P1SEL0 &= ~(0b1); //set P1 to I/O
+    P1DIR |= 0b1; //set P1.0 to output
+    P1OUT &= ~(0b1); //set P1.0 to zero
+
     #ifdef RADIOTYPE_SBAND
     cc2500_command_strobe(STROBE_SRES); //reset chip
     hardware_delay(100);

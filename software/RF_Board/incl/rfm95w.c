@@ -92,9 +92,11 @@ char rfm95w_get_mode(void) {
 
 /* set device mode (sleep, stdby, TX, RX, etc.) */
 void rfm95w_set_mode(const char mode) {
+    P1OUT |= (0b1);
     char r = rfm95w_read(0x01) & ~(0b00000111); //clear mode bits
     rfm95w_write(0x01, (r | mode)); //write new mode
     while(rfm95w_get_mode() != mode); //poll until commanded mode is entered
+    P1OUT &= ~(0b1);
 }
 
 /* set register 0x01 to configure radio modulation and put radio into standby */
@@ -169,6 +171,11 @@ void rfm95w_set_spreading_factor(const char sf) {
 /* write a 1 to the desired flag, clearing it */
 void rfm95w_clear_flag(const char f) {
     rfm95w_write(0x12, f);
+}
+
+/* clear all flags */
+void rfm95w_clear_all_flags(void) {
+    rfm95w_write(0x12, 0xFF);
 }
 
 /* read from flags register */

@@ -100,25 +100,27 @@ elif(type == 2):
     '''
 
     #test TX buffer    
-    ''''
-    print("Filling TX buffer")
-    for i in range(0,10):
-        rad.write_tx_buffer("WHAT HATH GOD WROUGHT".encode('utf-8'))
-        rad.write_tx_buffer("Hello World!".encode('utf-8'))
-        
-        tx_status = rad.get_tx_buffer_state()
-        print(tx_status.hex())
     
-    print("Setting to TX")
-    rad.radio_tx_mode()
-    tx_status = rad.get_tx_buffer_state()
-    while tx_status[1] != 0x0:
-        #rad.radio_tx_mode()
-        tx_status = rad.get_tx_buffer_state()
-        print(tx_status.hex())
+    while True:
+        print(rad.radio_idle_mode().hex())
+        print("Filling TX buffer")
+        for i in range(0,10):
+            rad.write_tx_buffer("WHAT HATH GOD WROUGHT".encode('utf-8'))
+            rad.write_tx_buffer("Hello World!".encode('utf-8'))
+            
+            tx_status = rad.get_tx_buffer_state()
+            print(tx_status.hex())
         
-    print("done with TX")
-    '''
+        print("Setting to TX")
+        print(rad.radio_tx_mode().hex())
+        tx_status = rad.get_tx_buffer_state()
+        while tx_status[1] != 0x0:
+            #rad.radio_tx_mode()
+            tx_status = rad.get_tx_buffer_state()
+            print(tx_status.hex())
+            
+        print("done with TX")
+        
     
     print("Switching to RX")
     print(rad.radio_rx_mode().hex())

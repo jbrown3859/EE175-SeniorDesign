@@ -412,6 +412,9 @@ class MainWindow():
             if ch == "S-Band":
                 self.SBand_command_queue.put(command_bytes)
                 self.write_console("Command hex: {}".format(command_bytes.hex()))
+            elif ch == "UHF":
+                self.UHF_command_queue.put(command_bytes)
+                self.write_console("Command hex: {}".format(command_bytes.hex()))
     
     def update_radio_status(self):
         if not self.status_queue.empty():
@@ -569,6 +572,7 @@ class MainWindow():
                 pass
                 
             #transmit packets
+            #S-Band
             if not self.SBand_command_queue.empty():
                 while not self.SBand_command_queue.empty(): #fill buffer
                     command = self.SBand_command_queue.get()
@@ -598,6 +602,34 @@ class MainWindow():
                     print(status)
                 
                 self.write_console("S-Band Transmission Complete")
+                
+            #UHF
+            if not self.UHF_command_queue.empty():
+                while not self.UHF_command_queue.empty(): #fill buffer
+                    command = self.UHF_command_queue.get()
+                    #for i in range(0, 3): #repeat command (maybe remove later)
+                    self.UHF.write_tx_buffer(command)
+                
+                self.write_console("UHF Entering Transmit Mode")
+                time.sleep(0.1)
+                status = int.from_bytes(self.UHF.radio_tx_mode(), "big")
+                print(status)
+                
+                tx_packets = 255 
+                while(tx_packets != 0): #wait until empty
+                    try:
+                        tx_packets = self.UHF.get_tx_buffer_state()[1]
+                        #if (tx_packets != 0):
+                            #self.UHF.radio_tx_mode()
+                    except IndexError:
+                        tx_packets = 255
+                    print("TX packets: {}".format(tx_packets))
+                
+                time.sleep(0.1)
+                status = int.from_bytes(self.UHF.radio_rx_mode(), "big")
+                print(status)
+                
+                self.write_console("UHF Transmission Complete")
                 
                 
     def close_window(self):
