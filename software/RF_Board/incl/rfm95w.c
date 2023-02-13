@@ -91,12 +91,19 @@ char rfm95w_get_mode(void) {
 }
 
 /* set device mode (sleep, stdby, TX, RX, etc.) */
-void rfm95w_set_mode(const char mode) {
+char rfm95w_set_mode(const char mode) {
     P1OUT |= (0b1);
+    rfm95w_clear_all_flags(); //clear flags to ensure a valid switch
     char r = rfm95w_read(0x01) & ~(0b00000111); //clear mode bits
     rfm95w_write(0x01, (r | mode)); //write new mode
-    while(rfm95w_get_mode() != mode); //poll until commanded mode is entered
+
+    hardware_timeout(1000);
+    while(rfm95w_get_mode() != mode && timeout_flag == 0); //poll until commanded mode is entered
+    hardware_timeout(0);
+    timeout_flag = 0;
+
     P1OUT &= ~(0b1);
+    return rfm95w_get_mode();
 }
 
 /* set register 0x01 to configure radio modulation and put radio into standby */

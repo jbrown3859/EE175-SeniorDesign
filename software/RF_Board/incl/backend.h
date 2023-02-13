@@ -4,7 +4,7 @@
 enum State{INIT, WAIT, GET_RADIO_INFO,
             GET_RX_BUF_STATE, READ_RX_BUF, BURST_READ_RX, FLUSH_RX,
             GET_TX_BUF_STATE, WRITE_TX_BUF, BURST_WRITE_TX, FLUSH_TX,
-            WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS,
+            WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS, GET_RADIO_STATE,
             PROG_RADIO_REG, READ_RADIO_REG,
             MODE_IDLE, MODE_RX, MODE_TX};
 
@@ -44,6 +44,8 @@ unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer);
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len);
 unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest);
 void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet_size, unsigned char packet_num);
+
+char get_flag_from_state(enum RadioState state);
 
 void main_loop(void);
 

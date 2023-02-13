@@ -56,7 +56,7 @@ if (type == 1):
 
         print("Setting to TX")
         status = 1
-        while status != 0x0:
+        while status != 0x80:
             time.sleep(1)
             status = int.from_bytes(rad.radio_tx_mode(), "big")
             print(status)
@@ -67,7 +67,7 @@ if (type == 1):
         
         print("Setting to RX")
         status = 1
-        while status != 0x10:
+        while status != 0x40:
             time.sleep(1)
             status = int.from_bytes(rad.radio_rx_mode(), "big")
             print(status)
@@ -102,6 +102,7 @@ elif(type == 2):
     #test TX buffer    
     
     while True:
+        print("Switching to idle")
         print(rad.radio_idle_mode().hex())
         print("Filling TX buffer")
         for i in range(0,10):
@@ -114,29 +115,29 @@ elif(type == 2):
         print("Setting to TX")
         print(rad.radio_tx_mode().hex())
         tx_status = rad.get_tx_buffer_state()
-        while tx_status[1] != 0x0:
+        while tx_status[1] != 0x0 or (tx_status[0] & 0xF0) == 0xC0:
             #rad.radio_tx_mode()
             tx_status = rad.get_tx_buffer_state()
             print(tx_status.hex())
-            
+        print(rad.get_tx_buffer_state().hex())
         print("done with TX")
         
     
-    print("Switching to RX")
-    print(rad.radio_rx_mode().hex())
-    time.sleep(1)
-    print(rad.radio_rx_mode().hex())
-    
-    while True:
-        #print("Requesting RX status")
-        rx_status = rad.get_rx_buffer_state()
-            
-        try:
-            if rx_status:
-                if rx_status[1] != 0:
-                    print(rx_status.hex())
-                    print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
-                    packets = rad.burst_read(rx_status[4], rx_status[1])
-                    print(packets)
-        except IndexError:
-            print(rx_status)
+        print("Switching to RX")
+        print(rad.radio_rx_mode().hex())
+        time.sleep(1)
+        print(rad.radio_rx_mode().hex())
+        
+        for i in range(0,50):
+            #print("Requesting RX status")
+            rx_status = rad.get_rx_buffer_state()
+                
+            try:
+                if rx_status:
+                    if rx_status[1] != 0:
+                        print(rx_status.hex())
+                        print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
+                        packets = rad.burst_read(rx_status[4], rx_status[1])
+                        print(packets)
+            except IndexError:
+                print(rx_status)

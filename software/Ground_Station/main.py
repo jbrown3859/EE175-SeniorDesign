@@ -306,6 +306,23 @@ class MainWindow():
                     
                     self.t.pop(0)
                 
+                
+                if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1]): #clear if causality is violated
+                    self.a_x.clear()
+                    self.a_y.clear()
+                    self.a_z.clear()
+                    
+                    self.g_x.clear()
+                    self.g_y.clear()
+                    self.g_z.clear()
+                    
+                    self.m_x.clear()
+                    self.m_y.clear()
+                    self.m_z.clear()
+                    
+                    self.t.clear()
+                
+                
                 if (packet['Timestamp'] not in self.t):
                     self.t.append(packet['Timestamp'])
                     
@@ -574,34 +591,39 @@ class MainWindow():
             #transmit packets
             #S-Band
             if not self.SBand_command_queue.empty():
-                while not self.SBand_command_queue.empty(): #fill buffer
-                    command = self.SBand_command_queue.get()
-                    for i in range(0, 3): #repeat command (maybe remove later)
-                        self.SBand.write_tx_buffer(command)
-                
-                self.write_console("S-Band Entering Transmit Mode")
-                status = 1
-                while status != 0x0:
-                    time.sleep(0.1)
-                    status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
-                    print(status)
-                
-                tx_packets = 255 
-                while(tx_packets != 0): #wait until empty
-                    try:
-                        tx_packets = self.SBand.get_tx_buffer_state()[1]
-                        if (tx_packets != 0):
-                            self.SBand.radio_tx_mode()
-                    except IndexError:
-                        tx_packets = 255
-                    print("TX packets: {}".format(tx_packets))
-                
-                while status != 0x10:
-                    time.sleep(0.1)
-                    status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
-                    print(status)
-                
-                self.write_console("S-Band Transmission Complete")
+                if self.SBand.port.is_open:                
+                    while not self.SBand_command_queue.empty(): #fill buffer
+                        command = self.SBand_command_queue.get()
+                        for i in range(0, 3): #repeat command (maybe remove later)
+                            self.SBand.write_tx_buffer(command)
+                    
+                    self.write_console("S-Band Entering Transmit Mode")
+                    status = 1
+                    while status != 0x0:
+                        time.sleep(0.1)
+                        status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
+                        print(status)
+                    
+                    tx_packets = 255 
+                    while(tx_packets != 0): #wait until empty
+                        try:
+                            tx_packets = self.SBand.get_tx_buffer_state()[1]
+                            if (tx_packets != 0):
+                                self.SBand.radio_tx_mode()
+                        except IndexError:
+                            tx_packets = 255
+                        print("TX packets: {}".format(tx_packets))
+                    
+                    while status != 0x10:
+                        time.sleep(0.1)
+                        status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
+                        print(status)
+                    
+                    self.write_console("S-Band Transmission Complete")
+                else:
+                    self.write_console("Error: S-Band radio is not connected, flushing command queue")
+                    with self.SBand_command_queue.mutex:
+                        self.SBand_command_queue.queue.clear()
                 
             #UHF
             if not self.UHF_command_queue.empty():
@@ -615,10 +637,13 @@ class MainWindow():
                 status = int.from_bytes(self.UHF.radio_tx_mode(), "big")
                 print(status)
                 
-                tx_packets = 255 
-                while(tx_packets != 0): #wait until empty
+                tx_packets = 255
+                radio_state = 0xF0
+                while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
                     try:
-                        tx_packets = self.UHF.get_tx_buffer_state()[1]
+                        state = self.UHF.get_tx_buffer_state()
+                        tx_packets = state[1]
+                        radio_state = state[0]
                         #if (tx_packets != 0):
                             #self.UHF.radio_tx_mode()
                     except IndexError:

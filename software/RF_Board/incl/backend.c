@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -33,6 +33,30 @@ unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned
     else {
         return (max - bottom) + top;
     }
+}
+
+char get_flag_from_state(enum RadioState state) {
+    char flag;
+
+    switch (state) {
+    case IDLE:
+        flag = 0x00;
+        break;
+    case RX:
+        flag = 0x40;
+        break;
+    case TX_WAIT:
+        flag = 0x80;
+        break;
+    case TX_ACTIVE:
+        flag = 0xC0;
+        break;
+    default:
+        flag = 0x00;
+        break;
+    }
+
+    return flag;
 }
 
 /* UART comms */
@@ -304,7 +328,7 @@ void main_loop(void) {
             state = WAIT;
             break;
         case GET_RX_BUF_STATE:
-            putchar(RXbuf.flags);
+            putchar(RXbuf.flags | get_flag_from_state(info.radio_mode));
             putchar((char)get_buffer_packet_count(&RXbuf));
 
             temp = get_buffer_data_size(&RXbuf);
@@ -344,7 +368,7 @@ void main_loop(void) {
             state = WAIT;
             break;
         case GET_TX_BUF_STATE:
-            putchar(TXbuf.flags);
+            putchar(TXbuf.flags | get_flag_from_state(info.radio_mode));
             putchar((char)get_buffer_packet_count(&TXbuf));
 
             temp = get_buffer_data_size(&TXbuf);
@@ -417,12 +441,16 @@ void main_loop(void) {
             break;
         case CLEAR_RX_FLAGS:
             RXbuf.flags = 0x00;
-            putchar(RXbuf.flags);
+            putchar(RXbuf.flags | get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         case CLEAR_TX_FLAGS:
             TXbuf.flags = 0x00;
-            putchar(TXbuf.flags);
+            putchar(TXbuf.flags | get_flag_from_state(info.radio_mode));
+            state = WAIT;
+            break;
+        case GET_RADIO_STATE:
+            putchar(get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         case PROG_RADIO_REG:
@@ -466,18 +494,23 @@ void main_loop(void) {
                 cc2500_command_strobe(STROBE_SFRX); //this fixes it for some reason and I also don't know why
             }
             cc2500_command_strobe(STROBE_SIDLE); //CAUSES UART TO HANG SOMETIMES AND I DON'T KNOW WHY
-
             radio_state = cc2500_get_status();
-            putchar(radio_state);
+
+            if (radio_state == STATUS_STATE_IDLE) {
+                info.radio_mode = IDLE;
+            }
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_clear_all_flags();
-            rfm95w_set_mode(OP_MODE_STDBY);
-            radio_state = rfm95w_read(0x01); //mode register
-            putchar(radio_state);
+            rfm95w_set_DIO_mode(DIO0_NONE);
+            radio_state = rfm95w_set_mode(OP_MODE_STDBY);
+
+            if (radio_state == OP_MODE_STDBY) {
+                info.radio_mode = IDLE; //switch state only if the modem successfully switches
+            }
             #endif
 
-            info.radio_mode = IDLE;
+            putchar(get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         case MODE_RX:
@@ -485,17 +518,22 @@ void main_loop(void) {
             cc2500_command_strobe(STROBE_SFRX);
             cc2500_command_strobe(STROBE_SRX);
             radio_state = cc2500_get_status();
-            putchar(radio_state);
+
+            if (radio_state == STATUS_STATE_RX) {
+                info.radio_mode = RX;
+            }
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_clear_all_flags();
             rfm95w_set_DIO_mode(DIO0_RXDONE);
-            rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
-            radio_state = rfm95w_read(0x01); //mode register
-            putchar(radio_state);
+            radio_state = rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
+
+            if (radio_state == OP_MODE_RXCONTINUOUS) {
+                info.radio_mode = RX; //switch state only if the modem successfully switches
+            }
             #endif
 
-            info.radio_mode = RX;
+            putchar(get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         case MODE_TX:
@@ -503,17 +541,22 @@ void main_loop(void) {
             cc2500_command_strobe(STROBE_SFRX);
             cc2500_command_strobe(STROBE_SIDLE);
             radio_state = cc2500_get_status();
-            putchar(radio_state);
+
+            if (radio_state == STATUS_STATE_IDLE) {
+                info.radio_mode = TX_WAIT;
+            }
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_clear_all_flags();
             rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO
-            rfm95w_set_mode(OP_MODE_STDBY);
-            radio_state = rfm95w_read(0x01); //mode register
-            putchar(radio_state);
+            radio_state = rfm95w_set_mode(OP_MODE_STDBY);
+
+            if (radio_state == OP_MODE_STDBY) {
+                info.radio_mode = TX_WAIT; //switch state only if the modem successfully switches
+            }
             #endif
 
-            info.radio_mode = TX_WAIT;
+            putchar(get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         default:
@@ -560,6 +603,9 @@ void main_loop(void) {
                     break;
                 case 0x73:
                     state = CLEAR_TX_FLAGS;
+                    break;
+                case 0x74:
+                    state = GET_RADIO_STATE;
                     break;
                 case 0x80:
                     state = PROG_RADIO_REG;

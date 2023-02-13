@@ -48,6 +48,7 @@
 #define DIO0_RXDONE 0x00
 #define DIO0_TXDONE 0x40
 #define DIO0_CADDONE 0x80
+#define DIO0_NONE 0xC0
 
 #define FLAG_RXTIMEOUT 0x80
 #define FLAG_RXDONE 0x40
@@ -96,7 +97,7 @@ void rfm95w_display_register(const char addr);
 void rfm95w_register_dump(void);
 
 /* device programming */
-void rfm95w_set_mode(const char mode);
+char rfm95w_set_mode(const char mode);
 char rfm95w_get_mode(void);
 void rfm95w_set_lora_mode(const char lora_mode);
 void rfm95w_set_frequency_mode(const char m);
