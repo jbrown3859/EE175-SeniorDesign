@@ -644,8 +644,8 @@ class MainWindow():
                         state = self.UHF.get_tx_buffer_state()
                         tx_packets = state[1]
                         radio_state = state[0]
-                        #if (tx_packets != 0):
-                            #self.UHF.radio_tx_mode()
+                        if (radio_state != 0xC0):
+                            self.UHF.radio_tx_mode()
                     except IndexError:
                         tx_packets = 255
                     print("TX packets: {}".format(tx_packets))

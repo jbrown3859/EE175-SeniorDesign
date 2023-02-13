@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -502,7 +502,7 @@ void main_loop(void) {
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_clear_all_flags();
-            rfm95w_set_DIO_mode(DIO0_NONE);
+            //rfm95w_set_DIO_mode(DIO0_NONE);
             radio_state = rfm95w_set_mode(OP_MODE_STDBY);
 
             if (radio_state == OP_MODE_STDBY) {
