@@ -513,16 +513,18 @@ class MainWindow():
                 self.UHF.port.close()
                 self.write_console("UHF Modem Disconnected")      
             
-            for port in portnames:
-                if not self.SBand.port.is_open: #if port is closed
-                    self.SBand.attempt_connection(port)
-                    if self.SBand.port.is_open:
-                        self.write_console("S-Band Modem Connection Accepted")
-                
-                if not self.UHF.port.is_open:
-                    self.UHF.attempt_connection(port)
-                    if self.UHF.port.is_open:
-                        self.write_console("UHF Modem Connection Accepted")
+            #only attempt to connect radios if there is no incoming data
+            if (int(time.time() - radio_status['SBand_last_packet']) > 2) and (int(time.time() - radio_status['UHF_last_packet']) > 2):
+                for port in portnames:
+                    if not self.SBand.port.is_open: #if port is closed
+                        self.SBand.attempt_connection(port)
+                        if self.SBand.port.is_open:
+                            self.write_console("S-Band Modem Connection Accepted")
+                    
+                    if not self.UHF.port.is_open:
+                        self.UHF.attempt_connection(port)
+                        if self.UHF.port.is_open:
+                            self.write_console("UHF Modem Connection Accepted")
                 
             #get radio info          
             if self.status_queue.empty():
@@ -534,7 +536,7 @@ class MainWindow():
                         sband_info = self.SBand.get_radio_info()
                         radio_status['SBand_frequency'] = sband_info['frequency'].lstrip('0') + " Hz"
                         radio_status['SBand_rate'] = sband_info['data_rate'].lstrip('0') + " Baud"
-                    except(serial.serialutil.SerialException, IndexError):
+                    except(serial.serialutil.SerialException, IndexError, KeyError):
                         pass
                 else:
                     radio_status['SBand_frequency'] = "N/A"
@@ -545,7 +547,7 @@ class MainWindow():
                         uhf_info = self.UHF.get_radio_info()
                         radio_status['UHF_frequency'] = uhf_info['frequency'].lstrip('0') + " Hz"
                         radio_status['UHF_rate'] = uhf_info['data_rate'].lstrip('0') + " Baud"
-                    except(serial.serialutil.SerialException, IndexError):
+                    except(serial.serialutil.SerialException, IndexError, KeyError):
                         pass
                 else:
                     radio_status['UHF_frequency'] = "N/A"
@@ -557,6 +559,10 @@ class MainWindow():
             try:
                 if self.SBand.port.is_open:
                     status = self.SBand.get_rx_buffer_state()
+                    
+                    if (status[0] & 0x03) != 0:
+                        self.write_console("Warning: S-Band RX buffer overflowed!")
+                    
                     if status[1] != 0: #if packet
                         radio_status['SBand_last_packet'] = time.time()
                         packets = self.SBand.burst_read(status[4], status[1])
@@ -569,6 +575,10 @@ class MainWindow():
                                 
                 if self.UHF.port.is_open:
                     status = self.UHF.get_rx_buffer_state()
+                    
+                    if (status[0] & 0x03) != 0:
+                        self.write_console("Warning: UHF RX buffer overflowed!")
+                    
                     if status[1] != 0: #if packet
                         radio_status['UHF_last_packet'] = time.time()
                         packets = self.UHF.burst_read(status[4], status[1])
@@ -599,22 +609,25 @@ class MainWindow():
                     
                     self.write_console("S-Band Entering Transmit Mode")
                     status = 1
-                    while status != 0x0:
+                    while status != 0x80:
                         time.sleep(0.1)
                         status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
                         print(status)
                     
-                    tx_packets = 255 
-                    while(tx_packets != 0): #wait until empty
+                    tx_packets = 255
+                    radio_state = 0xF0
+                    while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
                         try:
-                            tx_packets = self.SBand.get_tx_buffer_state()[1]
-                            if (tx_packets != 0):
+                            state = self.SBand.get_tx_buffer_state()
+                            tx_packets = state[1]
+                            radio_state = state[0]
+                            if (radio_state != 0xC0):
                                 self.SBand.radio_tx_mode()
                         except IndexError:
                             tx_packets = 255
                         print("TX packets: {}".format(tx_packets))
                     
-                    while status != 0x10:
+                    while status != 0x40:
                         time.sleep(0.1)
                         status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
                         print(status)

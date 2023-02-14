@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -215,7 +215,7 @@ __interrupt void PORT2_ISR(void) {
 }
 
 void main_loop(void) {
-    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_3; //watchdog on, slow clock source, reset watchdog, 16s expiration
+    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_4; //watchdog on, slow clock source, reset watchdog, 1s expiration
 
     enum State state = INIT;
     unsigned int temp;
@@ -260,6 +260,19 @@ void main_loop(void) {
     TXbuf.ptr_base = 0;
     TXbuf.ptr_head = 0;
     TXbuf.flags = 0;
+
+    /* GPIO inits */
+    #ifdef RADIOTYPE_SBAND
+    //TX/RX Switch
+    P3SEL0 &= ~(0x3E); //set 3.1-3.5 to I/O
+    P3DIR |= (0x3E); //set 3.1-3.5 to output
+
+    P3OUT |= (1 << 1); //set P3.1 to 1 (bypass LNA A)
+    P3OUT |= (1 << 2); //set P3.2 to 1 (bypass LNA B)
+    P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
+    P3OUT &= ~(1 << 5); //set P3.4 to zero (PA off)
+    P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+    #endif
 
     for (;;) {
         /* Radio state machine*/
@@ -497,6 +510,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_IDLE) {
+                P3OUT &= ~(1 << 5); //RX
                 info.radio_mode = IDLE;
             }
             #endif
@@ -520,6 +534,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_RX) {
+                P3OUT &= ~(1 << 5); //RX
                 info.radio_mode = RX;
             }
             #endif
@@ -543,6 +558,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_IDLE) {
+                P3OUT |= (1 << 5); //TX
                 info.radio_mode = TX_WAIT;
             }
             #endif
@@ -630,6 +646,6 @@ void main_loop(void) {
             }
             break;
         }
-        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_3; //reset watchdog count
+        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_4; //reset watchdog count
     }
 }
