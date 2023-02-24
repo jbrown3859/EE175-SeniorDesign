@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -264,6 +264,7 @@ void main_loop(void) {
     /* GPIO inits */
     #ifdef RADIOTYPE_SBAND
     //TX/RX Switch
+    /*
     P3SEL0 &= ~(0x3E); //set 3.1-3.5 to I/O
     P3DIR |= (0x3E); //set 3.1-3.5 to output
 
@@ -272,6 +273,8 @@ void main_loop(void) {
     P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
     P3OUT &= ~(1 << 5); //set P3.4 to zero (PA off)
     P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+    */
+    cc2500_init_frontend();
     #endif
 
     for (;;) {
@@ -314,6 +317,7 @@ void main_loop(void) {
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);
+            cc2500_set_frontend(RX_DUAL_BYPASS);
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_set_DIO_mode(DIO0_RXDONE);
@@ -510,7 +514,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_IDLE) {
-                P3OUT &= ~(1 << 5); //RX
+                cc2500_set_frontend(RX_SHUTDOWN);
                 info.radio_mode = IDLE;
             }
             #endif
@@ -534,7 +538,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_RX) {
-                P3OUT &= ~(1 << 5); //RX
+                cc2500_set_frontend(RX_DUAL_BYPASS);
                 info.radio_mode = RX;
             }
             #endif
@@ -558,7 +562,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_IDLE) {
-                P3OUT |= (1 << 5); //TX
+                cc2500_set_frontend(TX);
                 info.radio_mode = TX_WAIT;
             }
             #endif

@@ -42,6 +42,7 @@ if (type == 1):
 
     while True:
         print("Setting to idle")
+        '''
         status = 1
         while status != 0x0:
             time.sleep(1)
@@ -64,6 +65,7 @@ if (type == 1):
         for i in range(0,20):
             tx_status = rad.get_tx_buffer_state()
             print(tx_status.hex())
+        '''
         
         print("Setting to RX")
         status = 1
@@ -73,14 +75,14 @@ if (type == 1):
             print(status)
             
         for i in range(0,200):
-            print("Requesting RX status")
+            #print("Requesting RX status")
             rx_status = rad.get_rx_buffer_state()
                 #tx_status = rad.get_tx_buffer_state()
                 #print(tx_status.hex())
                 
             try:
                 if rx_status:
-                    print(rx_status.hex())
+                    #print(rx_status.hex())
                     if rx_status[1] != 0:
                         print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
                         packets = rad.burst_read(rx_status[4], rx_status[1])
@@ -121,7 +123,6 @@ elif(type == 2):
             print(tx_status.hex())
         print(rad.get_tx_buffer_state().hex())
         print("done with TX")
-        
     
         print("Switching to RX")
         print(rad.radio_rx_mode().hex())

@@ -3,6 +3,9 @@
 
 #define XTAL_FREQ 26000000 //frequency of off-chip crystal
 
+/* RF frontend enum*/
+enum cc2500_frontend_setting{RX_SHUTDOWN, RX_DUAL_BYPASS, RX_SINGLE_BYPASS, RX_NO_BYPASS, TX};
+
 /* command strobes */
 #define STROBE_SRES 0x30 //reset
 #define STROBE_SFSTXON 0x31
@@ -113,6 +116,8 @@ extern char cc2500_TXRX_done;
 
 /* I/O functions */
 void cc2500_init_gpio(enum cc2500_interrupt_setting interrupts);
+void cc2500_init_frontend(void);
+
 char cc2500_read(const unsigned char addr);
 void cc2500_burst_read_fifo(char* buffer, unsigned char len);
 void cc2500_write(const unsigned char addr, const char data);
@@ -137,6 +142,8 @@ void cc2500_set_sync_word(const unsigned short sync);
 void cc2500_set_crc(const char crc_en, const char crc_autoflush, const char crc_append);
 void cc2500_configure_gdo(const unsigned char pin, const unsigned char config);
 void cc2500_set_tx_power(const unsigned char power);
+
+void cc2500_set_frontend(enum cc2500_frontend_setting setting);
 
 /* TX/RX functions */
 void cc2500_transmit(const char* data, const char size);

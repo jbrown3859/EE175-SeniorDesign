@@ -67,6 +67,7 @@ int main(void) {
     unsigned int i;
 
     cc2500_command_strobe(STROBE_SRX);
+
     for (;;) {
         if (send == 1) {
             cc2500_init_gpio(INT_NONE); //disable interrupts
@@ -110,6 +111,15 @@ int main(void) {
         }
     }
 
+    /*
+    cc2500_init_gpio(INT_NONE);
+    char message[6] = {'H','e','l','l','o','\n'};
+    for (;;) {
+        putchars("Transmitting\n\r");
+        cc2500_transmit(message, 6);
+        hardware_delay(5000);
+    }
+    */
 
     return 0;
 }

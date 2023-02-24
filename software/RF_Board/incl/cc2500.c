@@ -35,6 +35,20 @@ void cc2500_init_gpio(enum cc2500_interrupt_setting interrupts) {
     //cc2500_configure_gdo(GDO2, TX_RX_ACTIVE); //TX/RX detect
 }
 
+/* configure GPIO for RF frontend (RF board PCB only) */
+void cc2500_init_frontend(void) {
+    //TX/RX Switch
+    P3SEL0 &= ~(0x3E); //set 3.1-3.5 to I/O
+    P3SEL1 &= ~(1 << 4); //enable I/O on P3.4
+    P3DIR |= (0x3E); //set 3.1-3.5 to output
+
+    P3OUT |= (1 << 1); //set P3.1 to 1 (bypass LNA A)
+    P3OUT |= (1 << 2); //set P3.2 to 1 (bypass LNA B)
+    P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
+    P3OUT &= ~(1 << 4); //set P3.4 to zero (PA off)
+    P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+}
+
 /* read register */
 char cc2500_read(const unsigned char addr) {
     if (addr >= 0x30 && addr <= 0x3D) { //status registers require burst bit to be set
@@ -253,6 +267,56 @@ void cc2500_set_tx_power(const unsigned char power) {
     char FREND0 = cc2500_read(0x22) & 0xF8;
     cc2500_write(0x3E, power);
     cc2500_write(0x22, FREND0); //sets PA_POWER to 0x00
+}
+
+/* switch frontend mode */
+void cc2500_set_frontend(enum cc2500_frontend_setting setting) {
+    switch (setting) {
+    case RX_SHUTDOWN:
+        P3OUT &= ~(1 << 4); //set P3.4 to zero (PA off)
+
+        P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
+        P3OUT &= ~(1 << 1); //both bypasses off
+        P3OUT &= ~(1 << 2);
+
+        P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+        break;
+    case RX_DUAL_BYPASS:
+        P3OUT &= ~(1 << 4); //set P3.4 to zero (PA off)
+
+        P3OUT &= ~(1 << 3); //set P3.3 to 0 (enable LNAs)
+        P3OUT |= (1 << 1); //set P3.1 to 1 (bypass LNA A)
+        P3OUT |= (1 << 2); //set P3.2 to 1 (bypass LNA B)
+
+        P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+        break;
+    case RX_SINGLE_BYPASS:
+        P3OUT &= ~(1 << 4); //set P3.4 to zero (PA off)
+
+        P3OUT &= ~(1 << 3); //set P3.3 to 0 (enable LNAs)
+        P3OUT |= (1 << 1); //set P3.1 to 1 (bypass LNA A)
+        P3OUT &= ~(1 << 2); //set P3.2 to 0 (enable LNA B)
+
+        P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+        break;
+    case RX_NO_BYPASS:
+        P3OUT &= ~(1 << 4); //set P3.4 to zero (PA off)
+
+        P3OUT &= ~(1 << 3); //set P3.3 to 0 (enable LNAs)
+        P3OUT &= ~(1 << 1); //set P3.1 to 0 (enable LNA A)
+        P3OUT &= ~(1 << 2); //set P3.2 to 0 (enable LNA B)
+
+        P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
+        break;
+    case TX:
+        P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
+        P3OUT &= ~(1 << 1); //both bypasses off
+        P3OUT &= ~(1 << 2);
+
+        P3OUT |= (1 << 5); //set P3.5 to one (TX mode)
+        P3OUT |= (1 << 4); //set P3.4 to zero (PA on)
+        break;
+    }
 }
 
 /* transmit */
