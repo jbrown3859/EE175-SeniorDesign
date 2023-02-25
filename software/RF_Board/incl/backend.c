@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -538,7 +538,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_RX) {
-                cc2500_set_frontend(RX_DUAL_BYPASS);
+                cc2500_set_frontend(RX_NO_BYPASS);
                 info.radio_mode = RX;
             }
             #endif

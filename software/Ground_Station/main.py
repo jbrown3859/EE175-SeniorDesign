@@ -610,7 +610,7 @@ class MainWindow():
                     self.write_console("S-Band Entering Transmit Mode")
                     status = 1
                     while status != 0x80:
-                        time.sleep(0.1)
+                        #time.sleep(0.1)
                         status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
                         print(status)
                     
@@ -628,7 +628,7 @@ class MainWindow():
                         print("TX packets: {}".format(tx_packets))
                     
                     while status != 0x40:
-                        time.sleep(0.1)
+                        #time.sleep(0.1)
                         status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
                         print(status)
                     
