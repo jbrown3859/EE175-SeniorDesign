@@ -103,7 +103,7 @@ int main(void) {
                 image_packet[0] = ((img_ptr >> 8) & 0xFF) | 0x80;
                 image_packet[1] = (img_ptr) & 0xFF;
                 cc2500_transmit(image_packet, 18);
-
+                //cc2500_transmit(image_packet, 18);
             }
             cc2500_init_gpio(INT_GDO2);
             cc2500_command_strobe(STROBE_SRX);

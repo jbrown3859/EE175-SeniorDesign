@@ -111,7 +111,7 @@ class MainWindow():
         self.widgets['status_title'].grid(row=3,column=0,columnspan=2)
         
         self.widgets['sband_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
-        self.widgets['sband_status'].grid(row=4,column=0,sticky='NSEW')
+        self.widgets['sband_status'].grid(row=4,column=0,sticky='NSEW',rowspan=2)
         tk.Label(self.widgets['sband_status'], text="S-Band Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
         tk.Label(self.widgets['sband_status'], text="Serial:", font=("Arial", 15)).grid(row=1,column=0)
         self.widgets['sband_connected'] = tk.Label(self.widgets['sband_status'], text="Not Connected", font=("Arial", 15), fg="red")
@@ -131,7 +131,7 @@ class MainWindow():
         
         #UHF
         self.widgets['uhf_status'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
-        self.widgets['uhf_status'].grid(row=4,column=1,sticky='NSEW')
+        self.widgets['uhf_status'].grid(row=4,column=1,sticky='NSEW',rowspan=2)
         tk.Label(self.widgets['uhf_status'], text="UHF Radio", font=("Arial", 15)).grid(row=0,column=0,columnspan=2)
         tk.Label(self.widgets['uhf_status'], text="Serial:", font=("Arial", 15)).grid(row=1,column=0)
         self.widgets['uhf_connected'] = tk.Label(self.widgets['uhf_status'], text="Not Connected", font=("Arial", 15), fg="red")
@@ -145,9 +145,17 @@ class MainWindow():
         self.widgets['uhf_frequency'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
         self.widgets['uhf_frequency'].grid(row=3,column=1)
         
-        tk.Label(self.widgets['uhf_status'], text="Data Rate:", font=("Arial", 15)).grid(row=4,column=0)
-        self.widgets['uhf_rate'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
-        self.widgets['uhf_rate'].grid(row=4,column=1)
+        tk.Label(self.widgets['uhf_status'], text="Bandwidth:", font=("Arial", 15)).grid(row=4,column=0)
+        self.widgets['uhf_bandwidth'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_bandwidth'].grid(row=4,column=1)
+        
+        tk.Label(self.widgets['uhf_status'], text="Spreading Factor:", font=("Arial", 15)).grid(row=5,column=0)
+        self.widgets['uhf_spread'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_spread'].grid(row=5,column=1)
+        
+        tk.Label(self.widgets['uhf_status'], text="Coding Rate:", font=("Arial", 15)).grid(row=6,column=0)
+        self.widgets['uhf_coding'] = tk.Label(self.widgets['uhf_status'], text="N/A", font=("Arial", 15), fg="red")
+        self.widgets['uhf_coding'].grid(row=6,column=1)
         
         '''
         Radio Programming
@@ -468,7 +476,9 @@ class MainWindow():
             self.widgets['uhf_connected'].destroy()
             self.widgets['uhf_last'].destroy()
             self.widgets['uhf_frequency'].destroy()
-            self.widgets['uhf_rate'].destroy()
+            self.widgets['uhf_bandwidth'].destroy()
+            self.widgets['uhf_spread'].destroy()
+            self.widgets['uhf_coding'].destroy()
             
             if status['UHF_open']:
                 self.widgets['uhf_connected'] = tk.Label(self.widgets['uhf_status'], text="Connected", font=("Arial", 15), fg="green")
@@ -488,8 +498,14 @@ class MainWindow():
             self.widgets['uhf_frequency'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_frequency'], font=("Arial", 15), fg=sband_color)
             self.widgets['uhf_frequency'].grid(row=3,column=1)
             
-            self.widgets['uhf_rate'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_rate'], font=("Arial", 15), fg=sband_color)
-            self.widgets['uhf_rate'].grid(row=4,column=1)
+            self.widgets['uhf_bandwidth'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_bandwidth'], font=("Arial", 15), fg=sband_color)
+            self.widgets['uhf_bandwidth'].grid(row=4,column=1)
+            
+            self.widgets['uhf_spread'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_spread'], font=("Arial", 15), fg=sband_color)
+            self.widgets['uhf_spread'].grid(row=5,column=1)
+            
+            self.widgets['uhf_coding'] = tk.Label(self.widgets['uhf_status'], text=status['UHF_coding'], font=("Arial", 15), fg=sband_color)
+            self.widgets['uhf_coding'].grid(row=6,column=1)
             
         self.window.after(1000, self.update_radio_status)
             
@@ -546,12 +562,16 @@ class MainWindow():
                     try:
                         uhf_info = self.UHF.get_radio_info()
                         radio_status['UHF_frequency'] = uhf_info['frequency'].lstrip('0') + " Hz"
-                        radio_status['UHF_rate'] = uhf_info['data_rate'].lstrip('0') + " Baud"
+                        radio_status['UHF_bandwidth'] = str(float(uhf_info['bandwidth'].lstrip('0'))/100) + " kHz"
+                        radio_status['UHF_spread'] = uhf_info['spreading_factor'].lstrip('0')
+                        radio_status['UHF_coding'] = uhf_info['coding_rate'][0] + '/' + uhf_info['coding_rate'][1]
                     except(serial.serialutil.SerialException, IndexError, KeyError):
                         pass
                 else:
                     radio_status['UHF_frequency'] = "N/A"
-                    radio_status['UHF_rate'] = "N/A"
+                    radio_status['UHF_bandwidth'] = "N/A"
+                    radio_status['UHF_spread'] = "N/A"
+                    radio_status['UHF_coding'] = "N/A"
                 
                 self.status_queue.put(radio_status)
             
@@ -572,7 +592,17 @@ class MainWindow():
                                 packet = packets[(18*i):(18*(i+1))]
                                 #print(packet)
                                 self.img_queue.put(packet)
+                        elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
+                            for i in range(0, status[1]):
+                                packet = list(packets[(32*i):(32*(i+1))])
                                 
+                                packet_data = {}
+                                packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
+                                packet_data['Acceleration'] = packet[5:8] #x,y,z
+                                packet_data['Angular Rate'] = packet[8:11]
+                                packet_data['Magnetic Field'] = packet[11:14]
+                                self.telem_queue.put(packet_data)
+                        
                 if self.UHF.port.is_open:
                     status = self.UHF.get_rx_buffer_state()
                     

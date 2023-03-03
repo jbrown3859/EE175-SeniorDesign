@@ -4,31 +4,6 @@
 #include <util.h>
 
 char DIO0_mode;
-//extern char TX_done;
-//extern char RX_done;
-
-//extern char TX_timeout;
-
-/* vector for interrupt on P2.0 triggered by DIO0 on LoRa */
-/*
-#pragma vector=PORT2_VECTOR
-__interrupt void PORT2_ISR(void) {
-    switch(DIO0_mode) {
-    case DIO0_RXDONE:
-        rfm95w_clear_flag(FLAG_RXDONE);
-        rfm95w_clear_flag(FLAG_VALIDHEADER);
-        RX_done = 1;
-        break;
-    case DIO0_TXDONE:
-        rfm95w_clear_flag(FLAG_TXDONE);
-        TX_done = 1;
-        break;
-    case DIO0_CADDONE:
-        break;
-    }
-    P2IFG &= ~(0x01); //clear interrupt flag
-}
-*/
 
 /* init */
 void rfm95w_init(void) {
@@ -80,9 +55,12 @@ void rfm95w_display_register(const char addr) {
 /* dump all registers over serial */
 void rfm95w_register_dump(void) {
     unsigned char i;
+
+    putchars("LoRa Register Dump:\n\r");
     for (i = 0; i < 128; i++) {
         rfm95w_display_register(i);
     }
+    putchars("\n\r");
 }
 
 /* get device mode */
@@ -92,7 +70,6 @@ char rfm95w_get_mode(void) {
 
 /* set device mode (sleep, stdby, TX, RX, etc.) */
 char rfm95w_set_mode(const char mode) {
-    P1OUT |= (0b1);
     rfm95w_clear_all_flags(); //clear flags to ensure a valid switch
     char r = rfm95w_read(0x01) & ~(0b00000111); //clear mode bits
     rfm95w_write(0x01, (r | mode)); //write new mode
@@ -102,7 +79,6 @@ char rfm95w_set_mode(const char mode) {
     hardware_timeout(0);
     timeout_flag = 0;
 
-    P1OUT &= ~(0b1);
     return rfm95w_get_mode();
 }
 
@@ -131,6 +107,17 @@ void rfm95w_set_carrier_frequency(const unsigned long long frequency) {
     rfm95w_write(0x06, (char)((frf >> 16) & 0xFF)); //MSB
     rfm95w_write(0x07, (char)((frf >> 8) & 0xFF)); //middle byte
     rfm95w_write(0x08, (char)(frf & 0xFF)); //LSB
+}
+
+/* get carrier frequency */
+unsigned long long rfm95w_get_carrier_frequency(void) {
+    unsigned long long frf;
+    unsigned long long freq;
+
+    frf = ((unsigned long long)rfm95w_read(0x06) << 16) | ((unsigned long long)rfm95w_read(0x07) << 8) | rfm95w_read(0x08);
+    freq = (frf * F_XOSC)/524288;
+
+    return freq;
 }
 
 /* set the transmit power of the device*/
@@ -166,6 +153,49 @@ void rfm95w_set_lora_bandwidth(const char b) {
     rfm95w_write(0x1D, (r | b));
 }
 
+/* get bandwidth in Hz */
+unsigned long rfm95w_get_lora_bandwidth(void) {
+    char b = rfm95w_read(0x1D) & 0xF0;
+    unsigned long bw;
+
+    switch(b) {
+        case BW_7_8:
+            bw = 7800;
+            break;
+        case BW_10_4:
+            bw = 10400;
+            break;
+        case BW_15_6:
+            bw = 15600;
+            break;
+        case BW_20_8:
+            bw = 20800;
+            break;
+        case BW_32_25:
+            bw = 32250;
+            break;
+        case BW_41_7:
+            bw = 41700;
+            break;
+        case BW_62_5:
+            bw = 62500;
+            break;
+        case BW_125:
+            bw = 125000;
+            break;
+        case BW_250:
+            bw = 250000;
+            break;
+        case BW_500:
+            bw = 500000;
+            break;
+        default:
+            bw = 0;
+            break;
+    }
+    return bw;
+}
+
 /* set spreading factor (will only write if sf is in range 6-12) */
 void rfm95w_set_spreading_factor(const char sf) {
     char r = rfm95w_read(0x1E) & 0x0F; //clear high bits
@@ -173,6 +203,13 @@ void rfm95w_set_spreading_factor(const char sf) {
     if (sf >= 6 && sf <= 12) {
         rfm95w_write(0x1E, (r | (sf << 4)));
     }
+}
+
+/* get spreading factor */
+unsigned char rfm95w_get_spreading_factor(void) {
+    char sf = rfm95w_read(0x1E) & 0xF0;
+
+    return (sf >> 4) & 0x0F;
 }
 
 /* write a 1 to the desired flag, clearing it */
@@ -236,6 +273,29 @@ void rfm95w_set_coding_rate(const char cr) {
     char r;
     r = rfm95w_read(0x1d) & ~(0b1110); //read and clear coding rate bits
     rfm95w_write(0x1d, (r | cr));
+}
+
+/* get coding rate */
+unsigned char rfm95w_get_coding_rate(void) {
+    char r = rfm95w_read(0x1d) & (0b1110);
+    unsigned char rate;
+
+    switch(r) {
+    case CR_4_5:
+        rate = 45;
+        break;
+    case CR_4_6:
+        rate = 46;
+        break;
+    case CR_4_7:
+        rate = 47;
+        break;
+    case CR_4_8:
+        rate = 48;
+        break;
+    }
+
+    return rate;
 }
 
 /* set normal/inverted IQ */
@@ -319,4 +379,27 @@ unsigned char rfm95w_read_fifo(char* buffer) {
 
     rfm95w_write(0x0d, 0x00); //reset pointer (may be redundant?)
     return num_bytes;
+}
+
+/* save registers to reset chip */
+void rfm95w_save_registers(char* registers) {
+    unsigned char i;
+
+    for(i=0x01;i<0x27;i++) {
+        registers[i] = rfm95w_read(i);
+    }
+}
+
+/* load registers to chip */
+void rfm95w_load_registers(char* registers) {
+    unsigned char i;
+
+    rfm95w_set_mode(OP_MODE_SLEEP); //put into sleep mode
+    rfm95w_write(0x01, registers[1] & 0x80); //LoRa/FSK mode setting must be done in sleep
+
+    for(i=0x02;i<0x27;i++) {
+        rfm95w_write(i, registers[i]);
+    }
+
+    rfm95w_write(0x01, registers[1]); //write rest
 }

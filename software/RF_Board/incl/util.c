@@ -81,3 +81,45 @@ unsigned long long pow(unsigned long long base, unsigned long long exp) {
 
     return result;
 }
+
+/* ADC */
+void init_ADC(const char channel) {
+    ADCCTL0 &= ~ADCENC; //disable conversion
+    ADCCTL0 &= ~ADCSHT; //clear sample and hold field
+    ADCCTL0 |= ADCSHT_2; //16 cycle sample and hold
+    ADCCTL0 |= ADCON; //ADC on
+
+    ADCCTL1 |= ADCSSEL_2; //SMCLK clock source
+    ADCCTL1 |= ADCSHP;
+
+    ADCCTL2 &= ~ADCRES;
+    ADCCTL2 |= ADCRES_2; //12 bit resolution
+
+    ADCMCTL0 &= ~(0xF); //clear channel select bits
+    if (channel <= 0xF) {
+        ADCMCTL0 |= channel;
+    }
+}
+
+unsigned int get_ADC_result(void) {
+    ADCCTL0 |= ADCENC | ADCSC; //start conversion
+    while((ADCIFG & ADCIFG0) == 0); //wait until complete
+    return ADCMEM0;
+}
+
+unsigned int ADC_to_millivolts(unsigned int adcval) {
+    unsigned long long result = ((unsigned long long)adcval * 3300)/4096;
+    return (unsigned int)result;
+}
+
+/* take n ADC readings and average them together*/
+unsigned int get_ADC_average(const unsigned char n) {
+    unsigned char i;
+    unsigned long long result = 0;
+
+    for (i=0;i<n;i++) {
+        result += get_ADC_result();
+    }
+
+    return (unsigned int)(result/n);
+}

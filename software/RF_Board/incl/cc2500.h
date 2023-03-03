@@ -91,6 +91,9 @@ enum cc2500_interrupt_setting{INT_NONE,INT_GDO0,INT_GDO2,INT_BOTH};
 #define WHITE_ON 0x40
 
 /* data rates */
+#define MAN_300 131
+#define EXP_300 3
+
 #define MAN_9600 131
 #define EXP_9600 8
 
@@ -152,5 +155,9 @@ unsigned char cc2500_receive(char* buffer);
 /* getters */
 unsigned long long cc2500_get_frequency(void);
 unsigned long long cc2500_get_data_rate(void);
+
+/* register loading/saving */
+void cc2500_save_registers(char* registers);
+void cc2500_load_registers(char* registers);
 
 #endif

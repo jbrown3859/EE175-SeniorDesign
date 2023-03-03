@@ -133,9 +133,12 @@ void cc2500_display_register(const char addr) {
 /* dump all registers over serial */
 void cc2500_register_dump(void) {
     unsigned char i;
+
+    putchars("CC2500 Register Dump:\n\r");
     for (i = 0; i <= 0x3D; i++) {
         cc2500_display_register(i);
     }
+    putchars("\n\r");
 }
 
 /* radio programming */
@@ -368,4 +371,20 @@ unsigned long long cc2500_get_data_rate(void) {
     unsigned long drate_m = cc2500_read(0x11);
 
     return (((256 + drate_m) * pow(2, drate_e))* XTAL_FREQ)/268435456;
+}
+
+/* save registers to array */
+void cc2500_save_registers(char* registers) {
+    unsigned int i;
+    for(i=0;i<0x2E;i++) {
+        registers[i] = cc2500_read(i);
+    }
+}
+
+/* load registers from array */
+void cc2500_load_registers(char* registers) {
+    unsigned int i;
+    for(i=0;i<0x2E;i++) {
+        cc2500_write(i, registers[i]);
+    }
 }

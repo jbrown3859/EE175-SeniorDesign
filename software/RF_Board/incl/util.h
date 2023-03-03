@@ -10,4 +10,9 @@ void clear_bytes(char* s, unsigned char l);
 
 unsigned long long pow(unsigned long long base, unsigned long long exp);
 
+void init_ADC(const char channel);
+unsigned int get_ADC_result(void);
+unsigned int ADC_to_millivolts(unsigned int adcval);
+unsigned int get_ADC_average(const unsigned char n);
+
 #endif /* UTIL_H_ */

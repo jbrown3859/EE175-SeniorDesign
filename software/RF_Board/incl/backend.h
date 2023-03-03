@@ -6,13 +6,17 @@ enum State{INIT, WAIT, GET_RADIO_INFO,
             GET_TX_BUF_STATE, WRITE_TX_BUF, BURST_WRITE_TX, FLUSH_TX,
             WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS, GET_RADIO_STATE,
             PROG_RADIO_REG, READ_RADIO_REG,
-            MODE_IDLE, MODE_RX, MODE_TX};
+            MODE_IDLE, MODE_RX, MODE_TX,
+            MANUAL_RESET};
 
 enum RadioState{IDLE, RX, TX_WAIT, TX_ACTIVE};
 
 struct RadioInfo {
     unsigned long frequency;
     unsigned long data_rate;
+    unsigned long bandwidth;
+    unsigned char spreading_factor;
+    unsigned char coding_rate;
     enum RadioState radio_mode;
 };
 

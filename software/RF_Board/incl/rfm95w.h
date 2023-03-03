@@ -101,11 +101,22 @@ char rfm95w_set_mode(const char mode);
 char rfm95w_get_mode(void);
 void rfm95w_set_lora_mode(const char lora_mode);
 void rfm95w_set_frequency_mode(const char m);
+
 void rfm95w_set_carrier_frequency(const unsigned long long frequency);
+unsigned long long rfm95w_get_carrier_frequency(void);
+
 void rfm95w_set_tx_power(const char boost, const char max, const char power);
 void rfm95w_write_fifo(const char c);
+
 void rfm95w_set_lora_bandwidth(const char b);
+unsigned long rfm95w_get_lora_bandwidth(void);
+
 void rfm95w_set_spreading_factor(const char sf);
+unsigned char rfm95w_get_spreading_factor(void);
+
+void rfm95w_set_coding_rate(const char cr);
+unsigned char rfm95w_get_coding_rate(void);
+
 void rfm95w_agc_auto_on(const char a);
 void rfm95w_set_lna_gain(const char gain, const char boost_lf, const char boost_hf);
 void rfm95w_LDR_optimize(const char ldr);
@@ -119,7 +130,6 @@ unsigned char rfm95w_get_payload_length(void);
 void rfm95w_set_preamble_length(const int l);
 void rfm95w_set_header_mode(const char m);
 void rfm95w_set_crc(const char c);
-void rfm95w_set_coding_rate(const char cr);
 void rfm95w_set_IQ(const char m);
 void rfm95w_set_sync_word(const char s);
 unsigned char rfm95w_get_packet_rssi(void);
@@ -127,5 +137,8 @@ unsigned char rfm95w_get_packet_rssi(void);
 unsigned char rfm95w_read_fifo(char* buffer);
 void rfm95w_transmit_chars(const char* data);
 void rfm95w_transmit_fixed_packet(const char* data);
+
+void rfm95w_save_registers(char* registers);
+void rfm95w_load_registers(char* registers);
 
 #endif /* RFM95W_H_ */
