@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -39,7 +39,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi1;
+I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef huart2;
 
@@ -50,90 +50,139 @@ UART_HandleTypeDef huart2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char SPI_Read(uint8_t address){
-	char data;
-	address = address | 0x80;
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-	HAL_SPI_Transmit(&hspi1, (uint8_t *)&(address), 1, 100);
-	HAL_SPI_Receive(&hspi1, (uint8_t *)&data, 1, 100);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-	return data;
-}
 
-void SPI_Write(uint8_t address, uint8_t data){
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
-		HAL_SPI_Transmit(&hspi1, (uint8_t *)&(address), 1, 100);
-		HAL_SPI_Transmit(&hspi1, (uint8_t *)&(data), 1, 100);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
-}
+//D10 (PB6)	--> SDL
+//Leftmost Pin 9 (PB7) --> SDA
+//3v3
+static const uint16_t MPU6050_ADDR = 0xD0;
+static const uint16_t WHO_AM_I_REG = 0x75;
+static const uint16_t PWR_MGMT_1_REG = 0x6B;
+static const uint16_t SAMPLE_RATE_REG = 0x19;
+static const uint16_t ACCEL_CONFIG_REG = 0x1C;
+static const uint16_t GYRO_CONFIG_REG = 0x43;
+static const uint16_t ACCEL_XOUT_H_REG = 0x3B;
+static const uint16_t GYRO_XOUT_H_REG = 0x43;
+uint8_t count = 0;
 
-void BMM150_Normal(){
-    	uint8_t temp;
-    	SPI_Write(0x4B, 0x01); //set to sleep
-    	temp = SPI_Read(0x4C);
-    	temp &= 0xF9; //clears last two bits
-    	SPI_Write(0x4C, temp);	//set to normal
-}
+//void print_float(float floatvalue) {
+//	unsigned char *chptr;
+//	 chptr = (unsigned char *) &floatvalue;
+//	 Tx(*chptr++);Tx(*chptr++);Tx(*chptr++);Tx(*chptr);
+//}
 
-void BMM150_Set(){
-			uint8_t temp;
-	    	temp = SPI_Read(0x4E);
-	    	temp &= 0x38; //  0011 1000
-	    	SPI_Write(0x4E, temp);	//set to normal
-}
 
 void print_hex(char h) {
+	int i;
+	char nibble;
+	for (i = 1; i >= 0; i--) {
+		nibble = ((h >> (4 * i)) & 0x0F);
+		if (nibble < 10) { //decimal number
+			nibble += 48;
+			HAL_UART_Transmit(&huart2, (uint8_t*) &nibble, sizeof(nibble), 10);
+		} else { //letter
+			nibble += 55;
+			HAL_UART_Transmit(&huart2, (uint8_t*) &nibble, sizeof(nibble), 10);
+		}
+	}
+}
+
+void print_decimal(const long long data, const unsigned char len) {
     int i;
     char nibble;
-    for (i = 1; i >= 0; i--) {
-        nibble = ((h >> (4 * i)) & 0x0F);
-        if (nibble < 10) { //decimal number
-        	nibble += 48;
-            HAL_UART_Transmit(&huart2,(uint8_t *)&nibble, sizeof(nibble), 10);
-        }
-        else { //letter
-        	nibble += 55;
-        	HAL_UART_Transmit(&huart2,(uint8_t *)&nibble, sizeof(nibble), 10);
-        }
+    for (i = (len-1); i>=0; i--) {
+        nibble = ((int)(data / pow(10, i)) % 10) + 48;
+        HAL_UART_Transmit(&huart2, (uint8_t*) &nibble, sizeof(nibble), 10);
     }
 }
 
-void getData(){
-	uint8_t newline[] = "\n\r"; //Data to send
-		  	 	  uint8_t space[] = "	"; //Data to send
-		  	 	  uint8_t x[] = "X:	"; //Data to send
-		  	 	  uint8_t y[] = "Y:	"; //Data to send
-		  	 	  uint8_t z[] = "Z:	"; //Data to send
-		  	 	  HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);// Sending in normal mode
-	//	  	 	  for(count = 0x40; count < 0x52; count++){
-	//	  	 		uint8_t ReadData = SPI_Read(count); //Data to send
-	//	  	 		print_hex(count);
-	//	  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-	//	  	 		print_hex(ReadData);
-	//	  	 		HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);
-	//	  	 	  }
-		  	 		HAL_UART_Transmit(&huart2,x,sizeof(x),10);
-		  	 		print_hex(SPI_Read(0x43));
-		  	 		print_hex(SPI_Read(0x42));
-		  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-		  	 		HAL_UART_Transmit(&huart2,y,sizeof(y),10);
-		  	 		print_hex(SPI_Read(0x45));
-		  	 		print_hex(SPI_Read(0x44));
-		  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-		  	 		HAL_UART_Transmit(&huart2,z,sizeof(z),10);
-		  	 		print_hex(SPI_Read(0x47));
-		  	 		print_hex(SPI_Read(0x46));
-		  	 		HAL_Delay(200);
+void newline() {
+	uint8_t buf[12];
+	strcpy((char*) buf, "	\r\n");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+}
+
+void space() {
+	uint8_t buf[12];
+	strcpy((char*) buf, "	");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+}
+
+void count_init() {
+	count++;
+	print_decimal(count, 3);
+	space();
+}
+
+void MPU6050_Init() {
+	uint8_t check, data;
+	HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, 1000);//check if its there
+	//print_hex(check);	space();
+
+	data = 0;
+	//HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &check, 1, 1000);		print_hex(check);	space();	//check reg
+	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &data, 1, 1000);	//wakes up sensor by sending 0x00 to PWR_MGMT_1_REG
+	//HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &check, 1, 1000);		print_hex(check);	space();	//check reg
+
+	data = 0x07;
+	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, SAMPLE_RATE_REG, 1, &data, 1, 1000);// Set DATA RATE of 1KHz by writing SAMPLE_RATE_REG register
+
+	data = 0x00;
+	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &data, 1, 1000);	//set acceleration config
+
+	data = 0x00;
+	HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, 1000);//set gyro config
+}
+
+void MPU6050_Read_Accel() {
+
+	uint8_t data[6];
+	HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, data, 6, 1000);
+	float x_accel = (int16_t)(data[0] << 8 | data [1])/16384.0;
+	float y_accel = (int16_t)(data[2] << 8 | data [3])/16384.0;
+	float z_accel = (int16_t)(data[4] << 8 | data [5])/16384.0;
+
+	uint8_t buf[12];
+	strcpy((char*) buf, "Acceleration: x: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(x_accel * 10000, 5);	space();
+
+	strcpy((char*) buf, "y: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(y_accel * 10000, 5);	space();
+
+	strcpy((char*) buf, "z: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(z_accel *10000, 5);	space();
+}
+
+void MPU6050_Read_Gyro() {
+
+	uint8_t data[6];
+	HAL_I2C_Mem_Read (&hi2c1, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, data, 6, 1000);
+	float x_gyro = (int16_t)(data[0] << 8 | data [1])/131.0;
+	float y_gyro = (int16_t)(data[2] << 8 | data [3])/131.0;
+	float z_gyro = (int16_t)(data[4] << 8 | data [5])/131.0;
+
+	uint8_t buf[12];
+	strcpy((char*) buf, "Gyroscope: x: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(x_gyro*10000, 5);	space();
+
+	strcpy((char*) buf, "y: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(y_gyro*10000, 5);	space();
+
+	strcpy((char*) buf, "z: ");
+	HAL_UART_Transmit(&huart2, buf, strlen((char*) buf), 100);
+	print_decimal(z_gyro*10000, 5);	space();
 }
 /* USER CODE END 0 */
 
@@ -164,14 +213,9 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_SPI1_Init();
-  MX_USART2_UART_Init();
+
   /* USER CODE BEGIN 2 */
-    uint8_t Test = 0x00; //Data to send
-    //uint8_t count = 0x40;
-    BMM150_Normal();
-    BMM150_Set();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -179,14 +223,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  Test++;
-	  	 	  //print_hex(Test);
-	  	 	  getData();
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
-
 
 /**
   * @brief System Clock Configuration
@@ -227,40 +268,36 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief SPI1 Initialization Function
+  * @brief I2C1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_SPI1_Init(void)
+static void MX_I2C1_Init(void)
 {
 
-  /* USER CODE BEGIN SPI1_Init 0 */
+  /* USER CODE BEGIN I2C1_Init 0 */
 
-  /* USER CODE END SPI1_Init 0 */
+  /* USER CODE END I2C1_Init 0 */
 
-  /* USER CODE BEGIN SPI1_Init 1 */
+  /* USER CODE BEGIN I2C1_Init 1 */
 
-  /* USER CODE END SPI1_Init 1 */
-  /* SPI1 parameter configuration*/
-  hspi1.Instance = SPI1;
-  hspi1.Init.Mode = SPI_MODE_MASTER;
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
-  hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
-  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi1.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN SPI1_Init 2 */
+  /* USER CODE BEGIN I2C1_Init 2 */
 
-  /* USER CODE END SPI1_Init 2 */
+  /* USER CODE END I2C1_Init 2 */
 
 }
 
@@ -313,7 +350,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -321,12 +358,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
@@ -345,11 +382,10 @@ static void MX_GPIO_Init(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
