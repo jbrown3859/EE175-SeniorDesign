@@ -177,65 +177,48 @@ class MainWindow():
         prog_width = 20
         #Sband
         self.widgets['sband_program'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
-<<<<<<< HEAD
-        self.widgets['sband_program'].grid(row=5,column=0, sticky='N')
 
-        self.widgets['sband_freq_label'] = tk.Label(self.widgets['sband_program'], text="Frequency", font=("Arial", 12))
-        self.widgets['sband_freq_label'].grid(row=0,column=0)
-
-        self.widgets['sband_freq'] = tk.Entry(self.widgets['sband_program'], width = 16)
-        self.widgets['sband_freq'].grid(row=1,column=0,pady=5,padx=5)
-
-        self.widgets['sband_rate_label'] = tk.Label(self.widgets['sband_program'], text="Data Rate", font=("Arial", 12))
-        self.widgets['sband_rate_label'].grid(row=0,column=1)
-
-        self.widgets['sband_rate'] = tk.OptionMenu(self.widgets['sband_program'], None, None)
-        self.widgets['sband_rate'].grid(row=1,column=1)
-        self.widgets['sband_rate'].config(width=10,padx=5)
-        '''
-
-=======
         self.widgets['sband_program'].grid(row=6,column=0, sticky='N')
-        
+
         self.widgets['sband_prog_label'] = tk.Label(self.widgets['sband_program'], text="S-Band Programming", font=("Arial", 15))
         self.widgets['sband_prog_label'].grid(row=0,column=0, columnspan=2)
-        
+
         self.SBand_param = tk.StringVar(self.window)
         self.widgets['sband_prog_param'] = tk.OptionMenu(self.widgets['sband_program'],self.SBand_param,"Frequency","Data Rate")
         self.widgets['sband_prog_param'].grid(row=1,column=0, padx=prog_pad)
         self.widgets['sband_prog_param'].config(width=prog_width)
-        
+
         self.Sband_prog_val = tk.StringVar(self.window)
         self.widgets['sband_prog_box'] = tk.Entry(self.widgets['sband_program'], textvariable=self.Sband_prog_val, width=prog_width)
         self.widgets['sband_prog_box'].grid(row=1,column=1, padx=prog_pad)
-        
-        self.widgets['sband_button'] = tk.Button(self.widgets['sband_program'], 
-                                                    text = "Program Radio", command = self.program_sband, 
+
+        self.widgets['sband_button'] = tk.Button(self.widgets['sband_program'],
+                                                    text = "Program Radio", command = self.program_sband,
                                                     width = 20, height = 2, bg='#c5e6e1')
         self.widgets['sband_button'].grid(row=3,column=0,columnspan=2)
-        
+
         #UHF
         self.widgets['uhf_program'] = tk.Frame(self.window,highlightbackground="black",highlightthickness=2)
         self.widgets['uhf_program'].grid(row=6,column=1, sticky='N')
-        
+
         self.widgets['uhf_prog_label'] = tk.Label(self.widgets['uhf_program'], text="UHF Programming", font=("Arial", 15))
         self.widgets['uhf_prog_label'].grid(row=0,column=0, columnspan=2)
-        
+
         self.SBand_param = tk.StringVar(self.window)
         self.widgets['uhf_prog_param'] = tk.OptionMenu(self.widgets['uhf_program'],self.SBand_param,"Frequency","Data Rate")
         self.widgets['uhf_prog_param'].grid(row=1,column=0, padx=prog_pad)
         self.widgets['uhf_prog_param'].config(width=prog_width)
-        
+
         self.Sband_prog_val = tk.StringVar(self.window)
         self.widgets['uhf_prog_box'] = tk.Entry(self.widgets['uhf_program'], textvariable=self.Sband_prog_val, width=prog_width)
         self.widgets['uhf_prog_box'].grid(row=1,column=1, padx=prog_pad)
-        
-        self.widgets['uhf_button'] = tk.Button(self.widgets['uhf_program'], 
-                                                    text = "Program Radio", command = self.program_uhf, 
+
+        self.widgets['uhf_button'] = tk.Button(self.widgets['uhf_program'],
+                                                    text = "Program Radio", command = self.program_uhf,
                                                     width = 20, height = 2, bg='#c5e6e1')
         self.widgets['uhf_button'].grid(row=3,column=0,columnspan=2)
-        
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
+
         '''
         Command Center
         '''
@@ -379,15 +362,11 @@ class MainWindow():
                     self.t_v.pop(0)
 
                     self.t.pop(0)
-<<<<<<< HEAD
 
 
-                if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1]): #clear if causality is violated
-=======
-                
-                
+
                 if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1] and packet['Timestamp'] != 0): #clear if causality is violated
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
                     self.a_x.clear()
                     self.a_y.clear()
                     self.a_z.clear()
@@ -403,73 +382,43 @@ class MainWindow():
                     self.t_v.clear()
 
                     self.t.clear()
-<<<<<<< HEAD
 
 
-                if (packet['Timestamp'] not in self.t):
-=======
-                
-                
+
                 if (packet['Timestamp'] not in self.t and packet['Acceleration']): #discard packets with no data in them
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
                     self.t.append(packet['Timestamp'])
 
                     #adjust x scale to match packet timestamps
                     self.mag_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
                     self.accel_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
                     self.gyro_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
-<<<<<<< HEAD
-                    self.temp_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
 
-                    self.a_x.append(packet['Acceleration'][0])
-                    self.a_y.append(packet['Acceleration'][1])
-                    self.a_z.append(packet['Acceleration'][2])
-                    self.accel_x.set_data(self.t, self.a_x)
-                    self.accel_y.set_data(self.t, self.a_y)
-                    self.accel_z.set_data(self.t, self.a_z)
-
-                    self.g_x.append(packet['Angular Rate'][0])
-                    self.g_y.append(packet['Angular Rate'][1])
-                    self.g_z.append(packet['Angular Rate'][2])
-                    self.gyro_x.set_data(self.t, self.g_x)
-                    self.gyro_y.set_data(self.t, self.g_y)
-                    self.gyro_z.set_data(self.t, self.g_z)
-
-                    self.m_x.append(packet['Magnetic Field'][0])
-                    self.m_y.append(packet['Magnetic Field'][1])
-                    self.m_z.append(packet['Magnetic Field'][2])
-                    self.mag_x.set_data(self.t, self.m_x)
-                    self.mag_y.set_data(self.t, self.m_y)
-                    self.mag_z.set_data(self.t, self.m_z)
-
-                    self.t_v.append(packet['Temperature'][0])
-                    self.temp_val.set_data(self.t, self.t_v)
-
-        except (IndexError, ValueError):
-=======
-                    
                     self.a_x.append(to_signed(packet['Acceleration'][0]))
                     self.a_y.append(to_signed(packet['Acceleration'][1]))
                     self.a_z.append(to_signed(packet['Acceleration'][2]))
                     self.accel_x.set_data(self.t, self.a_x)
                     self.accel_y.set_data(self.t, self.a_y)
                     self.accel_z.set_data(self.t, self.a_z)
-                    
+
                     self.g_x.append(to_signed(packet['Angular Rate'][0]))
                     self.g_y.append(to_signed(packet['Angular Rate'][1]))
                     self.g_z.append(to_signed(packet['Angular Rate'][2]))
                     self.gyro_x.set_data(self.t, self.g_x)
                     self.gyro_y.set_data(self.t, self.g_y)
                     self.gyro_z.set_data(self.t, self.g_z)
-                    
+
                     self.m_x.append(to_signed(packet['Magnetic Field'][0]))
                     self.m_y.append(to_signed(packet['Magnetic Field'][1]))
                     self.m_z.append(to_signed(packet['Magnetic Field'][2]))
                     self.mag_x.set_data(self.t, self.m_x)
                     self.mag_y.set_data(self.t, self.m_y)
                     self.mag_z.set_data(self.t, self.m_z)
+
+                    self.t_v.append(packet['Temperature'][0])
+                    self.temp_val.set_data(self.t, self.t_v)
         except (ValueError):
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
             pass
 
     def update_command(self):
@@ -618,17 +567,15 @@ class MainWindow():
             self.widgets['uhf_coding'].grid(row=6,column=1)
 
         self.window.after(1000, self.update_radio_status)
-<<<<<<< HEAD
 
-=======
-        
+
     def program_sband(self):
         print("Programming S-Band beep boop")
-        
+
     def program_uhf(self):
         print("Programming UHF beep boop")
-            
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
+
     def serial_thread(self):
         radio_status = {}
         radio_status['SBand_last_packet'] = 0
@@ -722,13 +669,11 @@ class MainWindow():
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 packet_data['Temperature'] = packet[15]
                                 self.telem_queue.put(packet_data)
-<<<<<<< HEAD
 
-=======
                         else:
                             self.write_console("S-Band received uncategorized packets: {}".format(packets))
-                        
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
+
                 if self.UHF.port.is_open:
                     status = self.UHF.get_rx_buffer_state()
 
@@ -738,17 +683,14 @@ class MainWindow():
                     if status[1] != 0: #if packet
                         radio_status['UHF_last_packet'] = time.time()
                         packets = self.UHF.burst_read(status[4], status[1])
-<<<<<<< HEAD
 
-                        if (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
-=======
-                        
+
                         if (status[4] == 18): #if image packet
                             for i in range(0, math.floor(len(packets)/18)):
                                 packet = packets[(18*i):(18*(i+1))]
                                 self.img_queue.put(packet)
                         elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
                             for i in range(0, status[1]):
                                 packet = list(packets[(32*i):(32*(i+1))])
 
@@ -759,15 +701,12 @@ class MainWindow():
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 packet_data['Temperature'] = packet[15]
                                 self.telem_queue.put(packet_data)
-<<<<<<< HEAD
 
-
-=======
                         else:
                             self.write_console("UHF received uncategorized packets: {}".format(packets))
-                        
-                        
->>>>>>> ed2fb51ba27c233f22830f62940b8d3046f5492c
+
+
+
             except (serial.serialutil.SerialException, IndexError):
                 pass
 
