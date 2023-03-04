@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128

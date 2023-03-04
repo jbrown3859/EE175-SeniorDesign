@@ -1,0 +1,95 @@
+{
+	"Downlink Image":{
+		"header": 32,
+		"arguments": [
+			{
+			"label": "Resolution",
+			"type": "dropdown",
+			"options":
+				{
+				"160x120":1,
+				"320x240":2,
+				"640x480":3
+				}
+			},
+			{
+			"label": "Color",
+			"type": "dropdown",
+			"options": {"GRB422":1}
+			},
+			{
+			"label": "TX Channel",
+			"type": "dropdown",
+			"options":
+				{
+				"UHF": 1,
+				"S-Band": 2
+				}
+			}
+		]
+	},
+	"Configure S-Band":{
+		"header": 33,
+		"arguments": [
+			{
+			"label": "Frequency",
+			"type": "number",
+			"range": [2420000000,2480000000],
+			"bytes": 4
+			}
+		]
+	},
+	"Configure UHF":{
+		"header": 34,
+		"arguments": [
+			{
+			"label": "Frequency",
+			"type": "number",
+			"range": [433000000,438000000],
+			"bytes": 4
+			},
+			{
+			"label": "Bandwidth",
+			"type": "dropdown",
+			"options":
+				{
+				"7.8k":0,
+				"10.4k":1,
+				"15.6k":2,
+				"20.8k":3,
+				"32.25k":4,
+				"41.7k":5,
+				"62.5k":6,
+				"125k":7,
+				"250k":8,
+				"500k":9
+				}
+			},
+			{
+			"label": "Spread Factor",
+			"type": "dropdown",
+			"options":
+				{
+				"6": 6,
+				"7": 7,
+				"8": 8,
+				"9": 9,
+				"10": 10,
+				"11": 11,
+				"12": 12
+				}
+			}
+		]
+	},
+	"Configure Telemetry": {
+		"header": 35,
+		"arguments": [
+			{
+			"label": "Period (ms)",
+			"type": "number",
+			"range": [1, 65536],
+			"bytes": 2
+			}
+		]
+	}
+}

@@ -152,6 +152,21 @@ void cc2500_set_base_frequency(const unsigned long long freq) {
     cc2500_write(0x0F, (char)(f & 0xFF)); //low byte
 }
 
+/* calculate operating frequency from register settings */
+unsigned long long cc2500_get_frequency(void) {
+    unsigned long long high = ((unsigned long long)cc2500_read(0x0D) << 16) & 0xFF0000;
+    unsigned long long med = ((unsigned long long)cc2500_read(0x0E) << 8) & 0xFF00;
+    unsigned long long low = cc2500_read(0x0F);
+    unsigned long long freq = high | med | low;
+
+    unsigned long long chan = cc2500_read(0x0A);
+
+    long long chanspc_e = cc2500_read(0x13) & 0x03;
+    unsigned long long chanspc_m = cc2500_read(0x14);
+
+    return (XTAL_FREQ * (freq + chan * ((256 + chanspc_m) * pow(2, chanspc_e - 2))))/65536;
+}
+
 /* set intermediate frequency for RX */
 void cc2500_set_IF_frequency(const unsigned long long freq ) {
     unsigned char f;
@@ -348,21 +363,6 @@ unsigned char cc2500_receive(char* buffer) {
     else {
         return 0;
     }
-}
-
-/* calculate operating frequency from register settings */
-unsigned long long cc2500_get_frequency(void) {
-    unsigned long long high = ((unsigned long long)cc2500_read(0x0D) << 16);
-    unsigned long long med = ((unsigned long long)cc2500_read(0x0E) << 8);
-    unsigned long long low = cc2500_read(0x0F);
-    unsigned long long freq = high | med | low;
-
-    unsigned long long chan = cc2500_read(0x0A);
-
-    long long chanspc_e = cc2500_read(0x13) & 0x03;
-    unsigned long long chanspc_m = cc2500_read(0x14);
-
-    return (XTAL_FREQ / 65536) * (freq + chan * ((256 + chanspc_m) * pow(2, chanspc_e - 2)));
 }
 
 /* calculate data rate from register settings */

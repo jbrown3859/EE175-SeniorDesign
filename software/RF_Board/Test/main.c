@@ -47,8 +47,9 @@ int main(void)
     init_ADC(5); //init for channel #5
     */
 
-    /*
+
     //radio programming
+    cc2500_set_frontend(RX_SHUTDOWN);
     cc2500_command_strobe(STROBE_SRES); //reset chip
     cc2500_register_dump();
     hardware_delay(100);
@@ -73,7 +74,19 @@ int main(void)
 
     cc2500_register_dump();
     __no_operation();
-    */
+
+    for (;;) {
+        cc2500_set_base_frequency(2450000000);
+        print_hex(cc2500_read(0x0D));
+        print_hex(cc2500_read(0x0E));
+        print_hex(cc2500_read(0x0F));
+        putchars("  ");
+        print_dec(cc2500_get_frequency(), 10);
+        putchars("  ");
+        print_hex(cc2500_read(0x0A));
+        putchars("\n\r");
+    }
+
 
     /*
     char msg[5] = {'T','E','S','T'};
@@ -131,7 +144,7 @@ int main(void)
     }
     */
 
-
+    /*
     rfm95w_init();
     rfm95w_reset();
 
@@ -171,6 +184,7 @@ int main(void)
     compare_arrays(regs, after, 0x27);
 
     for (;;) {}
+    */
 
     /*
     for (;;) {
@@ -187,20 +201,6 @@ int main(void)
         putchars("\n\r");
     }
     */
-
-    /*
-    unsigned int i;
-	for(;;) {
-	    for (i=0;i<2000;i++) {
-	        SPI_TX(0x00, 'M');
-	    }
-	    putchars("I haue read the truest computer of Times,\n\r");
-	    putchars("and the best Arithmetician that euer breathed,\n\r");
-	    putchars("and he reduceth thy dayes into a short number\n\r");
-	    putchars("\n\r");
-	    //hardware_delay(10000);
-	}
-	*/
 
 	return 0;
 }
