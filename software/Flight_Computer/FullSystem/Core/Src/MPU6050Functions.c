@@ -41,47 +41,58 @@ void MPU6050_Init(I2C_HandleTypeDef i2c) {
 	HAL_I2C_Mem_Write(&i2c, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, 1000);//set gyro config
 }
 
-void MPU6050_Read_Accel(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart) {
+void MPU6050_Read_Accel(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart, uint8_t *accel) {
 
 	uint8_t data[6];
 	HAL_I2C_Mem_Read(&i2c, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, data, 6, 1000);
-	float x_accel = (int16_t) (data[0] << 8 | data[1]) / 16384.0;
-	float y_accel = (int16_t) (data[2] << 8 | data[3]) / 16384.0;
-	float z_accel = (int16_t) (data[4] << 8 | data[5]) / 16384.0;
+//	float x_accel = (int16_t) (data[0] << 8 | data[1]) / 16384.0;
+//	float y_accel = (int16_t) (data[2] << 8 | data[3]) / 16384.0;
+//	float z_accel = (int16_t) (data[4] << 8 | data[5]) / 16384.0;
+	uint8_t x_accel = data[0];
+	uint8_t y_accel = data[2];
+	uint8_t z_accel = data[4];
 
+	accel[5] = x_accel;
 	print_string(uart, "Acceleration x: ");
-	print_decimal(uart, x_accel * 10000, 5);
+	print_hex(uart, x_accel);
 	space(uart);
 
+	accel[6] = y_accel;
 	print_string(uart, "y: ");
-	print_decimal(uart, y_accel * 10000, 5);
+	print_hex(uart, y_accel);
 	space(uart);
 
+	accel[7] = z_accel;
 	print_string(uart, "z: ");
-	print_decimal(uart, z_accel * 10000, 5);
+	print_hex(uart, z_accel);
 	space(uart);
 	space(uart);
 	space(uart);
 }
 
-void MPU6050_Read_Gyro(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart) {
+void MPU6050_Read_Gyro(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart, uint8_t *gyro) {
 
 	uint8_t data[6];
-	HAL_I2C_Mem_Read(&i2c, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, data, 6, 1000);
-	float x_gyro = (int16_t) (data[0] << 8 | data[1]) / 131.0;
-	float y_gyro = (int16_t) (data[2] << 8 | data[3]) / 131.0;
-	float z_gyro = (int16_t) (data[4] << 8 | data[5]) / 131.0;
+	HAL_I2C_Mem_Read(&i2c, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, data, 6, 10);
+//	float x_gyro = (int16_t) (data[0] << 8 | data[1]) / 131.0;
+//	float y_gyro = (int16_t) (data[2] << 8 | data[3]) / 131.0;
+//	float z_gyro = (int16_t) (data[4] << 8 | data[5]) / 131.0;
+	uint8_t x_gyro = data[0];
+	uint8_t y_gyro = data[2];
+	uint8_t z_gyro = data[4];
 
+	gyro[8] = x_gyro;
 	print_string(uart, "Gyroscope: x: ");
-	print_decimal(uart, x_gyro * 10000, 5);
+	print_hex(uart, x_gyro);
 	space(uart);
 
+	gyro[9] = y_gyro;
 	print_string(uart, "y: ");
-	print_decimal(uart, y_gyro * 10000, 5);
+	print_hex(uart, y_gyro);
 	space(uart);
 
+	gyro[10] = z_gyro;
 	print_string(uart, "z: ");
-	print_decimal(uart, z_gyro * 10000, 5);
+	print_hex(uart, z_gyro);
 	space(uart);
 }
-

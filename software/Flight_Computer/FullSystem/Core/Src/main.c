@@ -18,6 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+#include <TerminalOutputs.h>
+#include <RadioFunctions.h>
+#include <MPU6050Functions.h>
+#include <BMM150Functions.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -31,6 +38,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define	IDLE	0
+#define	RX_MODE	1
+#define	TX_MODE	2
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -106,15 +116,64 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 	MPU6050_Init(hi2c1);
+	while(GetRadioInfo(huart1, huart2) != 0x53){
+		count_init(huart2);
+		newlineFinal(huart2);
+	}
+	uint8_t commands[1];
+	uint8_t TXPacket[32];
+	uint8_t RadioState = IDLE;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
-    /* USER CODE END WHILE */
+			/* USER CODE END WHILE */
+			count_init(huart2);
 
-    /* USER CODE BEGIN 3 */
-	}
+			switch (RadioState) {
+			case IDLE:
+				IDLEMode(huart1, huart2);
+				RadioState = RX_MODE;
+				break;
+			case RX_MODE:
+				RXMode(huart1, huart2);
+				while (GetRXNumPackets(huart1, huart2) != 0) {
+					GetRXBufferState(huart1, huart2);
+					ReadRXBuffer(huart1, huart2, commands);
+				}
+				RadioState = TX_MODE;
+				break;
+			case TX_MODE:
+				TXMode(huart1, huart2);
+				/*telemetry data
+				 * WriteTXBuffer
+				 */
+				MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
+				MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
+				newline(huart2);
+				BMM150getData(hspi1, huart2, TXPacket);
+				newline(huart2);
+				TXPacket[0] = 0x54;
+				TXPacket[1] = (uint8_t)(count >> 24) & 0xFF;
+				TXPacket[2] = (uint8_t)(count >> 16) & 0xFF;
+				TXPacket[3] = (uint8_t)(count >> 8) & 0xFF;
+				TXPacket[4] = (uint8_t)count & 0xFF;
+				send_buffer(huart2, TXPacket, 32);
+				WriteTXBuffer(huart1, huart2, TXPacket, 32);
+				while (GetTXActiveState(huart1, huart2) == 1) {
+					print_string(huart2, "TX_ACTIVE");
+					HAL_Delay(10);
+				}
+				RadioState = RX_MODE;
+				break;
+			default:
+				RadioState = IDLE;
+			}
+
+			newlineFinal(huart2);
+			/* USER CODE BEGIN 3 */
+		}
   /* USER CODE END 3 */
 }
 
@@ -381,11 +440,21 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);

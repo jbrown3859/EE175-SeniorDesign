@@ -22,7 +22,7 @@ void print_hex(UART_HandleTypeDef uart, char h);
 
 void print_decimal(UART_HandleTypeDef uart, const long long data, const unsigned char len);
 
-extern uint8_t count;
+extern uint32_t count;
 void count_init(UART_HandleTypeDef uart);
 
 void send_buffer(UART_HandleTypeDef uart, uint8_t *buffer, uint32_t buffer_length);

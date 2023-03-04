@@ -19,8 +19,8 @@ extern const uint16_t GYRO_XOUT_H_REG;
 
 void MPU6050_Init(I2C_HandleTypeDef i2c);
 
-void MPU6050_Read_Accel(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart);
+void MPU6050_Read_Accel(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart, uint8_t *accel);
 
-void MPU6050_Read_Gyro(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart);
+void MPU6050_Read_Gyro(I2C_HandleTypeDef i2c, UART_HandleTypeDef uart, uint8_t *gyro);
 
 #endif /* INC_MPU6050FUNCTIONS_H_ */

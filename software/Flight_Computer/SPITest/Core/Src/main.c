@@ -107,6 +107,34 @@ void print_hex(char h) {
         }
     }
 }
+
+void getData(){
+	uint8_t newline[] = "\n\r"; //Data to send
+		  	 	  uint8_t space[] = "	"; //Data to send
+		  	 	  uint8_t x[] = "X:	"; //Data to send
+		  	 	  uint8_t y[] = "Y:	"; //Data to send
+		  	 	  uint8_t z[] = "Z:	"; //Data to send
+		  	 	  HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);// Sending in normal mode
+	//	  	 	  for(count = 0x40; count < 0x52; count++){
+	//	  	 		uint8_t ReadData = SPI_Read(count); //Data to send
+	//	  	 		print_hex(count);
+	//	  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
+	//	  	 		print_hex(ReadData);
+	//	  	 		HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);
+	//	  	 	  }
+		  	 		HAL_UART_Transmit(&huart2,x,sizeof(x),10);
+		  	 		print_hex(SPI_Read(0x43));
+		  	 		print_hex(SPI_Read(0x42));
+		  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
+		  	 		HAL_UART_Transmit(&huart2,y,sizeof(y),10);
+		  	 		print_hex(SPI_Read(0x45));
+		  	 		print_hex(SPI_Read(0x44));
+		  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
+		  	 		HAL_UART_Transmit(&huart2,z,sizeof(z),10);
+		  	 		print_hex(SPI_Read(0x47));
+		  	 		print_hex(SPI_Read(0x46));
+		  	 		HAL_Delay(200);
+}
 /* USER CODE END 0 */
 
 /**
@@ -141,7 +169,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
     uint8_t Test = 0x00; //Data to send
-    uint8_t count = 0x40;
+    //uint8_t count = 0x40;
     BMM150_Normal();
     BMM150_Set();
   /* USER CODE END 2 */
@@ -153,31 +181,7 @@ int main(void)
     /* USER CODE END WHILE */
 	  Test++;
 	  	 	  //print_hex(Test);
-	  	 	  uint8_t newline[] = "\n\r"; //Data to send
-	  	 	  uint8_t space[] = "	"; //Data to send
-	  	 	  uint8_t x[] = "X:	"; //Data to send
-	  	 	  uint8_t y[] = "Y:	"; //Data to send
-	  	 	  uint8_t z[] = "Z:	"; //Data to send
-	  	 	  HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);// Sending in normal mode
-//	  	 	  for(count = 0x40; count < 0x52; count++){
-//	  	 		uint8_t ReadData = SPI_Read(count); //Data to send
-//	  	 		print_hex(count);
-//	  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-//	  	 		print_hex(ReadData);
-//	  	 		HAL_UART_Transmit(&huart2,newline,sizeof(newline),10);
-//	  	 	  }
-	  	 		HAL_UART_Transmit(&huart2,x,sizeof(x),10);
-	  	 		print_hex(SPI_Read(0x43));
-	  	 		print_hex(SPI_Read(0x42));
-	  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-	  	 		HAL_UART_Transmit(&huart2,y,sizeof(y),10);
-	  	 		print_hex(SPI_Read(0x45));
-	  	 		print_hex(SPI_Read(0x44));
-	  	 		HAL_UART_Transmit(&huart2,space,sizeof(space),10);
-	  	 		HAL_UART_Transmit(&huart2,z,sizeof(z),10);
-	  	 		print_hex(SPI_Read(0x47));
-	  	 		print_hex(SPI_Read(0x46));
-	  	 		HAL_Delay(200);
+	  	 	  getData();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

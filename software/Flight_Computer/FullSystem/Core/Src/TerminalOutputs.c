@@ -77,12 +77,12 @@ void send_buffer(UART_HandleTypeDef uart, uint8_t *buffer, uint32_t buffer_lengt
 		print_hex(uart, buffer[i]);
 	}
 	newline(uart);
-	memset(buffer, 0, buffer_length);
+	//memset(buffer, 0, buffer_length);
 }
 
-uint8_t count = 0;
+uint32_t count = 0;
 void count_init(UART_HandleTypeDef uart) {
 	count++;
-	print_decimal(uart, count, 3);
+	print_decimal(uart, (uint8_t)count, 3);
 	space(uart);
 }
