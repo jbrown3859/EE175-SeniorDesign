@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 1024
 #define RX_PACKETS 128
@@ -226,6 +226,7 @@ void main_loop(void) {
     unsigned int pkt_num = 0;
     unsigned char command;
     char args[16];
+    char regs[48];
 
     unsigned int i = 0;
     //unsigned int j = 0;
@@ -312,12 +313,15 @@ void main_loop(void) {
         /* UART state machine */
         switch(state) {
         case INIT:
-            info.frequency = 435000000; //dummy value, should never actually be this
-            info.data_rate = 9600;
+            info.frequency = 0; //dummy values, should never actually be this
+            info.data_rate = 0;
+            info.bandwidth = 0;
+            info.spreading_factor = 0;
+            info.coding_rate = 0;
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);
-            cc2500_set_frontend(RX_DUAL_BYPASS);
+            cc2500_set_frontend(RX_SINGLE_BYPASS);
             #endif
             #ifdef RADIOTYPE_UHF
             rfm95w_set_DIO_mode(DIO0_RXDONE);
@@ -337,11 +341,18 @@ void main_loop(void) {
             putchar('S');
             #endif
             #ifdef RADIOTYPE_UHF
+            info.frequency = rfm95w_get_carrier_frequency();
+            info.bandwidth = rfm95w_get_lora_bandwidth();
+            info.spreading_factor = rfm95w_get_spreading_factor();
+            info.coding_rate = rfm95w_get_coding_rate();
             putchar('U');
             #endif
 
             print_dec(info.frequency, 10);
             print_dec(info.data_rate, 6);
+            print_dec(info.bandwidth, 6);
+            print_dec(info.spreading_factor, 2);
+            print_dec(info.coding_rate, 2);
             state = WAIT;
             break;
         case GET_RX_BUF_STATE:
@@ -538,7 +549,7 @@ void main_loop(void) {
             radio_state = cc2500_get_status();
 
             if (radio_state == STATUS_STATE_RX) {
-                cc2500_set_frontend(RX_NO_BYPASS);
+                cc2500_set_frontend(RX_SINGLE_BYPASS);
                 info.radio_mode = RX;
             }
             #endif
@@ -573,6 +584,43 @@ void main_loop(void) {
 
             if (radio_state == OP_MODE_STDBY) {
                 info.radio_mode = TX_WAIT; //switch state only if the modem successfully switches
+            }
+            #endif
+
+            putchar(get_flag_from_state(info.radio_mode));
+            state = WAIT;
+            break;
+        case MANUAL_RESET: //reset chip and save register states
+            #ifdef RADIOTYPE_SBAND
+            cc2500_save_registers(regs);
+            cc2500_command_strobe(STROBE_SRES);
+            hardware_delay(100);
+            cc2500_load_registers(regs);
+
+            switch(info.radio_mode) {
+            case IDLE:
+                cc2500_set_frontend(RX_SHUTDOWN);
+                break;
+            case RX:
+                cc2500_set_frontend(RX_SINGLE_BYPASS);
+                break;
+            case TX_WAIT:
+                cc2500_set_frontend(TX);
+                break;
+            case TX_ACTIVE:
+                info.radio_mode = TX_WAIT;
+                cc2500_set_frontend(TX);
+                break;
+            }
+            #endif
+            #ifdef RADIOTYPE_UHF
+            rfm95w_save_registers(regs);
+            rfm95w_reset();
+            hardware_delay(100);
+            rfm95w_load_registers(regs);
+
+            if (info.radio_mode == TX_ACTIVE) {
+                info.radio_mode = TX_WAIT;
             }
             #endif
 
@@ -641,6 +689,9 @@ void main_loop(void) {
                     break;
                 case 0x84:
                     state = MODE_TX;
+                    break;
+                case 0x85:
+                    state = MANUAL_RESET;
                     break;
                 default:
                     flush_UART_FIFO(); //flush to avoid hanging

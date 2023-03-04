@@ -4,9 +4,9 @@ import serial.tools.list_ports
 
 import radio
 
-type = int(input("Radio Type (1 = SBand, 2 = UHF):"))
+type = int(input("Radio Type (1 = SBand, 2 = UHF, 3 = SBand RX):"))
 
-if (type == 1):
+if (type == 1  or type == 3):
     rad = radio.Radio("SBand", 115200)
 elif (type == 2):
     rad = radio.Radio("UHF", 115200)
@@ -39,10 +39,15 @@ if (type == 1):
 
     for i in range(0,0x30):
         print("{}: {}".format(hex(i), rad.read_radio_register(i).hex()))
+        
+    print("Resetting Chip")
+    print(rad.radio_manual_reset())
+    
+    for i in range(0,0x30):
+        print("{}: {}".format(hex(i), rad.read_radio_register(i).hex()))
 
     while True:
         print("Setting to idle")
-        '''
         status = 1
         while status != 0x0:
             time.sleep(1)
@@ -65,7 +70,6 @@ if (type == 1):
         for i in range(0,20):
             tx_status = rad.get_tx_buffer_state()
             print(tx_status.hex())
-        '''
         
         print("Setting to RX")
         status = 1
@@ -75,14 +79,10 @@ if (type == 1):
             print(status)
             
         for i in range(0,200):
-            #print("Requesting RX status")
             rx_status = rad.get_rx_buffer_state()
-                #tx_status = rad.get_tx_buffer_state()
-                #print(tx_status.hex())
                 
             try:
                 if rx_status:
-                    #print(rx_status.hex())
                     if rx_status[1] != 0:
                         print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
                         packets = rad.burst_read(rx_status[4], rx_status[1])
@@ -91,9 +91,9 @@ if (type == 1):
                 print(rx_status)
 
 elif(type == 2):
-    print(rad.radio_idle_mode().hex())
-    time.sleep(1)
-    print(rad.radio_idle_mode().hex())
+    #print(rad.radio_idle_mode().hex())
+    #time.sleep(1)
+    #print(rad.radio_idle_mode().hex())
     
     '''
     print("Register Dump")
@@ -104,8 +104,33 @@ elif(type == 2):
     #test TX buffer    
     
     while True:
-        print("Switching to idle")
+        print("Switching to RX")
+        print(rad.radio_rx_mode().hex())
+        
+        print("Resetting Chip")
+        print(rad.radio_manual_reset())
+        
+        print("Buffer State")
+        print(rad.get_rx_buffer_state())
+        
+        print("Switching to TX")
+        print(rad.radio_tx_mode().hex())
+        
+        print("Resetting Chip")
+        print(rad.radio_manual_reset())
+        
+        print("Buffer State")
+        print(rad.get_rx_buffer_state())
+        
+        print("Switching to IDLE")
         print(rad.radio_idle_mode().hex())
+        
+        print("Resetting Chip")
+        print(rad.radio_manual_reset())
+        
+        print("Buffer State")
+        print(rad.get_rx_buffer_state())
+        
         print("Filling TX buffer")
         for i in range(0,10):
             rad.write_tx_buffer("WHAT HATH GOD WROUGHT".encode('utf-8'))
@@ -142,3 +167,23 @@ elif(type == 2):
                         print(packets)
             except IndexError:
                 print(rx_status)
+                
+elif (type == 3):
+    print("Switching to RX")
+    print(rad.radio_rx_mode().hex())
+    time.sleep(1)
+    print(rad.radio_rx_mode().hex())
+    
+    while True:
+        rx_status = rad.get_rx_buffer_state()
+                
+        try:
+            if rx_status:
+                if rx_status[1] != 0:
+                    print(rx_status.hex())
+                    print("Requesting {} packets of size {}".format(rx_status[1], rx_status[4]))
+                    packets = rad.burst_read(rx_status[4], rx_status[1])
+                    print(packets)
+        except IndexError:
+            print(rx_status)
+    

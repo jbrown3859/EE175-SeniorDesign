@@ -5,6 +5,22 @@
 #include <cc2500.h>
 #include <rfm95w.h>
 
+/* compare arrays and find different elements (for debugging mass register programming) */
+void compare_arrays(char* a, char* b, unsigned char len) {
+    unsigned int i;
+    for (i=0;i<len;i++) {
+        if (a[i] != b[i]) {
+            putchars("Index:");
+            print_hex(i);
+            putchars(" a:");
+            print_hex(a[i]);
+            putchars(" b:");
+            print_hex(b[i]);
+            putchars("\n\r");
+        }
+    }
+}
+
 /**
  * main.c
  */
@@ -15,16 +31,26 @@ int main(void)
     __bis_SR_register(GIE); //enable interrupts
 
     /* GPIO */
-    cc2500_init_frontend();
+    //cc2500_init_frontend();
 
     init_clock();
     init_serial_timer(1000); //set I/O timeout
     init_UART(115200);
     init_SPI_master();
 
+    //ADC test
+    //set P1.5 to ADC input
+    /*
+    P1SEL0 |= (1 << 5);
+    P1SEL1 |= (1 << 5);
 
-    /* radio programming */
+    init_ADC(5); //init for channel #5
+    */
+
+    /*
+    //radio programming
     cc2500_command_strobe(STROBE_SRES); //reset chip
+    cc2500_register_dump();
     hardware_delay(100);
     //cc2500_set_base_frequency(2450000000);
     //cc2500_set_IF_frequency(457000);
@@ -33,7 +59,7 @@ int main(void)
     cc2500_set_data_whitening(WHITE_OFF);
     cc2500_set_fifo_thresholds(0x0A);
     //cc2500_set_sync_word(0xBAAD);
-    cc2500_set_data_rate(MAN_38400,EXP_38400);
+    cc2500_set_data_rate(MAN_300,EXP_300);
     //cc2500_set_crc(CRC_ENABLED, CRC_AUTOFLUSH, 0x00);
     cc2500_set_crc(0x00,0x00,0x00);
     //cc2500_write(0x26, 0x11); //value from smartrf studio
@@ -47,9 +73,42 @@ int main(void)
 
     cc2500_register_dump();
     __no_operation();
+    */
 
+    /*
     char msg[5] = {'T','E','S','T'};
 
+    unsigned char txpower = 0xE0;
+    unsigned int i;
+    //power test
+    for(;;) {
+        txpower = 0xFF;
+        cc2500_set_tx_power(txpower);
+        putchars("Transmit Power Register: ");
+        print_hex(txpower);
+        putchars("\n\r");
+
+        cc2500_set_frontend(TX);
+        cc2500_write(0x3F, 22); //write size
+        cc2500_burst_write_fifo("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 22);
+        while (cc2500_get_status() != STATUS_STATE_TX && cc2500_get_status() != STATUS_STATE_FSTXON) {
+            cc2500_command_strobe(STROBE_STX);
+        }
+        for(i=0;i<20;i++) {
+            print_dec(ADC_to_millivolts(get_ADC_result()), 4); //print ADC value
+            putchars("\n\r");
+            hardware_delay(100);
+        }
+        hardware_delay(60000); //wait until done
+        cc2500_command_strobe(STROBE_SFTX);
+        cc2500_set_frontend(RX_SHUTDOWN);
+        putchars("\n\r");
+
+        __no_operation();
+        txpower += 0x03;
+    }
+
+    //frontend test
     for (;;) {
         putchars("Setting to TX\n\r");
         cc2500_set_frontend(TX);
@@ -70,8 +129,9 @@ int main(void)
         putchars("Set to no bypass\n\r");
         __no_operation();
     }
+    */
 
-    /*
+
     rfm95w_init();
     rfm95w_reset();
 
@@ -94,10 +154,36 @@ int main(void)
     rfm95w_set_max_payload_length(0x20);
     rfm95w_set_sync_word(0x34);
 
-    for(;;) {
-        putchars("Register Dump:\n\r");
-        rfm95w_register_dump();
-        hardware_delay(60000);
+    char regs[48];
+    char after[48];
+
+    putchars("Programmed Registers: \n\r");
+    rfm95w_register_dump();
+    rfm95w_save_registers(regs);
+    rfm95w_reset();
+    putchars("After Reset: \n\r");
+    rfm95w_register_dump();
+    rfm95w_load_registers(regs);
+    hardware_delay(100);
+    putchars("After Load: \n\r");
+    rfm95w_register_dump();
+    rfm95w_save_registers(after);
+    compare_arrays(regs, after, 0x27);
+
+    for (;;) {}
+
+    /*
+    for (;;) {
+        putchars("LoRa Bandwidth: ");
+        print_dec(rfm95w_get_lora_bandwidth(), 6);
+        putchars("\n\r");
+
+        putchars("Spreading Factor: ");
+        print_dec(rfm95w_get_spreading_factor(), 2);
+        putchars("\n\r");
+
+        putchars("Coding Rate: ");
+        print_dec(rfm95w_get_coding_rate(), 2);
         putchars("\n\r");
     }
     */
