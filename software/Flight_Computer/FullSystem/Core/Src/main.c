@@ -25,6 +25,7 @@
 #include <RadioFunctions.h>
 #include <MPU6050Functions.h>
 #include <BMM150Functions.h>
+#include <LM75Functions.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,9 +43,6 @@
 #define	RX_MODE	1
 #define	TX_MODE	2
 
-const uint16_t LM75_ADDR = 0x96;
-const uint16_t LM75_CONFIG_REG = 0x01;
-const uint16_t LM75_TEMP_REG = 0x00;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -76,16 +74,7 @@ static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-char I2C_Read(uint16_t address, uint16_t reg) {
-	uint16_t data;
-	HAL_I2C_Mem_Read(&hi2c1, address, reg & 0x00FF, 1, &data, 1, 1000);
-	return data;
-}
 
-void I2C_Write(uint16_t address, uint16_t reg, uint8_t data) {
-	data = data & 0x00FF;
-	HAL_I2C_Mem_Write(&hi2c1, address, reg & 0x00FF, 1, &data, 1, 1000);
-}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -132,7 +121,7 @@ int main(void) {
 		count_init(huart2);
 		newlineFinal(huart2);
 	}
-	I2C_Write(LM75_ADDR, LM75_CONFIG_REG, 0x00);
+	LM75_init(hi2c1);
 	uint8_t commands[1];
 	uint8_t TXPacket[32];
 	uint8_t RadioState = IDLE;
@@ -166,19 +155,8 @@ int main(void) {
 			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
 			newline(huart2);
 			BMM150getData(hspi1, huart2, TXPacket);
-			newline(huart2);
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, LM75_TEMP_REG) >> 8 & 0xFF));
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, LM75_TEMP_REG) & 0xFF));
 			space(huart2);
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x01) >> 8 & 0xFF));
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x01) & 0xFF));
-			space(huart2);
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x02) >> 8 & 0xFF));
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x02) & 0xFF));
-			space(huart2);
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x03) >> 8 & 0xFF));
-			print_hex(huart2, (uint8_t) (I2C_Read(LM75_ADDR, 0x03) & 0xFF));
-			space(huart2);
+			getTempLM75(hi2c1, huart2);
 			newline(huart2);
 			TXPacket[0] = 0x54;
 			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
