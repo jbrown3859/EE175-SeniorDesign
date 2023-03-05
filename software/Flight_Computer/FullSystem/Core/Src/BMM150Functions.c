@@ -15,20 +15,20 @@
 char SPI_ReadBMM150(SPI_HandleTypeDef spi, uint8_t address) {
 	char data;
 	address = address | 0x80;
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
 	HAL_SPI_Transmit(&spi, (uint8_t*) &(address), 1, 100);
 	HAL_SPI_Receive(&spi, (uint8_t*) &data, 1, 10);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
 	return data;
 }
 
 void SPI_WriteBMM150(SPI_HandleTypeDef spi, uint8_t address, uint8_t data) {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
 	HAL_SPI_Transmit(&spi, (uint8_t*) &(address), 1, 100);
 	HAL_SPI_Transmit(&spi, (uint8_t*) &(data), 1, 10);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
 }
 
 void BMM150_Normal(SPI_HandleTypeDef spi) {
