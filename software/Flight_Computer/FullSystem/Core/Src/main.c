@@ -26,6 +26,7 @@
 #include <MPU6050Functions.h>
 #include <BMM150Functions.h>
 #include <CameraFunctions.h>
+#include <LM75Functions.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -158,8 +159,11 @@ int main(void) {
 		count_init(huart2);
 		newlineFinal(huart2);
 	}
+
 	BMM150_Normal(hspi1);
 	BMM150_Set(hspi1);
+
+	LM75_init(hi2c1);
 
 	OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
 	while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects)) {
@@ -201,14 +205,17 @@ int main(void) {
 			 */
 			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
 			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
-			newline(huart2);
+			print_string(huart2, "	");
 			BMM150getData(hspi1, huart2, TXPacket);
+			print_string(huart2, "	");
+			getTempLM75(hi2c1, huart2);
 			newline(huart2);
 			TXPacket[0] = 0x54;
 			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
 			TXPacket[2] = (uint8_t) (count >> 16) & 0xFF;
 			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
 			TXPacket[4] = (uint8_t) count & 0xFF;
+			TXPacket[14] = getTempLM75(hi2c1, huart2);
 			send_buffer(huart2, TXPacket, 32);
 			send_buffer(huart2, TXPacket, 32);
 			send_buffer(huart2, TXPacket, 32);
