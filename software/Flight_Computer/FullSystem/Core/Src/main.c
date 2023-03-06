@@ -158,6 +158,8 @@ int main(void) {
 		count_init(huart2);
 		newlineFinal(huart2);
 	}
+	BMM150_Normal(hspi1);
+	BMM150_Set(hspi1);
 
 	OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
 	while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects)) {
@@ -179,73 +181,76 @@ int main(void) {
 	while (1) {
 		/* USER CODE END WHILE */
 		count_init(huart2);
-
-//		switch (RadioState) {
-//		case IDLE:
-//			IDLEMode(huart1, huart2);
-//			RadioState = RX_MODE;
-//			break;
-//		case RX_MODE:
-//			RXMode(huart1, huart2);
-//			while (GetRXNumPackets(huart1, huart2) != 0) {
-//				GetRXBufferState(huart1, huart2);
-//				ReadRXBuffer(huart1, huart2, commands);
-//			}
-//			RadioState = TX_MODE;
-//			break;
-//		case TX_MODE:
-//			TXMode(huart1, huart2);
-//			/*telemetry data
-//			 * WriteTXBuffer
-//			 */
-//			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
-//			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
-//			newline(huart2);
-//			BMM150getData(hspi1, huart2, TXPacket);
-//			newline(huart2);
-//			TXPacket[0] = 0x54;
-//			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
-//			TXPacket[2] = (uint8_t) (count >> 16) & 0xFF;
-//			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
-//			TXPacket[4] = (uint8_t) count & 0xFF;
-//			send_buffer(huart2, TXPacket, 32);
-//			WriteTXBuffer(huart1, huart2, TXPacket, 32);
-//			while (GetTXActiveState(huart1, huart2) == 1) {
-//				print_string(huart2, "TX_ACTIVE");
-//				HAL_Delay(10);
-//			}
-//			RadioState = RX_MODE;
-//			break;
-//		default:
-//			RadioState = IDLE;
-//		}
-		newline(huart2);
-		start_capture(hspi1, huart2);
-		while (!capture_ready(hspi1)) {
-			HAL_Delay(100);
-			print_string(huart2, "Capture is not ready...delaying...");
+		switch (RadioState) {
+		case IDLE:
+			IDLEMode(huart1, huart2);
+			RadioState = RX_MODE;
+			break;
+		case RX_MODE:
+			RXMode(huart1, huart2);
+			while (GetRXNumPackets(huart1, huart2) != 0) {
+				GetRXBufferState(huart1, huart2);
+				ReadRXBuffer(huart1, huart2, commands);
+			}
+			RadioState = TX_MODE;
+			break;
+		case TX_MODE:
+			TXMode(huart1, huart2);
+			/*telemetry data
+			 * WriteTXBuffer
+			 */
+			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
+			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
 			newline(huart2);
+			BMM150getData(hspi1, huart2, TXPacket);
+			newline(huart2);
+			TXPacket[0] = 0x54;
+			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
+			TXPacket[2] = (uint8_t) (count >> 16) & 0xFF;
+			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
+			TXPacket[4] = (uint8_t) count & 0xFF;
+			send_buffer(huart2, TXPacket, 32);
+			send_buffer(huart2, TXPacket, 32);
+			send_buffer(huart2, TXPacket, 32);
+			WriteTXBuffer(huart1, huart2, TXPacket, 32);
+			while (GetTXActiveState(huart1, huart2) == 1) {
+				print_string(huart2, "TX_ACTIVE");
+				HAL_Delay(10);
+			}
+			//RadioState = RX_MODE;
+			RadioState = TX_MODE;
+			break;
+		default:
+			RadioState = IDLE;
 		}
-		print_string(huart2, "Capture ready");
-		newline(huart2);
 
-		uint8_t *buffer;
-		uint32_t length;
-
-		print_string(huart2, "Preparing to capture... ");
-		if (read_image_to_buffer(hi2c1, hspi1, huart2, format, &buffer,
-				&length)) {
-			print_string(huart2, "\r\nlength: ");
-			print_decimal(huart2, length, 8);
-			print_string(huart2, "\r\nImage read to buffer! ");
-			print_string(huart2, "Writing image to file...\r\n");
-			//send_buffer(buffer, length);
-			print_string(huart2, "\r\nImage read to file");
-		} else {
-			print_string(huart2, "Failed to read image");
-		}
-
-		newline(huart2);
+//				newline(huart2);
+//				start_capture(hspi1, huart2);
+//				while (!capture_ready(hspi1)) {
+//					HAL_Delay(100);
+//					print_string(huart2, "Capture is not ready...delaying...");
+//					newline(huart2);
+//				}
+//				print_string(huart2, "Capture ready");
+//				newline(huart2);
+//
+//				uint8_t *buffer;
+//				uint32_t length;
+//
+//				print_string(huart2, "Preparing to capture... ");
+//				if (read_image_to_buffer(hi2c1, hspi1, huart2, format, &buffer,
+//						&length)) {
+//					print_string(huart2, "\r\nlength: ");
+//					print_decimal(huart2, length, 8);
+//					print_string(huart2, "\r\nImage read to buffer! ");
+//					print_string(huart2, "Writing image to file...\r\n");
+//					//send_buffer(buffer, length);
+//					print_string(huart2, "\r\nImage read to file");
+//				} else {
+//					print_string(huart2, "Failed to read image");
+//				}
+//
+//				newline(huart2);
 
 		newlineFinal(huart2);
 		/* USER CODE BEGIN 3 */

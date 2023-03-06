@@ -47,9 +47,18 @@ void BMM150_Set(SPI_HandleTypeDef spi) {
 }
 
 void BMM150getData(SPI_HandleTypeDef spi, UART_HandleTypeDef uart, uint8_t *buf) {
-	char x_mag = SPI_ReadBMM150(spi, 0x43);
-	char y_mag = SPI_ReadBMM150(spi, 0x45);
-	char z_mag = SPI_ReadBMM150(spi, 0x47);
+	int16_t x_mag = ((uint16_t) SPI_ReadBMM150(spi, 0x43) << 8)
+			| (uint16_t)SPI_ReadBMM150(spi, 0x42);
+	x_mag *= 16;
+	x_mag = (char) (x_mag >> 8 & 0xFF);
+	int16_t y_mag = ((uint16_t) SPI_ReadBMM150(spi, 0x45) << 8)
+			| (uint16_t)SPI_ReadBMM150(spi, 0x44);
+	y_mag *= 16;
+	y_mag = (char) (y_mag >> 8 & 0xFF);
+	int16_t z_mag = ((uint16_t) SPI_ReadBMM150(spi, 0x47) << 8)
+			| (uint16_t)SPI_ReadBMM150(spi, 0x46);
+	z_mag *= 16;
+	z_mag = (char) (z_mag >> 8 & 0xFF);
 
 	buf[11] = x_mag;
 	print_string(uart, "Magnetometer x: ");
