@@ -98,7 +98,7 @@ class MainWindow():
         self.mag_z, = self.mag_ax.plot(self.t, self.m_z, label='z mag')
         self.mag_ax.legend()
 
-        self.temp_ax.set_ylim(0,255)
+        self.temp_ax.set_ylim(-128,128)
         self.temp_val, = self.temp_ax.plot(self.t,self.t_v, label='board temp')
         self.temp_ax.legend()
 
@@ -415,7 +415,7 @@ class MainWindow():
                     self.mag_y.set_data(self.t, self.m_y)
                     self.mag_z.set_data(self.t, self.m_z)
 
-                    self.t_v.append(packet['Temperature'][0])
+                    self.t_v.append(packet['Temperature'])
                     self.temp_val.set_data(self.t, self.t_v)
         except (ValueError):
 
@@ -669,6 +669,12 @@ class MainWindow():
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 packet_data['Temperature'] = packet[15]
                                 self.telem_queue.put(packet_data)
+                                
+                                with open('telemetry_log.txt', 'a') as f:
+                                    f.write('{:.2f}'.format(time.time()))
+                                    f.write(': ')
+                                    f.write(json.dumps(packet_data))
+                                    f.write('\n')
 
                         else:
                             self.write_console("S-Band received uncategorized packets: {}".format(packets))
@@ -701,6 +707,9 @@ class MainWindow():
                                 packet_data['Magnetic Field'] = packet[11:14]
                                 packet_data['Temperature'] = packet[15]
                                 self.telem_queue.put(packet_data)
+                                
+                                with open('telemetry_log.txt', 'a') as f:
+                                    f.write(json.dumps(packet_data))
 
                         else:
                             self.write_console("UHF received uncategorized packets: {}".format(packets))
