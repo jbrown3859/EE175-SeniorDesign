@@ -165,15 +165,15 @@ int main(void) {
 
 	LM75_init(hi2c1);
 
-	OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
-	while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects)) {
-		print_string(huart2, "OV2640 not initialized");
-		newline(huart2);
-		HAL_Delay(1000);
-	}
-	print_string(huart2, "OV2640 initialized");
-	newline(huart2);
-	Read_SPI_Regs(hspi1, huart2, 0x00, 0x48);
+//	OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
+//	while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects)) {
+//		print_string(huart2, "OV2640 not initialized");
+//		newline(huart2);
+//		HAL_Delay(1000);
+//	}
+//	print_string(huart2, "OV2640 initialized");
+//	newline(huart2);
+	//Read_SPI_Regs(hspi1, huart2, 0x00, 0x48);
 
 	uint8_t commands[1];
 	uint8_t TXPacket[32];
@@ -231,35 +231,74 @@ int main(void) {
 			RadioState = IDLE;
 		}
 
-//				newline(huart2);
-//				start_capture(hspi1, huart2);
-//				while (!capture_ready(hspi1)) {
-//					HAL_Delay(100);
-//					print_string(huart2, "Capture is not ready...delaying...");
-//					newline(huart2);
-//				}
-//				print_string(huart2, "Capture ready");
-//				newline(huart2);
+//		newline(huart2);
+//		start_capture(hspi1, huart2);
+//		while (!capture_ready(hspi1)) {
+//			HAL_Delay(100);
+//			print_string(huart2, "Capture is not ready...delaying...");
+//			newline(huart2);
+//		}
+//		print_string(huart2, "Capture ready");
+//		newline(huart2);
 //
-//				uint8_t *buffer;
-//				uint32_t length;
+//		uint32_t length;
 //
-//				print_string(huart2, "Preparing to capture... ");
-//				if (read_image_to_buffer(hi2c1, hspi1, huart2, format, &buffer,
-//						&length)) {
-//					print_string(huart2, "\r\nlength: ");
-//					print_decimal(huart2, length, 8);
-//					print_string(huart2, "\r\nImage read to buffer! ");
-//					print_string(huart2, "Writing image to file...\r\n");
-//					//send_buffer(buffer, length);
-//					print_string(huart2, "\r\nImage read to file");
-//				} else {
-//					print_string(huart2, "Failed to read image");
-//				}
+//		print_string(huart2, "Preparing to capture... ");
+//		if (read_image_to_buffer(hi2c1, hspi1, huart2, format)) {
+////					print_string(huart2, "\r\nlength: ");
+////					print_decimal(huart2, length, 8);
+//			print_string(huart2, "\r\nImage read to buffer! ");
+//			print_string(huart2, "Writing image to file...\r\n");
+//			//send_buffer(buffer, length);
+//			print_string(huart2, "\r\nImage read to file");
+//		} else {
+//			print_string(huart2, "Failed to read image");
+//		}
 //
-//				newline(huart2);
+//		newline(huart2);
+//
+//		newlineFinal(huart2);
+		TXMode(huart1, huart2);
 
-		newlineFinal(huart2);
+		newline(huart2);
+		OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
+		while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode,
+				effects)) {
+			print_string(huart2, "OV2640 not initialized");
+			newline(huart2);
+			HAL_Delay(1000);
+		}
+		print_string(huart2, "OV2640 initialized");
+		newline(huart2);
+
+		start_capture(hspi1, huart2);
+		while (!capture_ready(hspi1)) {
+			HAL_Delay(100);
+			print_string(huart2, "Capture is not ready...delaying...");
+			newline(huart2);
+		}
+		print_string(huart2, "Capture ready");
+		newline(huart2);
+		uint32_t length = read_fifo_length(hspi1);
+		uint8_t img_buf[32];
+		uint8_t img_packet[18];
+		uint16_t img_index = 0;
+		while (length >= 32) {
+			get_FIFO_bytes(hspi1, img_buf, 32);
+			//send_buffer(huart2, img_buf, 32);
+			make_img_packet(img_buf, img_packet, img_index);
+			WriteTXBuffer(huart1, huart2, img_packet, 18);
+			while (GetTXActiveState(huart1, huart2) == 1) {
+				print_decimal(huart2, length, 6);
+				print_string(huart2, "	TX_ACTIVE");
+				newline(huart2);
+				HAL_Delay(10);
+			}
+			img_index++;
+			length -= 32;
+		}
+		reset_camera(hi2c1, hspi1, format);
+
 		/* USER CODE BEGIN 3 */
 	}
 	/* USER CODE END 3 */
