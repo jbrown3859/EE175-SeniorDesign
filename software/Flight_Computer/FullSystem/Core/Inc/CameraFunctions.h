@@ -8,6 +8,14 @@
 #ifndef INC_CAMERAFUNCTIONS_H_
 #define INC_CAMERAFUNCTIONS_H_
 
+static const uint8_t CLPD_reg;
+static const uint8_t test_reg;
+static const uint8_t Sensor_interface_timing_reg;
+static const uint16_t Sensor_addr_write;
+static const uint16_t Sensor_addr_read;
+static const uint16_t OV2640_CHIPID_HIGH;
+static const uint16_t OV2640_CHIPID_LOW;
+
 struct sensor_reg {
 	uint16_t reg;
 	uint16_t val;
@@ -53,5 +61,8 @@ int OV2640_init(I2C_HandleTypeDef i2c, SPI_HandleTypeDef spi, uint8_t format, ui
 void start_capture(SPI_HandleTypeDef spi, UART_HandleTypeDef uart);
 int capture_ready(SPI_HandleTypeDef spi);
 uint32_t read_fifo_length(SPI_HandleTypeDef spi);
-int read_image_to_buffer(I2C_HandleTypeDef i2c, SPI_HandleTypeDef spi, UART_HandleTypeDef uart, uint8_t format, uint8_t **buffer, uint32_t *buffer_length);
+void reset_camera(I2C_HandleTypeDef i2c, SPI_HandleTypeDef spi, uint8_t format);
+int read_image_to_buffer(I2C_HandleTypeDef i2c, SPI_HandleTypeDef spi, UART_HandleTypeDef uart, uint8_t format);
+void get_FIFO_bytes(SPI_HandleTypeDef spi, uint8_t *buf, uint8_t length);
+void make_img_packet(uint8_t *img_buf, uint8_t *packet_buf, uint16_t index);
 #endif /* INC_CAMERAFUNCTIONS_H_ */
