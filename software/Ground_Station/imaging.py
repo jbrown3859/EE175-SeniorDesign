@@ -33,3 +33,15 @@ def GRB422toBGR(image, width, height):
             converted_image[j][i][2] = ((image[j][i] & 0x0C) << 4) #R
             
     return converted_image
+    
+def redtoBGR(image, width, height):
+    converted_image = np.zeros((height, width, 3), dtype='uint8')
+    image = image.astype(int)
+    
+    for i in range(0, width):
+        for j in range(0, height):
+            converted_image[j][i][0] = image[j][i]
+            converted_image[j][i][1] = image[j][i]
+            converted_image[j][i][2] = image[j][i]
+            
+    return converted_image
