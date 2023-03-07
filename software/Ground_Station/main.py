@@ -98,10 +98,9 @@ class MainWindow():
         self.mag_z, = self.mag_ax.plot(self.t, self.m_z, label='z mag')
         self.mag_ax.legend()
 
-        self.temp_ax.set_ylim(-128,128)
+        self.temp_ax.set_ylim(0,40)
         self.temp_val, = self.temp_ax.plot(self.t,self.t_v, label='board temp')
         self.temp_ax.legend()
-
 
 
         '''
@@ -318,9 +317,9 @@ class MainWindow():
                 for i in range(0,16):
                     self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
             except IndexError as e:
-                print("Error decoding image packet: " + str(packet))
+                self.write_console("Error decoding image packet: " + str(packet))
 
-        frame = imaging.GRB422toBGR(self.frame, res[0], res[1])
+        frame = imaging.redtoBGR(self.frame, res[0], res[1])
         frame = cv.resize(frame, (self.width, self.height))
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
@@ -345,7 +344,6 @@ class MainWindow():
                 print(len(self.t))
                 print(len(self.a_x))
                 '''
-                #print(packet)
                 if (len(self.a_x) >= 100):
                     self.a_x.pop(0)
                     self.a_y.pop(0)
@@ -362,8 +360,6 @@ class MainWindow():
                     self.t_v.pop(0)
 
                     self.t.pop(0)
-
-
 
                 if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1] and packet['Timestamp'] != 0): #clear if causality is violated
 
@@ -383,8 +379,6 @@ class MainWindow():
 
                     self.t.clear()
 
-
-
                 if (packet['Timestamp'] not in self.t and packet['Acceleration']): #discard packets with no data in them
 
                     self.t.append(packet['Timestamp'])
@@ -393,6 +387,7 @@ class MainWindow():
                     self.mag_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
                     self.accel_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
                     self.gyro_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
+                    self.temp_ax.set_xlim(self.telemetry_packets[0]['Timestamp'], packet['Timestamp'])
 
                     self.a_x.append(to_signed(packet['Acceleration'][0]))
                     self.a_y.append(to_signed(packet['Acceleration'][1]))
@@ -415,7 +410,7 @@ class MainWindow():
                     self.mag_y.set_data(self.t, self.m_y)
                     self.mag_z.set_data(self.t, self.m_z)
 
-                    self.t_v.append(packet['Temperature'])
+                    self.t_v.append(to_signed(packet['Temperature']))
                     self.temp_val.set_data(self.t, self.t_v)
         except (ValueError):
 
@@ -667,7 +662,7 @@ class MainWindow():
                                 packet_data['Acceleration'] = packet[5:8] #x,y,z
                                 packet_data['Angular Rate'] = packet[8:11]
                                 packet_data['Magnetic Field'] = packet[11:14]
-                                packet_data['Temperature'] = packet[15]
+                                packet_data['Temperature'] = (int(packet[14]) / 2)
                                 self.telem_queue.put(packet_data)
                                 
                                 with open('telemetry_log.txt', 'a') as f:
@@ -705,7 +700,7 @@ class MainWindow():
                                 packet_data['Acceleration'] = packet[5:8] #x,y,z
                                 packet_data['Angular Rate'] = packet[8:11]
                                 packet_data['Magnetic Field'] = packet[11:14]
-                                packet_data['Temperature'] = packet[15]
+                                packet_data['Temperature'] = packet[14]
                                 self.telem_queue.put(packet_data)
                                 
                                 with open('telemetry_log.txt', 'a') as f:
