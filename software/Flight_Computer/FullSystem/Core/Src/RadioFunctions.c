@@ -296,13 +296,13 @@ void ReadTXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal)
 	send_buffer(uartTerminal, Rx_data, size);
 }
 
-void ReadRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal, uint8_t *buffer) {
+void ReadRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal, uint8_t *buffer, uint8_t length) {
 	uint8_t data = 0x63;
 	HAL_UART_Transmit(&uartRadio, &data, 1, 100);
-
-	uint8_t Rx_data[100];
-	memset(Rx_data, 0, sizeof(Rx_data));
-	HAL_UART_Receive(&uartRadio, Rx_data, 100, 1000);
+//
+//	uint8_t Rx_data[100];
+//	memset(Rx_data, 0, sizeof(Rx_data));
+	HAL_UART_Receive(&uartRadio, buffer, length, 1000);
 //	Rx_data[MAX_RX_SIZE] = '\0'; // add null terminator to received data
 //
 //	// Determine actual size of received data
@@ -317,8 +317,8 @@ void ReadRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal,
 
 	print_string(uartTerminal, "RX First Packet: ");
 	newline(uartTerminal);
-	send_buffer(uartTerminal, Rx_data, GetRXNextPacketSize(uartRadio, uartTerminal));
-	buffer = Rx_data;
+	send_buffer(uartTerminal, buffer, length);
+	//buffer = Rx_data;
 }
 
 void IDLEMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
@@ -373,4 +373,19 @@ void TXMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
 	}
 	print_string(uartTerminal, "TX mode activated");
 	newline(uartTerminal);
+}
+
+char compare_buffer(UART_HandleTypeDef uartTerminal, const uint8_t *a_buf, const uint8_t *b_buf, uint8_t length){
+	for(int i = 0; i < length; i++){
+		print_string(uartTerminal, "Comparing recieve cmd: ");
+		newline(uartTerminal);
+		print_hex(uartTerminal, a_buf[i]);
+		newline(uartTerminal);
+		print_hex(uartTerminal, b_buf[i]);
+		newline(uartTerminal);
+		if(a_buf[i] != b_buf[i]){
+			return 0;
+		}
+	}
+	return 1;
 }

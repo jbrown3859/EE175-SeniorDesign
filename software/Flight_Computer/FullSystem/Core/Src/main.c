@@ -43,6 +43,7 @@
 #define	IDLE	0
 #define	RX_MODE	1
 #define	TX_MODE	2
+#define	START	3
 
 #define BMP 	0
 #define JPEG	1
@@ -175,8 +176,10 @@ int main(void) {
 //	newline(huart2);
 	//Read_SPI_Regs(hspi1, huart2, 0x00, 0x48);
 
-	uint8_t commands[1];
+	uint8_t commands[16];
+	const uint8_t img_cmd[4] = {0x20, 0x01, 0x01, 0x02};
 	uint8_t TXPacket[32];
+	int cmd_recieved = 0;
 	uint8_t RadioState = IDLE;
 	/* USER CODE END 2 */
 
@@ -184,22 +187,49 @@ int main(void) {
 	/* USER CODE BEGIN WHILE */
 	while (1) {
 		/* USER CODE END WHILE */
-		count_init(huart2);
-		switch (RadioState) {
-		case IDLE:
+		//count_init(huart2);
+
+		switch (RadioState){
+		case START:
+			RadioState = IDLE;
 			IDLEMode(huart1, huart2);
+		case IDLE:
 			RadioState = RX_MODE;
+			FlushRXBuffer(huart1, huart2);
+			RXMode(huart1, huart2);
 			break;
 		case RX_MODE:
-			RXMode(huart1, huart2);
-			while (GetRXNumPackets(huart1, huart2) != 0) {
-				GetRXBufferState(huart1, huart2);
-				ReadRXBuffer(huart1, huart2, commands);
+			if (cmd_recieved == 1){
+				RadioState = TX_MODE;
+				TXMode(huart1, huart2);
+				cmd_recieved = 0;
 			}
-			RadioState = TX_MODE;
 			break;
 		case TX_MODE:
-			TXMode(huart1, huart2);
+			RadioState = RX_MODE;
+			FlushRXBuffer(huart1, huart2);
+			RXMode(huart1, huart2);
+			break;
+		}
+
+		switch (RadioState) {
+		case IDLE:
+			break;
+		case RX_MODE:
+			while (GetRXNumPackets(huart1, huart2) != 0) {
+				GetRXBufferState(huart1, huart2);
+				ReadRXBuffer(huart1, huart2, commands, 16);
+				if(compare_buffer(huart2, commands, img_cmd, 4) == 1){
+					print_string(huart2, "Image command recieved.");
+					newline(huart2);
+					cmd_recieved = 1;
+					break;
+				}
+				send_buffer(huart2, commands, 16);
+			}
+			//RadioState = RX_MODE;
+			break;
+		case TX_MODE:
 			/*telemetry data
 			 * WriteTXBuffer
 			 */
@@ -224,8 +254,58 @@ int main(void) {
 				print_string(huart2, "TX_ACTIVE");
 				HAL_Delay(10);
 			}
-			//RadioState = RX_MODE;
-			RadioState = TX_MODE;
+
+
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			newline(huart2);
+			OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
+			while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode,
+					effects)) {
+				print_string(huart2, "OV2640 not initialized");
+				newline(huart2);
+				HAL_Delay(1000);
+			}
+			print_string(huart2, "OV2640 initialized");
+			newline(huart2);
+
+			start_capture(hspi1, huart2);
+			while (!capture_ready(hspi1)) {
+				HAL_Delay(100);
+				print_string(huart2, "Capture is not ready...delaying...");
+				newline(huart2);
+			}
+			print_string(huart2, "Capture ready");
+			newline(huart2);
+			uint32_t length = read_fifo_length(hspi1);
+			uint8_t img_buf[32];
+			uint8_t img_packet[18];
+			uint16_t img_index = 0;
+			while (length >= 32 && img_index <= 1200) {
+				get_FIFO_bytes(hspi1, img_buf, 32);
+				//send_buffer(huart2, img_buf, 32);
+				make_img_packet(img_buf, img_packet, img_index);
+				WriteTXBuffer(huart1, huart2, img_packet, 18);
+				WriteTXBuffer(huart1, huart2, img_packet, 18);	//second send for better quality
+				if(img_index == 0){
+					for(int i = 0; i < 10; i++){
+						WriteTXBuffer(huart1, huart2, img_packet, 18);
+					}
+				}
+				while (GetTXActiveState(huart1, huart2) == 1) {
+					print_decimal(huart2, length, 6);
+					print_string(huart2, "	TX_ACTIVE");
+					newline(huart2);
+					HAL_Delay(10);
+				}
+				img_index++;
+				length -= 32;
+//				if(img_index % 30 == 0){
+//					HAL_Delay(500);
+//				}
+				//HAL_Delay(10);
+			}
+			reset_camera(hi2c1, hspi1, format);
+//			RadioState = TX_MODE;
 			break;
 		default:
 			RadioState = IDLE;
@@ -257,47 +337,7 @@ int main(void) {
 //
 //		newline(huart2);
 //
-//		newlineFinal(huart2);
-		TXMode(huart1, huart2);
-
-		newline(huart2);
-		OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
-		while (!OV2640_init(hi2c1, hspi1, format, resolution, light_mode,
-				effects)) {
-			print_string(huart2, "OV2640 not initialized");
-			newline(huart2);
-			HAL_Delay(1000);
-		}
-		print_string(huart2, "OV2640 initialized");
-		newline(huart2);
-
-		start_capture(hspi1, huart2);
-		while (!capture_ready(hspi1)) {
-			HAL_Delay(100);
-			print_string(huart2, "Capture is not ready...delaying...");
-			newline(huart2);
-		}
-		print_string(huart2, "Capture ready");
-		newline(huart2);
-		uint32_t length = read_fifo_length(hspi1);
-		uint8_t img_buf[32];
-		uint8_t img_packet[18];
-		uint16_t img_index = 0;
-		while (length >= 32) {
-			get_FIFO_bytes(hspi1, img_buf, 32);
-			//send_buffer(huart2, img_buf, 32);
-			make_img_packet(img_buf, img_packet, img_index);
-			WriteTXBuffer(huart1, huart2, img_packet, 18);
-			while (GetTXActiveState(huart1, huart2) == 1) {
-				print_decimal(huart2, length, 6);
-				print_string(huart2, "	TX_ACTIVE");
-				newline(huart2);
-				HAL_Delay(10);
-			}
-			img_index++;
-			length -= 32;
-		}
-		reset_camera(hi2c1, hspi1, format);
+		//newlineFinal(huart2);
 
 		/* USER CODE BEGIN 3 */
 	}

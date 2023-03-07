@@ -20,11 +20,11 @@ char GetRXNextPacketSize(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTe
 void FlushTXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
 void FlushRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
 void ReadTXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
-void ReadRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal, uint8_t *buffer);
+void ReadRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal, uint8_t *buffer, uint8_t length);
 void IDLEMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
 void RXMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
 void TXMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal);
-
+char compare_buffer(UART_HandleTypeDef uartTerminal, const uint8_t *a_buf, const uint8_t *b_buf, uint8_t length);
 
 
 
