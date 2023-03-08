@@ -9,6 +9,8 @@ import json
 import math
 
 import tkinter as tk
+from tkinter import ttk
+
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.backend_bases import key_press_handler
@@ -39,6 +41,8 @@ class MainWindow():
         self.height = res[1]*4
         self.widgets = {}
         self.frame = np.zeros((120, 160), dtype='uint8') #image frame
+        frame = Image.fromarray(self.frame) # to PIL format
+        self.image = ImageTk.PhotoImage(frame)
 
         '''
         Radio Serial Port Instances
@@ -81,7 +85,7 @@ class MainWindow():
 
         self.accel_ax.legend()
         self.accel_canvas = FigureCanvasTkAgg(self.ag_plot, self.window)
-        self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=2, rowspan=2)
+        self.accel_canvas.get_tk_widget().grid(column=3,row=1,columnspan=4, rowspan=2)
         self.accel_animation = animation.FuncAnimation(self.ag_plot, self.animate_plot, interval=250, blit=False)
 
         #self.gyro_ax.set_xlim(0, 100)
@@ -113,7 +117,7 @@ class MainWindow():
         self.widgets['canvas'].grid(row=1, column=0, rowspan=2, columnspan=2, sticky='NSEW')
 
         self.widgets['telem_title'] = tk.Label(self.window, text="Spacecraft Telemetry", font=("Arial", 25))
-        self.widgets['telem_title'].grid(row=0,column=3, columnspan=2,sticky='NSEW')
+        self.widgets['telem_title'].grid(row=0,column=3, columnspan=4,sticky='NSEW')
 
         '''
         Radio Status
@@ -274,8 +278,27 @@ class MainWindow():
         '''
         Console
         '''
-        self.widgets['console'] = tk.Text(window,height=10,width=105,wrap=tk.WORD)
-        self.widgets['console'].grid(row=5,column=3,columnspan=4,rowspan=2,pady=10)
+        self.widgets['console'] = tk.Text(window,height=5,width=105,wrap=tk.WORD)
+        self.widgets['console'].grid(row=5,column=3,columnspan=4,rowspan=1,pady=10)
+        
+        '''
+        Misc. Buttons
+        '''
+        self.widgets['save_image'] = tk.Button(window, text = "Save Image", command = self.save_image,
+                                                    width = 20, height = 2, bg='#c5e6e1')
+        self.widgets['save_image'].grid(row=6,column=3)
+        
+        self.widgets['reset_sband'] = tk.Button(window, text = "Reset S-Band", command = self.reset_sband,
+                                                    width = 20, height = 2, bg='#c5e6e1')
+        self.widgets['reset_sband'].grid(row=6,column=4)
+        
+        self.widgets['reset_uhf'] = tk.Button(window, text = "Reset UHF", command = self.reset_uhf,
+                                                    width = 20, height = 2, bg='#c5e6e1')
+        self.widgets['reset_uhf'].grid(row=6,column=5)
+        
+        self.widgets['clear_plots'] = tk.Button(window, text = "Clear Plots", command = self.clear_plots,
+                                                    width = 20, height = 2, bg='#c5e6e1')
+        self.widgets['clear_plots'].grid(row=6,column=6)
 
         '''
         Serial Threading
@@ -413,7 +436,6 @@ class MainWindow():
                     self.t_v.append(to_signed(packet['Temperature']))
                     self.temp_val.set_data(self.t, self.t_v)
         except (ValueError):
-
             pass
 
     def update_command(self):
@@ -563,13 +585,123 @@ class MainWindow():
 
         self.window.after(1000, self.update_radio_status)
 
-
     def program_sband(self):
         print("Programming S-Band beep boop")
 
     def program_uhf(self):
         print("Programming UHF beep boop")
+        
+    def save_image(self):
+        file_dialog = tk.Toplevel(self.window)
+        imgname = tk.StringVar()
+        
+        def save():
+            filename = 'images/{}.png'.format(imgname.get())
+            cv.imwrite(filename, self.frame) #TODO: set this so you can select the file name
+            self.write_console("Saved image to {}".format(filename))
+            file_dialog.destroy()
+    
+        file_dialog.geometry('250x100')
+        file_dialog.title('Save Image')
+        
+        file_dialog.grid_rowconfigure(0, weight=1)
+        file_dialog.grid_columnconfigure(0, weight=1)
+        
+        savelabel = tk.Label(file_dialog, text="Filename:", font=("Arial", 12))
+        savelabel.grid(row=0,column=0,padx=5,pady=0)
+        savetext = tk.Entry(file_dialog, textvariable=imgname, width = 30)
+        savetext.grid(row=1,column=0,padx=5,pady=5)
+        savetext.grid_rowconfigure(1, weight=1)
+        savebutton = tk.Button(file_dialog,text = "Save", command=save, width = 20, height = 1, bg='#c5e6e1')
+        savebutton.grid(row=2,column=0,padx=5,pady=5)
+        savebutton.grid_rowconfigure(1, weight=1)
+        
+    def reset_sband(self):
+        print("Resetting S-Band beep boop")
+        
+    def reset_uhf(self):
+        print("Resetting UHF beep boop")
+        
+    def clear_plots(self):
+        print("Clearing plots beep boop")
 
+    '''
+    ground station interface functions
+    '''
+    def get_radio_packets(self, radio):
+        status = radio.get_rx_buffer_state()
+
+        if (status[1] != 0): #if packet
+            if ((status[0] & 0x03) != 0):
+                self.write_console("Warning: {} buffer overflowed!".format(radio.type))
+        
+            packets = radio.burst_read(status[4], status[1])
+
+            if (status[4] == 18): #if image packet
+                for i in range(0, math.floor(len(packets)/18)):
+                    packet = packets[(18*i):(18*(i+1))]
+                    self.img_queue.put(packet)
+            elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
+                for i in range(0, status[1]):
+                    packet = list(packets[(32*i):(32*(i+1))])
+
+                    packet_data = {}
+                    packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
+                    packet_data['Acceleration'] = packet[5:8] #x,y,z
+                    packet_data['Angular Rate'] = packet[8:11]
+                    packet_data['Magnetic Field'] = packet[11:14]
+                    packet_data['Temperature'] = (int(packet[14]) / 2)
+                    self.telem_queue.put(packet_data)
+                    
+                    with open('telemetry_log.txt', 'a') as f:
+                        f.write('{:.2f}'.format(time.time()))
+                        f.write(': ')
+                        f.write(json.dumps(packet_data))
+                        f.write('\n')
+            else:
+                self.write_console("{} received uncategorized packets: {}".format(radio.type, packets))
+                
+            return len(packets)
+        else:
+            return 0
+            
+    def transmit_packets(self, radio, radio_queue):
+        if not radio_queue.empty():
+            if radio.port.is_open:
+                while not radio_queue.empty(): #fill buffer
+                    command = radio_queue.get()
+                    for i in range(0, 3): #repeat command (maybe remove later)
+                        radio.write_tx_buffer(command)
+
+                self.write_console("{} Entering Transmit Mode".format(radio.type))
+                status = 1
+                while status != 0x80:
+                    status = int.from_bytes(radio.radio_tx_mode(), "big")
+                    print(status)
+
+                tx_packets = 255
+                radio_state = 0xF0
+                while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
+                    try:
+                        state = radio.get_tx_buffer_state()
+                        tx_packets = state[1]
+                        radio_state = state[0]
+                        if (radio_state != 0xC0):
+                            radio.radio_tx_mode()
+                    except IndexError:
+                        tx_packets = 255
+                    print("TX packets: {}".format(tx_packets))
+
+                while status != 0x40:
+                    status = int.from_bytes(radio.radio_rx_mode(), "big")
+                    print(status)
+
+                self.write_console("{} Transmission Complete".format(radio.type))
+            else:
+                self.write_console("Error: radio is not connected, flushing command queue")
+                while not radio_queue.empty():
+                    radio_queue.get() #get until queue is empty
+        
 
     def serial_thread(self):
         radio_status = {}
@@ -640,150 +772,22 @@ class MainWindow():
             #get packets
             try:
                 if self.SBand.port.is_open:
-                    status = self.SBand.get_rx_buffer_state()
-
-                    if (status[0] & 0x03) != 0:
-                        self.write_console("Warning: S-Band RX buffer overflowed!")
-
-                    if status[1] != 0: #if packet
+                    if (self.get_radio_packets(self.SBand) > 0): #get radio packets
                         radio_status['SBand_last_packet'] = time.time()
-                        packets = self.SBand.burst_read(status[4], status[1])
-
-                        if (status[4] == 18): #if image packet
-                            for i in range(0, math.floor(len(packets)/18)):
-                                packet = packets[(18*i):(18*(i+1))]
-                                self.img_queue.put(packet)
-                        elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
-                            for i in range(0, status[1]):
-                                packet = list(packets[(32*i):(32*(i+1))])
-
-                                packet_data = {}
-                                packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
-                                packet_data['Acceleration'] = packet[5:8] #x,y,z
-                                packet_data['Angular Rate'] = packet[8:11]
-                                packet_data['Magnetic Field'] = packet[11:14]
-                                packet_data['Temperature'] = (int(packet[14]) / 2)
-                                self.telem_queue.put(packet_data)
-                                
-                                with open('telemetry_log.txt', 'a') as f:
-                                    f.write('{:.2f}'.format(time.time()))
-                                    f.write(': ')
-                                    f.write(json.dumps(packet_data))
-                                    f.write('\n')
-
-                        else:
-                            self.write_console("S-Band received uncategorized packets: {}".format(packets))
-
-
+                        
                 if self.UHF.port.is_open:
-                    status = self.UHF.get_rx_buffer_state()
-
-                    if (status[0] & 0x03) != 0:
-                        self.write_console("Warning: UHF RX buffer overflowed!")
-
-                    if status[1] != 0: #if packet
+                    if (self.get_radio_packets(self.UHF) > 0): #get radio packets
                         radio_status['UHF_last_packet'] = time.time()
-                        packets = self.UHF.burst_read(status[4], status[1])
-
-
-                        if (status[4] == 18): #if image packet
-                            for i in range(0, math.floor(len(packets)/18)):
-                                packet = packets[(18*i):(18*(i+1))]
-                                self.img_queue.put(packet)
-                        elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
-
-                            for i in range(0, status[1]):
-                                packet = list(packets[(32*i):(32*(i+1))])
-
-                                packet_data = {}
-                                packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
-                                packet_data['Acceleration'] = packet[5:8] #x,y,z
-                                packet_data['Angular Rate'] = packet[8:11]
-                                packet_data['Magnetic Field'] = packet[11:14]
-                                packet_data['Temperature'] = packet[14]
-                                self.telem_queue.put(packet_data)
-                                
-                                with open('telemetry_log.txt', 'a') as f:
-                                    f.write(json.dumps(packet_data))
-
-                        else:
-                            self.write_console("UHF received uncategorized packets: {}".format(packets))
-
-
 
             except (serial.serialutil.SerialException, IndexError):
                 pass
 
             #transmit packets
             #S-Band
-            if not self.SBand_command_queue.empty():
-                if self.SBand.port.is_open:
-                    while not self.SBand_command_queue.empty(): #fill buffer
-                        command = self.SBand_command_queue.get()
-                        for i in range(0, 3): #repeat command (maybe remove later)
-                            self.SBand.write_tx_buffer(command)
-
-                    self.write_console("S-Band Entering Transmit Mode")
-                    status = 1
-                    while status != 0x80:
-                        #time.sleep(0.1)
-                        status = int.from_bytes(self.SBand.radio_tx_mode(), "big")
-                        print(status)
-
-                    tx_packets = 255
-                    radio_state = 0xF0
-                    while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
-                        try:
-                            state = self.SBand.get_tx_buffer_state()
-                            tx_packets = state[1]
-                            radio_state = state[0]
-                            if (radio_state != 0xC0):
-                                self.SBand.radio_tx_mode()
-                        except IndexError:
-                            tx_packets = 255
-                        print("TX packets: {}".format(tx_packets))
-
-                    while status != 0x40:
-                        #time.sleep(0.1)
-                        status = int.from_bytes(self.SBand.radio_rx_mode(), "big")
-                        print(status)
-
-                    self.write_console("S-Band Transmission Complete")
-                else:
-                    self.write_console("Error: S-Band radio is not connected, flushing command queue")
-                    with self.SBand_command_queue.mutex:
-                        self.SBand_command_queue.queue.clear()
+            self.transmit_packets(self.SBand, self.SBand_command_queue)
 
             #UHF
-            if not self.UHF_command_queue.empty():
-                while not self.UHF_command_queue.empty(): #fill buffer
-                    command = self.UHF_command_queue.get()
-                    #for i in range(0, 3): #repeat command (maybe remove later)
-                    self.UHF.write_tx_buffer(command)
-
-                self.write_console("UHF Entering Transmit Mode")
-                time.sleep(0.1)
-                status = int.from_bytes(self.UHF.radio_tx_mode(), "big")
-                print(status)
-
-                tx_packets = 255
-                radio_state = 0xF0
-                while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
-                    try:
-                        state = self.UHF.get_tx_buffer_state()
-                        tx_packets = state[1]
-                        radio_state = state[0]
-                        if (radio_state != 0xC0):
-                            self.UHF.radio_tx_mode()
-                    except IndexError:
-                        tx_packets = 255
-                    print("TX packets: {}".format(tx_packets))
-
-                time.sleep(0.1)
-                status = int.from_bytes(self.UHF.radio_rx_mode(), "big")
-                print(status)
-
-                self.write_console("UHF Transmission Complete")
+            self.transmit_packets(self.UHF, self.UHF_command_queue)
 
 
     def close_window(self):

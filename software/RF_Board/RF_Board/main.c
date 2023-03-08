@@ -40,8 +40,7 @@ int main(void) {
     cc2500_set_fifo_thresholds(0x0A);
     //cc2500_set_sync_word(0xBAAD);
     cc2500_set_data_rate(MAN_38400,EXP_38400);
-    //cc2500_set_crc(CRC_ENABLED, CRC_AUTOFLUSH, 0x00);
-    cc2500_set_crc(0x00,0x00,0x00);
+    //cc2500_set_crc(CRC_ENABLED, CRC_AUTOFLUSH, CRC_NO_APPEND);
     //cc2500_write(0x26, 0x11); //value from smartrf studio
     cc2500_set_tx_power(0xFF);
     cc2500_set_rxoff_mode(RXOFF_IDLE);

@@ -6,10 +6,10 @@
 #define RADIOTYPE_SBAND 1
 //#define RADIOTYPE_UHF 1
 
-#define RX_SIZE 1024
-#define RX_PACKETS 128
-#define TX_SIZE 1024
-#define TX_PACKETS 128
+#define RX_SIZE 2048
+#define RX_PACKETS 160
+#define TX_SIZE 256
+#define TX_PACKETS 32
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>

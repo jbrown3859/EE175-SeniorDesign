@@ -4,13 +4,16 @@ import serial.tools.list_ports
 
 import radio
 
-type = int(input("Radio Type (1 = SBand, 2 = UHF, 3 = SBand RX):"))
+type = int(input("Radio Type (1 = SBand, 2 = UHF, 3 = SBand RX, 4 = both set to TX):"))
 
 if (type == 1  or type == 3):
     rad = radio.Radio("SBand", 115200)
 elif (type == 2):
     rad = radio.Radio("UHF", 115200)
-    
+elif (type == 4):
+    rad = radio.Radio("UHF", 115200)
+    sband = radio.Radio("SBand", 115200)
+
 rad.port.timeout = 2#0.2
 rad.port.inter_byte_timeout = 1#0.08
 
@@ -26,6 +29,20 @@ while not rad.port.is_open:
         if rad.port.is_open:
             print("Modem Connection Accepted")
             break
+            
+if (type == 4):
+    while not sband.port.is_open:
+        ports = serial.tools.list_ports.comports()
+        portnames = []
+                    
+        for port, desc, hwid in ports:
+            portnames.append(port)
+
+        for port in portnames:
+            sband.attempt_connection(port)
+            if sband.port.is_open:
+                print("Modem Connection Accepted")
+                break
 
 print(rad.get_radio_info())
 print(rad.get_rx_buffer_state().hex())
@@ -186,4 +203,34 @@ elif (type == 3):
                     print(packets)
         except IndexError:
             print(rx_status)
+            
+elif (type == 4):
+    print("Starting")
+
+    status = 1
+    while status != 0x80:
+        time.sleep(1)
+        status = int.from_bytes(rad.radio_tx_mode(), "big")
+        print(status)
+    
+    print("UHF entered TX mode")
+        
+    status = 1
+    while status != 0x80:
+        time.sleep(1)
+        status = int.from_bytes(sband.radio_tx_mode(), "big")
+        print(status)
+
+    print("SBand entered TX mode")
+    
+    while True:
+        print("Filling UHF TX buffer")
+        for i in range(0,10):
+            rad.write_tx_buffer("WHAT HATH GOD WROUGHT".encode('utf-8'))
+            rad.write_tx_buffer("Hello World!".encode('utf-8'))
+            
+            tx_status = rad.get_tx_buffer_state()
+            print(tx_status.hex())
+    
+    
     
