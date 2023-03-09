@@ -5541,3 +5541,17 @@
 1678232650.80: {"Timestamp": 0, "Acceleration": [1, 64, 255], "Angular Rate": [253, 0, 255], "Magnetic Field": [248, 204, 6], "Temperature": 26.0}
 1678240356.84: {"Timestamp": 1, "Acceleration": [7, 243, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 23.5}
 1678244572.99: {"Timestamp": 1, "Acceleration": [6, 243, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 23.0}
+1678245663.38: {"Timestamp": 1, "Acceleration": [6, 243, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 23.0}
+1678317845.75: 1678320163.68: {"Timestamp": 1, "Acceleration": [6, 243, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.5}
+1678322712.22: {"Timestamp": 1, "Acceleration": [6, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.5}
+1678324373.62: {"Timestamp": 1, "Acceleration": [6, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 23.0}
+1678325188.62: {"Timestamp": 1, "Acceleration": [6, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.5}
+1678327366.48: {"Timestamp": 1, "Acceleration": [7, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678328692.17: {"Timestamp": 1, "Acceleration": [7, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678328757.01: {"Timestamp": 1, "Acceleration": [7, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678328789.45: {"Timestamp": 1, "Acceleration": [6, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678328936.58: {"Timestamp": 1, "Acceleration": [7, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678329148.50: {"Timestamp": 1, "Acceleration": [6, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678329293.20: {"Timestamp": 1, "Acceleration": [7, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678329452.58: {"Timestamp": 1, "Acceleration": [7, 244, 61], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}
+1678329590.05: {"Timestamp": 1, "Acceleration": [6, 244, 60], "Angular Rate": [253, 0, 0], "Magnetic Field": [0, 0, 0], "Temperature": 22.0}

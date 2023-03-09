@@ -289,15 +289,15 @@ class MainWindow():
         self.widgets['save_image'].grid(row=6,column=3)
         
         self.widgets['reset_sband'] = tk.Button(window, text = "Reset S-Band", command = self.reset_sband,
-                                                    width = 20, height = 2, bg='#c5e6e1')
+                                                    width = 20, height = 2, bg='#fa8c8c')
         self.widgets['reset_sband'].grid(row=6,column=4)
         
         self.widgets['reset_uhf'] = tk.Button(window, text = "Reset UHF", command = self.reset_uhf,
-                                                    width = 20, height = 2, bg='#c5e6e1')
+                                                    width = 20, height = 2, bg='#fa8c8c')
         self.widgets['reset_uhf'].grid(row=6,column=5)
         
         self.widgets['clear_plots'] = tk.Button(window, text = "Clear Plots", command = self.clear_plots,
-                                                    width = 20, height = 2, bg='#c5e6e1')
+                                                    width = 20, height = 2, bg='#e0b7eb')
         self.widgets['clear_plots'].grid(row=6,column=6)
 
         '''
@@ -309,6 +309,8 @@ class MainWindow():
 
         self.SBand_command_queue = queue.Queue()
         self.UHF_command_queue = queue.Queue()
+        
+        self.reset_queue = queue.Queue()
 
         self.thread_running = 1
         self.thread = threading.Thread(target=self.serial_thread)
@@ -385,7 +387,6 @@ class MainWindow():
                     self.t.pop(0)
 
                 if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1] and packet['Timestamp'] != 0): #clear if causality is violated
-
                     self.a_x.clear()
                     self.a_y.clear()
                     self.a_z.clear()
@@ -617,34 +618,54 @@ class MainWindow():
         savebutton.grid_rowconfigure(1, weight=1)
         
     def reset_sband(self):
-        print("Resetting S-Band beep boop")
+        self.reset_queue.put('S')
         
     def reset_uhf(self):
-        print("Resetting UHF beep boop")
+        self.reset_queue.put('U')
         
     def clear_plots(self):
-        print("Clearing plots beep boop")
+        self.a_x.clear()
+        self.a_y.clear()
+        self.a_z.clear()
+
+        self.g_x.clear()
+        self.g_y.clear()
+        self.g_z.clear()
+
+        self.m_x.clear()
+        self.m_y.clear()
+        self.m_z.clear()
+
+        self.t_v.clear()
+
+        self.t.clear()
+        
+        self.write_console("Cleared all telemetry plots")
 
     '''
     ground station interface functions
     '''
-    def get_radio_packets(self, radio):
-        status = radio.get_rx_buffer_state()
+    def get_radio_packets(self, rx_radio):
+        status = rx_radio.get_rx_buffer_state()
 
         if (status[1] != 0): #if packet
             if ((status[0] & 0x03) != 0):
-                self.write_console("Warning: {} buffer overflowed!".format(radio.type))
-        
-            packets = radio.burst_read(status[4], status[1])
-
-            if (status[4] == 18): #if image packet
-                for i in range(0, math.floor(len(packets)/18)):
-                    packet = packets[(18*i):(18*(i+1))]
+                self.write_console("Warning: {} buffer overflowed!".format(rx_radio.type))
+            
+            packets = rx_radio.flush_rx()
+            #print("===")
+            #print(packets)
+            packets = radio.get_packets_from_flush(packets)
+            
+            #packets = radio.burst_read(status[4], status[1])
+            
+            for packet in packets:         
+                #print(len(packet))
+                if (len(packet) == 18): #if image packet
                     self.img_queue.put(packet)
-            elif (status[4] == 32 and packets[0] == 0x54): #if telemetry packet
-                for i in range(0, status[1]):
-                    packet = list(packets[(32*i):(32*(i+1))])
-
+                elif (len(packet) == 32 and packet[0] == 0x54): #if telemetry packet
+                    packet = list(packet) #must convert back to list for JSON
+                
                     packet_data = {}
                     packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
                     packet_data['Acceleration'] = packet[5:8] #x,y,z
@@ -658,8 +679,8 @@ class MainWindow():
                         f.write(': ')
                         f.write(json.dumps(packet_data))
                         f.write('\n')
-            else:
-                self.write_console("{} received uncategorized packets: {}".format(radio.type, packets))
+                else:
+                    self.write_console("{} received uncategorized packet: {}".format(rx_radio.type, packet))
                 
             return len(packets)
         else:
@@ -692,6 +713,7 @@ class MainWindow():
                         tx_packets = 255
                     print("TX packets: {}".format(tx_packets))
 
+                status = 1
                 while status != 0x40:
                     status = int.from_bytes(radio.radio_rx_mode(), "big")
                     print(status)
@@ -735,6 +757,22 @@ class MainWindow():
                         self.UHF.attempt_connection(port)
                         if self.UHF.port.is_open:
                             self.write_console("UHF Modem Connection Accepted")
+
+            #reset radios
+            if not self.reset_queue.empty():
+                reset_radio = self.reset_queue.get()
+                if (reset_radio == 'S'):
+                    if self.SBand.port.is_open:
+                        self.SBand.radio_manual_reset()
+                        self.write_console("Reset S-Band radio")
+                    else:
+                        self.write_console("ERROR: S-Band radio is not connected")
+                elif (reset_radio == 'U'):
+                    if self.UHF.port.is_open:
+                        self.UHF.radio_manual_reset()
+                        self.write_console("Reset UHF radio")
+                    else:
+                        self.write_console("ERROR: UHF radio is not connected")
 
             #get radio info
             if self.status_queue.empty():
@@ -788,7 +826,6 @@ class MainWindow():
 
             #UHF
             self.transmit_packets(self.UHF, self.UHF_command_queue)
-
 
     def close_window(self):
         #self.write_console("Closing window")
