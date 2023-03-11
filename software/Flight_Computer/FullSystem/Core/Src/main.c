@@ -177,10 +177,11 @@ int main(void) {
 	//Read_SPI_Regs(hspi1, huart2, 0x00, 0x48);
 
 	uint8_t commands[16];
-	const uint8_t img_cmd[4] = {0x20, 0x01, 0x01, 0x02};
+	const uint8_t img_cmd[4] = { 0x20, 0x01, 0x01, 0x02 };
 	uint8_t TXPacket[32];
 	int cmd_recieved = 0;
-	uint8_t RadioState = IDLE;
+	uint8_t RadioStateSBand = IDLE;
+	uint8_t RadioStateUHF = IDLE;
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -188,38 +189,37 @@ int main(void) {
 	while (1) {
 		/* USER CODE END WHILE */
 		//count_init(huart2);
-
-		switch (RadioState){
+		switch (RadioStateSBand) {
 		case START:
-			RadioState = IDLE;
+			RadioStateSBand = IDLE;
 			IDLEMode(huart1, huart2);
 		case IDLE:
-			RadioState = RX_MODE;
+			RadioStateSBand = RX_MODE;
 			FlushRXBuffer(huart1, huart2);
 			RXMode(huart1, huart2);
 			break;
 		case RX_MODE:
-			if (cmd_recieved == 1){
-				RadioState = TX_MODE;
+			if (cmd_recieved == 1) {
+				RadioStateSBand = TX_MODE;
 				TXMode(huart1, huart2);
 				cmd_recieved = 0;
 			}
 			break;
 		case TX_MODE:
-			RadioState = RX_MODE;
+			RadioStateSBand = RX_MODE;
 			FlushRXBuffer(huart1, huart2);
 			RXMode(huart1, huart2);
 			break;
 		}
 
-		switch (RadioState) {
+		switch (RadioStateSBand) {
 		case IDLE:
 			break;
 		case RX_MODE:
 			while (GetRXNumPackets(huart1, huart2) != 0) {
 				GetRXBufferState(huart1, huart2);
 				ReadRXBuffer(huart1, huart2, commands, 16);
-				if(compare_buffer(huart2, commands, img_cmd, 4) == 1){
+				if (compare_buffer(huart2, commands, img_cmd, 4) == 1) {
 					print_string(huart2, "Image command recieved.");
 					newline(huart2);
 					cmd_recieved = 1;
@@ -227,35 +227,12 @@ int main(void) {
 				}
 				send_buffer(huart2, commands, 16);
 			}
-			//RadioState = RX_MODE;
+			//RadioStateSBand = RX_MODE;
 			break;
 		case TX_MODE:
 			/*telemetry data
 			 * WriteTXBuffer
 			 */
-			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
-			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
-			print_string(huart2, "	");
-			BMM150getData(hspi1, huart2, TXPacket);
-			print_string(huart2, "	");
-			getTempLM75(hi2c1, huart2);
-			newline(huart2);
-			TXPacket[0] = 0x54;
-			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
-			TXPacket[2] = (uint8_t) (count >> 16) & 0xFF;
-			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
-			TXPacket[4] = (uint8_t) count & 0xFF;
-			TXPacket[14] = getTempLM75(hi2c1, huart2);
-			send_buffer(huart2, TXPacket, 32);
-			send_buffer(huart2, TXPacket, 32);
-			send_buffer(huart2, TXPacket, 32);
-			WriteTXBuffer(huart1, huart2, TXPacket, 32);
-			while (GetTXActiveState(huart1, huart2) == 1) {
-				print_string(huart2, "TX_ACTIVE");
-				HAL_Delay(10);
-			}
-
-
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 			newline(huart2);
 			OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
@@ -285,9 +262,9 @@ int main(void) {
 				//send_buffer(huart2, img_buf, 32);
 				make_img_packet(img_buf, img_packet, img_index);
 				WriteTXBuffer(huart1, huart2, img_packet, 18);
-				WriteTXBuffer(huart1, huart2, img_packet, 18);	//second send for better quality
-				if(img_index == 0){
-					for(int i = 0; i < 10; i++){
+				WriteTXBuffer(huart1, huart2, img_packet, 18);//second send for better quality
+				if (img_index == 0) {
+					for (int i = 0; i < 10; i++) {
 						WriteTXBuffer(huart1, huart2, img_packet, 18);
 					}
 				}
@@ -305,10 +282,10 @@ int main(void) {
 				//HAL_Delay(10);
 			}
 			reset_camera(hi2c1, hspi1, format);
-//			RadioState = TX_MODE;
+//			RadioStateSBand = TX_MODE;
 			break;
 		default:
-			RadioState = IDLE;
+			RadioStateSBand = IDLE;
 		}
 
 //		newline(huart2);
@@ -339,7 +316,52 @@ int main(void) {
 //
 		//newlineFinal(huart2);
 
+		switch (RadioStateUHF) {
+		case START:
+			RadioStateUHF = IDLE;
+			IDLEMode(huart3, huart2);
+		case IDLE:
+			RadioStateUHF = TX_MODE;
+			TXMode(huart3, huart2);
+			break;
+		case RX_MODE:
+			break;
+		case TX_MODE:
+			RadioStateUHF = TX_MODE;
+			break;
+		}
+
+		switch (RadioStateUHF) {
+		case START:
+		case IDLE:
+			break;
+		case RX_MODE:
+			break;
+		case TX_MODE:
+			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
+			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
+			print_string(huart2, "	");
+			BMM150getData(hspi1, huart2, TXPacket);
+			print_string(huart2, "	");
+			getTempLM75(hi2c1, huart2);
+			newline(huart2);
+			TXPacket[0] = 0x54;
+			TXPacket[1] = (uint8_t) (count >> 24) & 0xFF;
+			TXPacket[2] = (uint8_t) (count >> 16) & 0xFF;
+			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
+			TXPacket[4] = (uint8_t) count & 0xFF;
+			TXPacket[14] = getTempLM75(hi2c1, huart2);
+			send_buffer(huart2, TXPacket, 32);
+			WriteTXBuffer(huart3, huart2, TXPacket, 32);
+			while (GetTXActiveState(huart1, huart2) == 1) {
+				print_string(huart2, "TX_ACTIVE");
+				HAL_Delay(10);
+			}
+			break;
+		}
+
 		/* USER CODE BEGIN 3 */
+
 	}
 	/* USER CODE END 3 */
 }
