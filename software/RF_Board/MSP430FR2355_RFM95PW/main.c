@@ -109,7 +109,7 @@ int main(void) {
     RX_done = 0;
     TX_done = 0;
 
-    char mode = 2;
+    char mode = 0;
 
     if (((P1IN >> 5) & 0xb1) == 0) { //TX mode
         rfm95w_set_DIO_mode(DIO0_TXDONE); //set DIO

@@ -624,21 +624,7 @@ class MainWindow():
         self.reset_queue.put('U')
         
     def clear_plots(self):
-        self.a_x.clear()
-        self.a_y.clear()
-        self.a_z.clear()
-
-        self.g_x.clear()
-        self.g_y.clear()
-        self.g_z.clear()
-
-        self.m_x.clear()
-        self.m_y.clear()
-        self.m_z.clear()
-
-        self.t_v.clear()
-
-        self.t.clear()
+        self.telemetry_packets.clear()
         
         self.write_console("Cleared all telemetry plots")
 
@@ -794,10 +780,10 @@ class MainWindow():
                     try:
                         uhf_info = self.UHF.get_radio_info()
                         radio_status['UHF_frequency'] = uhf_info['frequency'].lstrip('0') + " Hz"
-                        radio_status['UHF_bandwidth'] = str(float(uhf_info['bandwidth'].lstrip('0'))/100) + " kHz"
+                        radio_status['UHF_bandwidth'] = str(float(uhf_info['bandwidth'])/1000).lstrip('0') + " kHz"
                         radio_status['UHF_spread'] = uhf_info['spreading_factor'].lstrip('0')
                         radio_status['UHF_coding'] = uhf_info['coding_rate'][0] + '/' + uhf_info['coding_rate'][1]
-                    except(serial.serialutil.SerialException, IndexError, KeyError):
+                    except(serial.serialutil.SerialException, IndexError, KeyError, ValueError):
                         pass
                 else:
                     radio_status['UHF_frequency'] = "N/A"

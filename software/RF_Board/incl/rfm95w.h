@@ -135,7 +135,7 @@ void rfm95w_set_sync_word(const char s);
 unsigned char rfm95w_get_packet_rssi(void);
 
 unsigned char rfm95w_read_fifo(char* buffer);
-void rfm95w_transmit_chars(const char* data);
+void rfm95w_transmit_n_chars(const char* data, unsigned int len);
 void rfm95w_transmit_fixed_packet(const char* data);
 
 void rfm95w_save_registers(char* registers);

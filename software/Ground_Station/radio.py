@@ -10,11 +10,12 @@ def get_packets_from_flush(flush):
     num_bytes = 0
     packets = []
     while (i < len(flush)):
-        num_bytes = int.from_bytes(flush[i:i+2], byteorder='big') #get len of next packet
-        #print(num_bytes)
-        packets.append(flush[i+2:i+num_bytes+2])
-        i += num_bytes + 2
-        
+        num_bytes = int.from_bytes(flush[i:i+1], byteorder='big') #get len of next packet
+        print(num_bytes)
+        packets.append(flush[i+1:i+num_bytes+1])
+        i += num_bytes + 1
+    
+    #print(flush)    
     return packets
 
 class Radio():
@@ -22,8 +23,8 @@ class Radio():
         self.type = type #radio type string
         self.port = serial.Serial()
         self.port.baudrate = baudrate
-        self.port.timeout = 0.2 #seconds
-        self.port.inter_byte_timeout = 0.1
+        self.port.timeout = 0.5 #seconds
+        self.port.inter_byte_timeout = 0.25
         self.portname = None
         self.frequency = None
         self.last_packet = None
@@ -71,7 +72,7 @@ class Radio():
         if reply[0] == 170 and reply[1] == 170:
             info["frequency"] = reply[3:13].decode("utf-8")
             info["data_rate"] = reply[13:19].decode("utf-8")
-            info["bandwidth"] = reply[20:25].decode("utf-8")
+            info["bandwidth"] = reply[19:25].decode("utf-8")
             info["spreading_factor"] = reply[25:27].decode("utf-8")
             info["coding_rate"] = reply[27:29].decode("utf-8")
         

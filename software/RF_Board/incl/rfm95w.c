@@ -324,22 +324,18 @@ unsigned char rfm95w_get_packet_rssi(void) {
 
 
 /* load chars into FIFO until null terminator is encountered and then transmit */
-void rfm95w_transmit_chars(const char* data) {
-    char c;
+void rfm95w_transmit_n_chars(const char* data, unsigned int len) {
     unsigned char i = 0;
     char tx_ptr = rfm95w_read(0x0E);
     rfm95w_write(0x0D, tx_ptr); //set FIFO pointer to transmit buffer region
 
     rfm95w_set_mode(OP_MODE_STDBY); //must be in stdby to fill fifo
 
-    c = data[i];
-    while(c != '\0') {
-        rfm95w_write_fifo(c);
-        i++;
-        c = data[i];
+    for(i=0;i<len;i++) {
+        rfm95w_write_fifo(data[i]);
     }
 
-    rfm95w_set_payload_length(i);
+    rfm95w_set_payload_length(len);
     rfm95w_set_mode(OP_MODE_TX); //set to transmit mode
 }
 
@@ -385,7 +381,7 @@ unsigned char rfm95w_read_fifo(char* buffer) {
 void rfm95w_save_registers(char* registers) {
     unsigned char i;
 
-    for(i=0x01;i<0x27;i++) {
+    for(i=0x01;i<=0x5D;i++) {
         registers[i] = rfm95w_read(i);
     }
 }
@@ -397,7 +393,7 @@ void rfm95w_load_registers(char* registers) {
     rfm95w_set_mode(OP_MODE_SLEEP); //put into sleep mode
     rfm95w_write(0x01, registers[1] & 0x80); //LoRa/FSK mode setting must be done in sleep
 
-    for(i=0x02;i<0x27;i++) {
+    for(i=0x02;i<=0x5D;i++) {
         rfm95w_write(i, registers[i]);
     }
 

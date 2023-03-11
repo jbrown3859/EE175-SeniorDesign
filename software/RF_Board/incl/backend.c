@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 2048
 #define RX_PACKETS 160
@@ -226,7 +226,7 @@ void main_loop(void) {
     unsigned int pkt_num = 0;
     unsigned char command;
     char args[16];
-    char regs[48];
+    char regs[128];
 
     unsigned int i = 0;
     //unsigned int j = 0;
@@ -287,9 +287,8 @@ void main_loop(void) {
 
                 #ifdef RADIOTYPE_UHF
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-                pkt[pkt_len] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
-                pkt[pkt_len + 1] = '\0'; //null-terminate
-                rfm95w_transmit_chars(pkt);
+                pkt[pkt_len - 1] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
+                rfm95w_transmit_n_chars(pkt, pkt_len);
                 #endif
 
                 info.radio_mode = TX_ACTIVE;
@@ -379,8 +378,8 @@ void main_loop(void) {
             while (get_buffer_packet_count(&RXbuf) != 0) {
                 pkt_len = read_packet_buffer(&RXbuf, pkt);
 
-                if (pkt_len != 0) {
-                    putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
+                if (pkt_len != 0 && pkt_len < RX_SIZE) { //skip bad packets
+                    //putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
                     putchar((unsigned char)(pkt_len & 0xFF));
                     putnchars(pkt, pkt_len);
                 }
