@@ -15,9 +15,9 @@
 char GetRadioInfo(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
 	uint8_t data = 0x61;
 	HAL_UART_Transmit(&uartRadio, &data, 1, 100);
-	uint8_t Rx_data[19];
+	uint8_t Rx_data[29];
 	memset(Rx_data, 0, sizeof(Rx_data));
-	HAL_UART_Receive(&uartRadio, Rx_data, 19, 1000);
+	HAL_UART_Receive(&uartRadio, Rx_data, 29, 1000);
 
 	//send_buffer(uartTerminal, Rx_data, 19);
 
@@ -265,10 +265,10 @@ void FlushRXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal
 	memset(Rx_data, 0, sizeof(Rx_data));
 	HAL_UART_Receive(&uartRadio, Rx_data, 1024, 1000);
 
-	newline(uartTerminal);
-	print_string(uartTerminal, "Flushing...RX buffer contents: ");
-	newline(uartTerminal);
-	send_buffer(uartTerminal, Rx_data, 1024);
+//	newline(uartTerminal);
+//	print_string(uartTerminal, "Flushing...RX buffer contents: ");
+//	newline(uartTerminal);
+//	send_buffer(uartTerminal, Rx_data, 1024);
 }
 
 void ReadTXBuffer(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
