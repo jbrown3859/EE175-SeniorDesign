@@ -21,7 +21,11 @@
 /* Globals */
 struct packet_buffer RXbuf;
 struct packet_buffer TXbuf;
+
 struct RadioInfo info;
+
+#pragma PERSISTENT(RadioConfigs) //preserve during watchdog resets
+struct RadioPersistent RadioConfigs = {.radio_packet_length = 0};
 
 char RX_done = 0;
 
@@ -185,17 +189,25 @@ __interrupt void PORT2_ISR(void) {
     if (info.radio_mode == RX) {
         #ifdef RADIOTYPE_SBAND
         pkt_len = cc2500_receive(pkt);
-        if (pkt_len > 0) { //filter failed CRCs
-           write_packet_buffer(&RXbuf, pkt, pkt_len);
+
+        if (RadioConfigs.radio_packet_length == 0 || pkt_len == RadioConfigs.radio_packet_length) { //only match packets of the same length if packet length parameter > 0
+            if (pkt_len > 0) { //filter failed CRCs
+               write_packet_buffer(&RXbuf, pkt, pkt_len);
+            }
         }
+
         cc2500_command_strobe(STROBE_SFRX);
         cc2500_command_strobe(STROBE_SRX);
         #endif
         #ifdef RADIOTYPE_UHF
         pkt_len = rfm95w_read_fifo(pkt);
-        if (pkt_len > 0) {
-            write_packet_buffer(&RXbuf, pkt, pkt_len);
+
+        if (RadioConfigs.radio_packet_length == 0 || (pkt_len - 1) == RadioConfigs.radio_packet_length) {
+            if (pkt_len > 0) {
+                write_packet_buffer(&RXbuf, pkt, pkt_len - 1); //don't write newline
+            }
         }
+
         rfm95w_clear_flag(FLAG_RXDONE);
         rfm95w_clear_flag(FLAG_VALIDHEADER);
         #endif
@@ -287,8 +299,8 @@ void main_loop(void) {
 
                 #ifdef RADIOTYPE_UHF
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-                pkt[pkt_len - 1] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
-                rfm95w_transmit_n_chars(pkt, pkt_len);
+                pkt[pkt_len] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
+                rfm95w_transmit_n_chars(pkt, pkt_len + 1);
                 #endif
 
                 info.radio_mode = TX_ACTIVE;
@@ -306,6 +318,8 @@ void main_loop(void) {
             info.bandwidth = 0;
             info.spreading_factor = 0;
             info.coding_rate = 0;
+
+            RadioConfigs.radio_packet_length = 0; //get packets of any length by default
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);
@@ -469,6 +483,15 @@ void main_loop(void) {
         case CLEAR_TX_FLAGS:
             TXbuf.flags = 0x00;
             putchar(TXbuf.flags | get_flag_from_state(info.radio_mode));
+            state = WAIT;
+            break;
+        case SET_PACKET_LENGTH:
+            if (get_UART_bytes(args, 1, 10000) == 1) {
+                enable_FRAM_write(FRAM_WRITE_ENABLE);
+                RadioConfigs.radio_packet_length = (unsigned char)args[0];
+                enable_FRAM_write(FRAM_WRITE_DISABLE);
+            }
+            putchar(RadioConfigs.radio_packet_length);
             state = WAIT;
             break;
         case GET_RADIO_STATE:
@@ -668,6 +691,9 @@ void main_loop(void) {
                     break;
                 case 0x74:
                     state = GET_RADIO_STATE;
+                    break;
+                case 0x75:
+                    state = SET_PACKET_LENGTH;
                     break;
                 case 0x80:
                     state = PROG_RADIO_REG;

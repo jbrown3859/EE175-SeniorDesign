@@ -123,3 +123,18 @@ unsigned int get_ADC_average(const unsigned char n) {
 
     return (unsigned int)(result/n);
 }
+
+
+/* enable/disable writing to FRAM */
+void enable_FRAM_write(const char enable) {
+    switch(enable) {
+    case FRAM_WRITE_ENABLE:
+        SYSCFG0 = FRWPPW | DFWP; //enable FRAM write
+        break;
+    case FRAM_WRITE_DISABLE:
+        SYSCFG0 = FRWPPW | PFWP | DFWP; //disable FRAM write
+        break;
+    default:
+        break;
+    }
+}

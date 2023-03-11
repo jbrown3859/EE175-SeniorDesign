@@ -90,12 +90,19 @@ class Radio():
         return packet
         
     def burst_read(self, packetsize, packetnum):
-        self.port.write(b'd')
-        self.port.write(packetsize.to_bytes(1, byteorder='big'))
-        self.port.write(packetnum.to_bytes(1, byteorder='big'))
-        packets = self.port.read(packetsize * packetnum)
-        self.last_packet = time.time()
-        return packets
+        if (packetsize > 0 and packetnum > 0):
+            self.port.write(b'd')
+            self.port.write(packetsize.to_bytes(1, byteorder='big'))
+            self.port.write(packetnum.to_bytes(1, byteorder='big'))
+            
+            data = self.port.read(packetsize * packetnum)
+            print("fetched {} bytes".format(len(data)))
+            packets = []
+            for i in range(int(len(data)/packetsize)):
+                packets.append(data[i*packetsize:(i+1)*packetsize])
+            
+            self.last_packet = time.time()
+            return packets
         
     def flush_rx(self):
         state = self.get_rx_buffer_state()
@@ -152,6 +159,11 @@ class Radio():
         self.port.write(b's')
         flags = self.port.read(1)
         return flags
+        
+    def set_packet_length(self, length):
+        self.port.write(b'u')
+        self.port.write(length.to_bytes(1, byteorder='big'))
+        return self.port.read(1)
         
     def program_radio_register(self, addr, data):
         command = 0x80
