@@ -2,13 +2,29 @@ import serial
 import serial.tools.list_ports
 import time
 
+'''
+Helper Functions
+'''
+def get_packets_from_flush(flush):
+    i = 0
+    num_bytes = 0
+    packets = []
+    while (i < len(flush)):
+        num_bytes = int.from_bytes(flush[i:i+1], byteorder='big') #get len of next packet
+        print(num_bytes)
+        packets.append(flush[i+1:i+num_bytes+1])
+        i += num_bytes + 1
+    
+    #print(flush)    
+    return packets
+
 class Radio():
     def __init__(self, type, baudrate):
         self.type = type #radio type string
         self.port = serial.Serial()
         self.port.baudrate = baudrate
-        self.port.timeout = 0.2 #seconds
-        self.port.inter_byte_timeout = 0.1
+        self.port.timeout = 0.5 #seconds
+        self.port.inter_byte_timeout = 0.25
         self.portname = None
         self.frequency = None
         self.last_packet = None
@@ -56,7 +72,7 @@ class Radio():
         if reply[0] == 170 and reply[1] == 170:
             info["frequency"] = reply[3:13].decode("utf-8")
             info["data_rate"] = reply[13:19].decode("utf-8")
-            info["bandwidth"] = reply[20:25].decode("utf-8")
+            info["bandwidth"] = reply[19:25].decode("utf-8")
             info["spreading_factor"] = reply[25:27].decode("utf-8")
             info["coding_rate"] = reply[27:29].decode("utf-8")
         
@@ -82,8 +98,14 @@ class Radio():
         return packets
         
     def flush_rx(self):
+        state = self.get_rx_buffer_state()
+        len = int.from_bytes(state[2:4], byteorder='big', signed=False)
+        num_pkts = int(state[1])
+    
         self.port.write(b'e')
-        return self.port.read(10000)
+        
+        #print("Buffer size: {}".format(len))
+        return self.port.read(2048)
         
     def get_tx_buffer_state(self):
         self.port.write(b'f')

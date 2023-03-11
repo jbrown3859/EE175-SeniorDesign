@@ -113,6 +113,7 @@ enum cc2500_interrupt_setting{INT_NONE,INT_GDO0,INT_GDO2,INT_BOTH};
 #define CRC_ENABLED 0x04
 #define CRC_AUTOFLUSH 0x08
 #define CRC_APPEND 0x04
+#define CRC_NO_APPEND 0x00
 
 /* global variables */
 extern char cc2500_TXRX_done;

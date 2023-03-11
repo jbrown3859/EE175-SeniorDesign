@@ -38,6 +38,16 @@ int main(void)
     init_UART(115200);
     init_SPI_master();
 
+    /*
+    //basic test
+    for (;;) {
+        SPI_RX(0x4D);
+        putchars("I haue read the truest computer of Times\n\r");
+        putchars("and the best Arithmetician that euer breathed,\n\r");
+        putchars("and he reduceth thy dayes into a short number.\n\r");
+    }
+    */
+
     //ADC test
     //set P1.5 to ADC input
     /*
@@ -48,6 +58,7 @@ int main(void)
     */
 
 
+    /*
     //radio programming
     cc2500_set_frontend(RX_SHUTDOWN);
     cc2500_command_strobe(STROBE_SRES); //reset chip
@@ -72,9 +83,14 @@ int main(void)
 
     cc2500_init_gpio(INT_NONE); //init after programming to avoid false interrupts
 
-    cc2500_register_dump();
-    __no_operation();
+    for (;;) {
+        cc2500_register_dump();
+        __no_operation();
+        hardware_delay(30000);
+    }
+    */
 
+    /*
     for (;;) {
         cc2500_set_base_frequency(2450000000);
         print_hex(cc2500_read(0x0D));
@@ -86,7 +102,7 @@ int main(void)
         print_hex(cc2500_read(0x0A));
         putchars("\n\r");
     }
-
+    */
 
     /*
     char msg[5] = {'T','E','S','T'};
@@ -144,7 +160,6 @@ int main(void)
     }
     */
 
-    /*
     rfm95w_init();
     rfm95w_reset();
 
@@ -167,6 +182,7 @@ int main(void)
     rfm95w_set_max_payload_length(0x20);
     rfm95w_set_sync_word(0x34);
 
+    /*
     char regs[48];
     char after[48];
 
@@ -182,9 +198,12 @@ int main(void)
     rfm95w_register_dump();
     rfm95w_save_registers(after);
     compare_arrays(regs, after, 0x27);
-
-    for (;;) {}
     */
+
+    for (;;) {
+        rfm95w_register_dump();
+        hardware_delay(30000);
+    }
 
     /*
     for (;;) {

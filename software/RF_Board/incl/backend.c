@@ -3,13 +3,13 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
-#define RX_SIZE 1024
-#define RX_PACKETS 128
-#define TX_SIZE 1024
-#define TX_PACKETS 128
+#define RX_SIZE 2048
+#define RX_PACKETS 160
+#define TX_SIZE 256
+#define TX_PACKETS 32
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
@@ -226,7 +226,7 @@ void main_loop(void) {
     unsigned int pkt_num = 0;
     unsigned char command;
     char args[16];
-    char regs[48];
+    char regs[128];
 
     unsigned int i = 0;
     //unsigned int j = 0;
@@ -264,17 +264,6 @@ void main_loop(void) {
 
     /* GPIO inits */
     #ifdef RADIOTYPE_SBAND
-    //TX/RX Switch
-    /*
-    P3SEL0 &= ~(0x3E); //set 3.1-3.5 to I/O
-    P3DIR |= (0x3E); //set 3.1-3.5 to output
-
-    P3OUT |= (1 << 1); //set P3.1 to 1 (bypass LNA A)
-    P3OUT |= (1 << 2); //set P3.2 to 1 (bypass LNA B)
-    P3OUT |= (1 << 3); //set P3.3 to 1 (shutdown LNAs)
-    P3OUT &= ~(1 << 5); //set P3.4 to zero (PA off)
-    P3OUT &= ~(1 << 5); //set P3.5 to zero (RX mode)
-    */
     cc2500_init_frontend();
     #endif
 
@@ -298,9 +287,8 @@ void main_loop(void) {
 
                 #ifdef RADIOTYPE_UHF
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-                pkt[pkt_len] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
-                pkt[pkt_len + 1] = '\0'; //null-terminate
-                rfm95w_transmit_chars(pkt);
+                pkt[pkt_len - 1] = '\n'; //packet MUST end '\n' to trigger ISR (idk man I didn't design the chip)
+                rfm95w_transmit_n_chars(pkt, pkt_len);
                 #endif
 
                 info.radio_mode = TX_ACTIVE;
@@ -373,8 +361,7 @@ void main_loop(void) {
             break;
         case READ_RX_BUF:
             pkt_len = read_packet_buffer(&RXbuf, pkt);
-            pkt[pkt_len] = '\0';
-            putchars(pkt);
+            putnchars(pkt, pkt_len);
             state = WAIT;
             break;
         case BURST_READ_RX:
@@ -390,8 +377,12 @@ void main_loop(void) {
         case FLUSH_RX:
             while (get_buffer_packet_count(&RXbuf) != 0) {
                 pkt_len = read_packet_buffer(&RXbuf, pkt);
-                pkt[pkt_len] = '\0';
-                putchars(pkt);
+
+                if (pkt_len != 0 && pkt_len < RX_SIZE) { //skip bad packets
+                    //putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
+                    putchar((unsigned char)(pkt_len & 0xFF));
+                    putnchars(pkt, pkt_len);
+                }
             }
             state = WAIT;
             break;
@@ -443,8 +434,12 @@ void main_loop(void) {
         case FLUSH_TX:
             while (get_buffer_packet_count(&TXbuf) != 0) {
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-                pkt[pkt_len] = '\0';
-                putchars(pkt);
+
+                if (pkt_len != 0) {
+                    putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
+                    putchar((unsigned char)(pkt_len & 0xFF));
+                    putnchars(pkt, pkt_len);
+                }
             }
             state = WAIT;
             break;
@@ -463,8 +458,7 @@ void main_loop(void) {
             break;
         case READ_TX_BUF:
             pkt_len = read_packet_buffer(&TXbuf, pkt);
-            pkt[pkt_len] = '\0';
-            putchars(pkt);
+            putnchars(pkt, pkt_len);
             state = WAIT;
             break;
         case CLEAR_RX_FLAGS:
@@ -548,7 +542,7 @@ void main_loop(void) {
             cc2500_command_strobe(STROBE_SRX);
             radio_state = cc2500_get_status();
 
-            if (radio_state == STATUS_STATE_RX) {
+            if (radio_state == STATUS_STATE_RX || radio_state == STATUS_STATE_RXOVERFLOW || radio_state == STATUS_STATE_SETTLING || radio_state == STATUS_STATE_CALIBRATE) { //may not be in RX state if actively getting packets
                 cc2500_set_frontend(RX_SINGLE_BYPASS);
                 info.radio_mode = RX;
             }

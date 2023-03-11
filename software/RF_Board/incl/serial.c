@@ -213,6 +213,15 @@ void putchars(char* msg) {
     }
 }
 
+/* put n chars to buffer */
+void putnchars(char* msg, unsigned int n) {
+    unsigned int i;
+
+    for (i=0;i<n;i++) {
+        putchar(msg[i]);
+    }
+}
+
 void print_binary(char b) {
     int i;
     for (i = 7; i >= 0; i--) {

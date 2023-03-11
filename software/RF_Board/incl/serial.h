@@ -27,6 +27,8 @@ void init_UART(unsigned long);
 int getchar(void);
 void putchar(char c);
 void putchars(char* msg);
+void putnchars(char* msg, unsigned int n);
+
 void print_binary(char b);
 void print_hex(char h);
 void print_dec(const long long data, const unsigned char len);
