@@ -331,9 +331,9 @@ void IDLEMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
 		HAL_UART_Transmit(&uartRadio, &data, 1, 100);
 		memset(Rx_data, 0, sizeof(Rx_data));
 		HAL_UART_Receive(&uartRadio, Rx_data, 1024, 1000);
-		print_string(uartTerminal, "IDLE, chip state:	");
-		print_hex(uartTerminal, Rx_data[0]);
-		newline(uartTerminal);
+//		print_string(uartTerminal, "IDLE, chip state:	");
+//		print_hex(uartTerminal, Rx_data[0]);
+//		newline(uartTerminal);
 	}
 	print_string(uartTerminal, "IDLE mode activated");
 		newline(uartTerminal);
@@ -349,9 +349,9 @@ void RXMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
 		HAL_UART_Transmit(&uartRadio, &data, 1, 100);
 		memset(Rx_data, 0, sizeof(Rx_data));
 		HAL_UART_Receive(&uartRadio, Rx_data, 1024, 1000);
-		print_string(uartTerminal, "RX, chip state:	");
-		print_hex(uartTerminal, Rx_data[0]);
-		newline(uartTerminal);
+//		print_string(uartTerminal, "RX, chip state:	");
+//		print_hex(uartTerminal, Rx_data[0]);
+//		newline(uartTerminal);
 	}
 	print_string(uartTerminal, "RX mode activated");
 		newline(uartTerminal);
@@ -367,9 +367,9 @@ void TXMode(UART_HandleTypeDef uartRadio, UART_HandleTypeDef uartTerminal) {
 		HAL_UART_Transmit(&uartRadio, &data, 1, 100);
 		memset(Rx_data, 0, sizeof(Rx_data));
 		HAL_UART_Receive(&uartRadio, Rx_data, 1024, 1000);
-		print_string(uartTerminal, "TX, chip state:	");
-		print_hex(uartTerminal, Rx_data[0]);
-		newline(uartTerminal);
+//		print_string(uartTerminal, "TX, chip state:	");
+//		print_hex(uartTerminal, Rx_data[0]);
+//		newline(uartTerminal);
 	}
 	print_string(uartTerminal, "TX mode activated");
 	newline(uartTerminal);

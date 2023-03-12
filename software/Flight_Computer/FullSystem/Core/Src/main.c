@@ -262,6 +262,7 @@ int main(void) {
 			}
 			print_string(huart2, "Capture ready");
 			newline(huart2);
+			print_string(huart2, "Transmitting image...");
 			uint8_t res_packet[18];
 			uint16_t max_index;
 			memset(res_packet, 0, 18);
@@ -287,20 +288,14 @@ int main(void) {
 				get_FIFO_bytes(hspi1, img_buf, 32);
 				//send_buffer(huart2, img_buf, 32);
 				make_img_packet(img_buf, img_packet, img_index);
+				while (GetTXActiveState(huart1, huart2) == 1)
+					;
 				WriteTXBuffer(huart1, huart2, img_packet, 18);
 				WriteTXBuffer(huart1, huart2, img_packet, 18); //second send for better quality
 				if (img_index == 0) {
 					for (int i = 0; i < 10; i++) {
 						WriteTXBuffer(huart1, huart2, img_packet, 18);
 					}
-				}
-				while (GetTXActiveState(huart1, huart2) == 1) {
-					print_decimal(huart2, length, 6);
-					print_string(huart2, "	");
-					print_decimal(huart2, img_index, 6);
-					print_string(huart2, "	TX_ACTIVE");
-					newline(huart2);
-					HAL_Delay(10);
 				}
 				img_index++;
 				length -= 32;
@@ -357,15 +352,15 @@ int main(void) {
 			TXPacket[4] = (uint8_t) count & 0xFF;
 			TXPacket[14] = getTempLM75(hi2c1, huart2);
 			TXPacket[31] = '\n';
-			newline(huart2);
-			print_string(huart2, "Sending Packet: ");
-			send_buffer(huart2, TXPacket, 32);
-			WriteTXBuffer(huart3, huart2, TXPacket, 32);
+			//newline(huart2);
+			//print_string(huart2, "Sending Packet: ");
+			//send_buffer(huart2, TXPacket, 32);
 			while (GetTXActiveState(huart3, huart2) == 1) {
-				print_string(huart2, "TX_ACTIVE");
-				newline(huart2);
-				HAL_Delay(10);
+				//				print_string(huart2, "TX_ACTIVE");
+				//				newline(huart2);
+				//				HAL_Delay(10);
 			}
+			WriteTXBuffer(huart3, huart2, TXPacket, 32);
 			break;
 		default:
 			RadioStateSBand = IDLE;
