@@ -150,6 +150,7 @@ int main(void) {
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
+
 	MX_USART2_UART_Init();
 	MX_I2C1_Init();
 	MX_SPI1_Init();
@@ -169,13 +170,15 @@ int main(void) {
 ///////////////////////////////////////////////////////////////////////////////	Tel Init	//////////////////////////////////////////////////
 	MPU6050_Init(hi2c1);
 
-	BMM150_Normal(hspi1);
-	BMM150_Set(hspi1);
+//	BMM150_Normal(hspi1);
+//	BMM150_Set(hspi1);			//init in SM
 
 	LM75_init(hi2c1);
 
 	uint8_t commands[16];
-	const uint8_t img_cmd[4] = { 0x20, 0x01, 0x01, 0x02 };
+	const uint8_t img_cmd160x120[4] = { 0x20, 0x01, 0x01, 0x02 };
+	const uint8_t img_cmd320x240[4] = { 0x20, 0x02, 0x01, 0x02 };
+	const uint8_t img_cmd640x480[4] = { 0x20, 0x03, 0x01, 0x02 };
 	uint8_t TXPacket[32];
 	int cmd_recieved = 0;
 	uint8_t RadioStateSBand = IDLE;
@@ -193,19 +196,22 @@ int main(void) {
 			RadioStateSBand = IDLE;
 			IDLEMode(huart1, huart2);
 		case IDLE:
+			RadioStateSBand = RX_MODE;
+			RXMode(huart1, huart2);
+			break;
+		case RX_MODE:
 			if (cmd_recieved == 1) {
 				RadioStateSBand = TX_MODE;
 				TXMode(huart1, huart2);
+				FlushRXBuffer(huart1, huart2);
 				cmd_recieved = 0;
 			} else {
-				RadioStateSBand = IDLE;
+				RadioStateSBand = RX_MODE;
 			}
 			break;
-		case RX_MODE:
-			break;
 		case TX_MODE:
-			RadioStateSBand = IDLE;
-			IDLEMode(huart1, huart2);
+			RadioStateSBand = RX_MODE;
+			RXMode(huart1, huart2);
 			break;
 		}
 
@@ -214,6 +220,28 @@ int main(void) {
 		case IDLE:
 			break;
 		case RX_MODE:
+			while (GetRXNumPackets(huart1, huart2) != 0) {
+				GetRXBufferState(huart1, huart2);
+				ReadRXBuffer(huart1, huart2, commands, 16);
+				if (compare_buffer(huart2, commands, img_cmd160x120, 4)
+						|| compare_buffer(huart2, commands, img_cmd320x240, 4)
+						|| compare_buffer(huart2, commands, img_cmd640x480,
+								4)) {
+					print_string(huart2, "Image command recieved.");
+					newline(huart2);
+					if (commands[1] == 2) {
+						resolution = OV2640_320x240;
+					} else if (commands[1] == 3) {
+						resolution = OV2640_640x480;
+					} else {
+						resolution = OV2640_160x120;
+					}
+					cmd_recieved = 1;
+					break;
+				}
+				print_string(huart2, "Recieved Packet: ");
+				send_buffer(huart2, commands, 16);
+			}
 			break;
 		case TX_MODE:
 			OV2640_init(hi2c1, hspi1, format, resolution, light_mode, effects);
@@ -234,11 +262,28 @@ int main(void) {
 			}
 			print_string(huart2, "Capture ready");
 			newline(huart2);
+			uint8_t res_packet[18];
+			uint16_t max_index;
+			memset(res_packet, 0, 18);
+			res_packet[0] = 0x52;
+			if (resolution == OV2640_320x240) {
+				res_packet[1] = 0x02;
+				max_index = 4800;
+			} else if (resolution == OV2640_640x480) {
+				res_packet[1] = 0x03;
+				max_index = 19200;
+			} else {
+				res_packet[1] = 0x01;
+				max_index = 1200;
+			}
+			for (int i = 0; i < 10; i++) {
+				WriteTXBuffer(huart1, huart2, res_packet, 18);
+			}
 			uint32_t length = read_fifo_length(hspi1);
 			uint8_t img_buf[32];
 			uint8_t img_packet[18];
 			uint16_t img_index = 0;
-			while (length >= 32 && img_index <= 1200) {
+			while (length >= 32 && img_index <= max_index) {
 				get_FIFO_bytes(hspi1, img_buf, 32);
 				//send_buffer(huart2, img_buf, 32);
 				make_img_packet(img_buf, img_packet, img_index);
@@ -251,6 +296,8 @@ int main(void) {
 				}
 				while (GetTXActiveState(huart1, huart2) == 1) {
 					print_decimal(huart2, length, 6);
+					print_string(huart2, "	");
+					print_decimal(huart2, img_index, 6);
 					print_string(huart2, "	TX_ACTIVE");
 					newline(huart2);
 					HAL_Delay(10);
@@ -270,18 +317,18 @@ int main(void) {
 			RadioStateUHF = IDLE;
 			IDLEMode(huart3, huart2);
 		case IDLE:
-			RadioStateUHF = RX_MODE;
-			FlushRXBuffer(huart3, huart2);
-			RXMode(huart3, huart2);
-			break;
-		case RX_MODE:
 			RadioStateUHF = TX_MODE;
+			//FlushRXBuffer(huart3, huart2);
 			TXMode(huart3, huart2);
 			break;
+		case RX_MODE:
+//			RadioStateUHF = TX_MODE;
+//			TXMode(huart3, huart2);
+			break;
 		case TX_MODE:
-			RadioStateUHF = RX_MODE;
-			FlushRXBuffer(huart3, huart2);
-			RXMode(huart3, huart2);
+			RadioStateUHF = TX_MODE;
+			//FlushRXBuffer(huart3, huart2);
+			//RXMode(huart3, huart2);
 			break;
 		default:
 			RadioStateSBand = IDLE;
@@ -293,20 +340,11 @@ int main(void) {
 		case IDLE:
 			break;
 		case RX_MODE:
-			while (GetRXNumPackets(huart3, huart2) != 0) {
-				GetRXBufferState(huart3, huart2);
-				ReadRXBuffer(huart3, huart2, commands, 16);
-				if (compare_buffer(huart2, commands, img_cmd, 4) == 1) {
-					print_string(huart2, "Image command recieved.");
-					newline(huart2);
-					cmd_recieved = 1;
-					break;
-				}
-				print_string(huart2, "Recieved Packet: ");
-				send_buffer(huart2, commands, 16);
-			}
 			break;
 		case TX_MODE:
+			BMM150_Normal(hspi1);
+			BMM150_Set(hspi1);
+
 			MPU6050_Read_Accel(hi2c1, huart2, TXPacket);
 			MPU6050_Read_Gyro(hi2c1, huart2, TXPacket);
 			print_string(huart2, "	");
