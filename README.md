@@ -9,6 +9,6 @@ Vincent Le, vle059 at ucr dot edu
 
 ![Radio Board](https://user-images.githubusercontent.com/33066482/215556990-a60d57f6-d5c3-474f-8659-27967438bbe1.png)
 
-![System Diagram](https://user-images.githubusercontent.com/33066482/215556828-1d3fc741-1031-420e-9327-766225c7b27c.png)
+![System Diagram](https://user-images.githubusercontent.com/33066482/224515175-81307321-6b5c-4143-b56f-9aa302bbe904.png)
 
 ![FLowcharts](https://user-images.githubusercontent.com/33066482/192166011-54f5eca6-4ba4-4621-b2a1-52ec963ab26e.png)
