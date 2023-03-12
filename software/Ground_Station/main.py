@@ -36,8 +36,8 @@ class MainWindow():
     def __init__(self, window):
         self.window = window
         self.res = [160, 120]
-        self.width = self.res[0]*4
-        self.height = self.res[1]*4
+        self.width = 160*4
+        self.height = 120*4
         self.widgets = {}
         self.frame = np.zeros((self.res[1], self.res[0]), dtype='uint8') #image frame
         self.image = ImageTk.PhotoImage(Image.fromarray(self.frame)) #to PIL format
@@ -326,21 +326,37 @@ class MainWindow():
         self.widgets['console'].insert(tk.END, time.strftime("[%Y-%m-%d %H:%M:%S] ",time.gmtime()) + string + "\n")
         self.widgets['console'].see(tk.END)
         self.widgets['console'].config(state=tk.DISABLED)
+        
+    def set_image_resolution(self, new_res):
+        self.res = new_res
+        self.frame = np.zeros((self.res[1], self.res[0]), dtype='uint8') #image frame
+        self.image = ImageTk.PhotoImage(Image.fromarray(self.frame)) #to PIL format
 
     def update_image(self):
         while not self.img_queue.empty():
             packet = self.img_queue.get()
-            index = int.from_bytes(packet[0:2], 'big')
-            index &= ~0x8000
-            #print(index)
-            if (index == 0): #clear new frame
-                self.frame.fill(0)
+            if (packet[0] & 0x80 == 0x80): #pixel packets
+                index = int.from_bytes(packet[0:2], 'big')
+                index &= ~0x8000
+                #print(index)
+                if (index == 0): #clear new frame
+                    self.frame.fill(0)
 
-            try:
-                for i in range(0,16):
-                    self.frame[int(index / 10)][((index % 10) * 16) + i] = packet[2 + i]
-            except IndexError as e:
-                self.write_console("Error decoding image packet: " + str(packet))
+                try:
+                    for i in range(0,16):
+                        self.frame[int(index / int(self.res[0]/16))][((index % int(self.res[0]/16)) * 16) + i] = packet[2 + i]
+                except IndexError as e:
+                    self.write_console("Error decoding image packet: " + str(packet))
+            elif (packet[0] == 0x52): #image info packets
+                if packet[1] == 0x01 and self.res != [160, 120]:
+                    self.set_image_resolution([160, 120])
+                    self.write_console("Set image resolution to 160x120")
+                elif packet[1] == 0x02 and self.res != [320, 240]:
+                    self.set_image_resolution([320, 240])
+                    self.write_console("Set image resolution to 320x240")
+                elif packet[1] == 0x03 and self.res != [640, 480]:
+                    self.set_image_resolution([640, 480])
+                    self.write_console("Set image resolution to 640x480")
 
         frame = imaging.redtoBGR(self.frame, self.res[0], self.res[1])
         frame = cv.resize(frame, (self.width, self.height))
@@ -362,11 +378,6 @@ class MainWindow():
                 self.telemetry_packets.append(telem)
 
             for packet in self.telemetry_packets:
-                '''
-                print('===')
-                print(len(self.t))
-                print(len(self.a_x))
-                '''
                 if (len(self.a_x) >= 100):
                     self.a_x.pop(0)
                     self.a_y.pop(0)
@@ -383,23 +394,6 @@ class MainWindow():
                     self.t_v.pop(0)
 
                     self.t.pop(0)
-
-                if (len(self.t) > 1 and packet['Timestamp'] < self.t[-1] and packet['Timestamp'] != 0): #clear if causality is violated
-                    self.a_x.clear()
-                    self.a_y.clear()
-                    self.a_z.clear()
-
-                    self.g_x.clear()
-                    self.g_y.clear()
-                    self.g_z.clear()
-
-                    self.m_x.clear()
-                    self.m_y.clear()
-                    self.m_z.clear()
-
-                    self.t_v.clear()
-
-                    self.t.clear()
 
                 if (packet['Timestamp'] not in self.t and packet['Acceleration']): #discard packets with no data in them
 
@@ -624,6 +618,36 @@ class MainWindow():
     def clear_plots(self):
         self.telemetry_packets.clear()
         
+        self.a_x.clear()
+        self.a_y.clear()
+        self.a_z.clear()
+
+        self.g_x.clear()
+        self.g_y.clear()
+        self.g_z.clear()
+
+        self.m_x.clear()
+        self.m_y.clear()
+        self.m_z.clear()
+
+        self.t_v.clear()
+
+        self.t.clear()
+        
+        self.accel_x.set_data(self.t, self.a_x)
+        self.accel_y.set_data(self.t, self.a_y)
+        self.accel_z.set_data(self.t, self.a_z)
+
+        self.gyro_x.set_data(self.t, self.g_x)
+        self.gyro_y.set_data(self.t, self.g_y)
+        self.gyro_z.set_data(self.t, self.g_z)
+
+        self.mag_x.set_data(self.t, self.m_x)
+        self.mag_y.set_data(self.t, self.m_y)
+        self.mag_z.set_data(self.t, self.m_z)
+        
+        self.temp_val.set_data(self.t, self.t_v)
+        
         self.write_console("Cleared all telemetry plots")
 
     '''
@@ -642,9 +666,9 @@ class MainWindow():
             if packets:
                 for packet in packets:         
                     #print(len(packet))
-                    if (len(packet) == 18 and (packet[0] & 0x80 == 0x80)): #if image packet
+                    if (len(packet) == 18 and (packet[0] & 0x80 == 0x80 or packet[0] == 0x52)): #if image packet
                         self.img_queue.put(packet)
-                    elif (len(packet) == 32 and packet[0] == 0x54): #if telemetry packet
+                    elif (len(packet) == 32 and (packet[0] & 0x7F) == 0x54): #if telemetry packet
                         packet = list(packet) #must convert back to list for JSON
                     
                         packet_data = {}
@@ -739,7 +763,7 @@ class MainWindow():
                         self.UHF.attempt_connection(port)
                         if self.UHF.port.is_open:
                             self.write_console("UHF Modem Connection Accepted")
-                            self.write_console("Set UHF packet length to {} bytes".format(int.from_bytes(self.UHF.set_packet_length(18), byteorder='big', signed=False)))
+                            self.write_console("Set UHF packet length to {} bytes".format(int.from_bytes(self.UHF.set_packet_length(32), byteorder='big', signed=False)))
 
             #reset radios
             if not self.reset_queue.empty():

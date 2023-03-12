@@ -4,8 +4,8 @@
 #include <serial.h>
 #include <backend.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>

@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 4080
 #define RX_PACKETS 255
@@ -19,15 +19,15 @@
 #endif
 
 /* Globals */
+char RX_done = 0;
+
 struct packet_buffer RXbuf;
 struct packet_buffer TXbuf;
 
 struct RadioInfo info;
 
 #pragma PERSISTENT(RadioConfigs) //preserve during watchdog resets
-struct RadioPersistent RadioConfigs = {.radio_packet_length = 0};
-
-char RX_done = 0;
+struct RadioPersistent RadioConfigs = {.radio_packet_length = 0}; //get packets of any length by default
 
 /* TX/RX arrays */
 char TXbuf_data[TX_SIZE];
@@ -331,8 +331,6 @@ void main_loop(void) {
             info.bandwidth = 0;
             info.spreading_factor = 0;
             info.coding_rate = 0;
-
-            RadioConfigs.radio_packet_length = 0; //get packets of any length by default
 
             #ifdef RADIOTYPE_SBAND
             cc2500_command_strobe(STROBE_SRX);
