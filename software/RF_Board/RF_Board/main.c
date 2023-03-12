@@ -4,8 +4,8 @@
 #include <serial.h>
 #include <backend.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
@@ -31,7 +31,7 @@ int main(void) {
 
     #ifdef RADIOTYPE_SBAND
     cc2500_command_strobe(STROBE_SRES); //reset chip
-    hardware_delay(100);
+    hardware_delay(10);
     //cc2500_set_base_frequency(2450000000);
     //cc2500_set_IF_frequency(457000);
     cc2500_set_vco_autocal(AUTOCAL_FROM_IDLE);

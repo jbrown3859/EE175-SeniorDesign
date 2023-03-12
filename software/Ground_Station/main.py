@@ -686,8 +686,9 @@ class MainWindow():
                             f.write('\n')
                     else:
                         self.write_console("{} received uncategorized packet: {}".format(rx_radio.type, packet))
-                
-            return len(packets)
+                return len(packets)
+            else:
+                return 0
         else:
             return 0
             
