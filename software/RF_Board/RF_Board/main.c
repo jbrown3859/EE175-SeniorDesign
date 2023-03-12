@@ -4,8 +4,8 @@
 #include <serial.h>
 #include <backend.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
@@ -71,7 +71,7 @@ int main(void) {
     rfm95w_set_coding_rate(CR_4_5);
     rfm95w_set_header_mode(EXPLICIT_HEADER);
     //rfm95w_set_payload_length(0x08);
-    rfm95w_set_max_payload_length(0x20);
+    rfm95w_set_max_payload_length(0x28);
     rfm95w_set_sync_word(0x34);
     #endif
 

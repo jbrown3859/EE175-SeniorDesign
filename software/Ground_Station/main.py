@@ -27,8 +27,6 @@ import queue
 import radio
 import imaging
 
-res = [160, 120]
-
 def to_signed(n):
     if (n >= 128):
         n = n - 256
@@ -37,12 +35,12 @@ def to_signed(n):
 class MainWindow():
     def __init__(self, window):
         self.window = window
-        self.width = res[0]*4
-        self.height = res[1]*4
+        self.res = [160, 120]
+        self.width = self.res[0]*4
+        self.height = self.res[1]*4
         self.widgets = {}
-        self.frame = np.zeros((120, 160), dtype='uint8') #image frame
-        frame = Image.fromarray(self.frame) # to PIL format
-        self.image = ImageTk.PhotoImage(frame)
+        self.frame = np.zeros((self.res[1], self.res[0]), dtype='uint8') #image frame
+        self.image = ImageTk.PhotoImage(Image.fromarray(self.frame)) #to PIL format
 
         '''
         Radio Serial Port Instances
@@ -344,7 +342,7 @@ class MainWindow():
             except IndexError as e:
                 self.write_console("Error decoding image packet: " + str(packet))
 
-        frame = imaging.redtoBGR(self.frame, res[0], res[1])
+        frame = imaging.redtoBGR(self.frame, self.res[0], self.res[1])
         frame = cv.resize(frame, (self.width, self.height))
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
@@ -638,35 +636,32 @@ class MainWindow():
             if ((status[0] & 0x03) != 0):
                 self.write_console("Warning: {} buffer overflowed!".format(rx_radio.type))
             
-            packets = rx_radio.flush_rx()
-            #print("===")
-            #print(packets)
-            packets = radio.get_packets_from_flush(packets)
+            print("bytes in buffer: {}".format(status[4] * status[1]))
+            packets = rx_radio.burst_read(status[4], status[1])
             
-            #packets = radio.burst_read(status[4], status[1])
-            
-            for packet in packets:         
-                #print(len(packet))
-                if (len(packet) == 18): #if image packet
-                    self.img_queue.put(packet)
-                elif (len(packet) == 32 and packet[0] == 0x54): #if telemetry packet
-                    packet = list(packet) #must convert back to list for JSON
-                
-                    packet_data = {}
-                    packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
-                    packet_data['Acceleration'] = packet[5:8] #x,y,z
-                    packet_data['Angular Rate'] = packet[8:11]
-                    packet_data['Magnetic Field'] = packet[11:14]
-                    packet_data['Temperature'] = (int(packet[14]) / 2)
-                    self.telem_queue.put(packet_data)
+            if packets:
+                for packet in packets:         
+                    #print(len(packet))
+                    if (len(packet) == 18 and (packet[0] & 0x80 == 0x80)): #if image packet
+                        self.img_queue.put(packet)
+                    elif (len(packet) == 32 and packet[0] == 0x54): #if telemetry packet
+                        packet = list(packet) #must convert back to list for JSON
                     
-                    with open('telemetry_log.txt', 'a') as f:
-                        f.write('{:.2f}'.format(time.time()))
-                        f.write(': ')
-                        f.write(json.dumps(packet_data))
-                        f.write('\n')
-                else:
-                    self.write_console("{} received uncategorized packet: {}".format(rx_radio.type, packet))
+                        packet_data = {}
+                        packet_data['Timestamp'] = int.from_bytes(bytes(packet[1:5]), byteorder='big', signed=False)
+                        packet_data['Acceleration'] = packet[5:8] #x,y,z
+                        packet_data['Angular Rate'] = packet[8:11]
+                        packet_data['Magnetic Field'] = packet[11:14]
+                        packet_data['Temperature'] = (int(packet[14]) / 2)
+                        self.telem_queue.put(packet_data)
+                        
+                        with open('telemetry_log.txt', 'a') as f:
+                            f.write('{:.2f}'.format(time.time()))
+                            f.write(': ')
+                            f.write(json.dumps(packet_data))
+                            f.write('\n')
+                    else:
+                        self.write_console("{} received uncategorized packet: {}".format(rx_radio.type, packet))
                 
             return len(packets)
         else:
@@ -738,11 +733,13 @@ class MainWindow():
                         self.SBand.attempt_connection(port)
                         if self.SBand.port.is_open:
                             self.write_console("S-Band Modem Connection Accepted")
+                            self.write_console("Set S-Band packet length to {} bytes".format(int.from_bytes(self.SBand.set_packet_length(18), byteorder='big', signed=False)))
 
                     if not self.UHF.port.is_open:
                         self.UHF.attempt_connection(port)
                         if self.UHF.port.is_open:
                             self.write_console("UHF Modem Connection Accepted")
+                            self.write_console("Set UHF packet length to {} bytes".format(int.from_bytes(self.UHF.set_packet_length(18), byteorder='big', signed=False)))
 
             #reset radios
             if not self.reset_queue.empty():

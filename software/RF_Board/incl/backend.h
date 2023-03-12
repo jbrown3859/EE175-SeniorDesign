@@ -4,7 +4,7 @@
 enum State{INIT, WAIT, GET_RADIO_INFO,
             GET_RX_BUF_STATE, READ_RX_BUF, BURST_READ_RX, FLUSH_RX,
             GET_TX_BUF_STATE, WRITE_TX_BUF, BURST_WRITE_TX, FLUSH_TX,
-            WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS, GET_RADIO_STATE,
+            WRITE_RX_BUF, READ_TX_BUF, CLEAR_RX_FLAGS, CLEAR_TX_FLAGS, GET_RADIO_STATE, SET_PACKET_LENGTH,
             PROG_RADIO_REG, READ_RADIO_REG,
             MODE_IDLE, MODE_RX, MODE_TX,
             MANUAL_RESET};
@@ -18,6 +18,10 @@ struct RadioInfo {
     unsigned char spreading_factor;
     unsigned char coding_rate;
     enum RadioState radio_mode;
+};
+
+struct RadioPersistent { //should not get reset when watchdog is triggered
+    unsigned char radio_packet_length;
 };
 
 /* data structure for RX and TX packet buffers */
