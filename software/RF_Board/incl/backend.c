@@ -3,11 +3,11 @@
 #include <serial.h>
 #include <util.h>
 
-//#define RADIOTYPE_SBAND 1
-#define RADIOTYPE_UHF 1
+#define RADIOTYPE_SBAND 1
+//#define RADIOTYPE_UHF 1
 
-#define RX_SIZE 2048
-#define RX_PACKETS 160
+#define RX_SIZE 4080
+#define RX_PACKETS 255
 #define TX_SIZE 256
 #define TX_PACKETS 32
 
@@ -28,6 +28,15 @@ struct RadioInfo info;
 struct RadioPersistent RadioConfigs = {.radio_packet_length = 0};
 
 char RX_done = 0;
+
+/* TX/RX arrays */
+char TXbuf_data[TX_SIZE];
+unsigned int TXbuf_ptrs[TX_PACKETS];
+
+#pragma PERSISTENT(RXbuf_data)
+char RXbuf_data[RX_SIZE] = {0};
+#pragma PERSISTENT(RXbuf_ptrs)
+unsigned int RXbuf_ptrs[RX_PACKETS] = {0};
 
 /* helper functions */
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
@@ -139,6 +148,8 @@ void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigne
     }
 
     if ((buffer->flags & 0x03) == 0) { //if no overflows
+        enable_FRAM_write(FRAM_WRITE_ENABLE); //enable FRAM access for write
+
         for(i=0;i<len;i++) {
             buffer->data[buffer->data_head] = data[i];
             buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
@@ -146,6 +157,8 @@ void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigne
 
         buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
         buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
+
+        enable_FRAM_write(FRAM_WRITE_DISABLE); //set back to read-only
     }
 }
 
@@ -249,8 +262,8 @@ void main_loop(void) {
     char radio_state;
 
     /* RX buffer */
-    char RXbuf_data[RX_SIZE];
-    unsigned int RXbuf_ptrs[RX_PACKETS];
+    //char RXbuf_data[RX_SIZE];
+    //unsigned int RXbuf_ptrs[RX_PACKETS];
     RXbuf.data = RXbuf_data;
     RXbuf.max_data = RX_SIZE;
     RXbuf.pointers = RXbuf_ptrs;
@@ -262,8 +275,8 @@ void main_loop(void) {
     RXbuf.flags = 0;
 
     /* TX buffer */
-    char TXbuf_data[TX_SIZE];
-    unsigned int TXbuf_ptrs[TX_PACKETS];
+    //char TXbuf_data[TX_SIZE];
+    //unsigned int TXbuf_ptrs[TX_PACKETS];
     TXbuf.data = TXbuf_data;
     TXbuf.max_data = TX_SIZE;
     TXbuf.pointers = TXbuf_ptrs;

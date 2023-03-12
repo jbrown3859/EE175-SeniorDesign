@@ -27,8 +27,6 @@ import queue
 import radio
 import imaging
 
-res = [160, 120]
-
 def to_signed(n):
     if (n >= 128):
         n = n - 256
@@ -37,12 +35,12 @@ def to_signed(n):
 class MainWindow():
     def __init__(self, window):
         self.window = window
-        self.width = res[0]*4
-        self.height = res[1]*4
+        self.res = [160, 120]
+        self.width = self.res[0]*4
+        self.height = self.res[1]*4
         self.widgets = {}
-        self.frame = np.zeros((120, 160), dtype='uint8') #image frame
-        frame = Image.fromarray(self.frame) # to PIL format
-        self.image = ImageTk.PhotoImage(frame)
+        self.frame = np.zeros((self.res[1], self.res[0]), dtype='uint8') #image frame
+        self.image = ImageTk.PhotoImage(Image.fromarray(self.frame)) #to PIL format
 
         '''
         Radio Serial Port Instances
@@ -344,7 +342,7 @@ class MainWindow():
             except IndexError as e:
                 self.write_console("Error decoding image packet: " + str(packet))
 
-        frame = imaging.redtoBGR(self.frame, res[0], res[1])
+        frame = imaging.redtoBGR(self.frame, self.res[0], self.res[1])
         frame = cv.resize(frame, (self.width, self.height))
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
