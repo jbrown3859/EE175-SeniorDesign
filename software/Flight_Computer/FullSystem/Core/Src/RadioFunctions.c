@@ -389,3 +389,11 @@ char compare_buffer(UART_HandleTypeDef uartTerminal, const uint8_t *a_buf, const
 	}
 	return 1;
 }
+
+uint8_t sum_bits(uint64_t data, uint8_t length){
+	uint8_t sum = 0;
+	for(int i = 0; i < 32; i++){
+		sum += (data >> i) & 0x01;
+	}
+	return sum;
+}
