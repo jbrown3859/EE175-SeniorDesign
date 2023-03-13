@@ -11,6 +11,8 @@ enum State{INIT, WAIT, GET_RADIO_INFO,
 
 enum RadioState{IDLE, RX, TX_WAIT, TX_ACTIVE};
 
+enum BufferAccess{FREE, ACTIVE};
+
 struct RadioInfo {
     unsigned long frequency;
     unsigned long data_rate;
@@ -37,6 +39,8 @@ struct packet_buffer {
     unsigned int ptr_base;
 
     char flags;
+
+    enum BufferAccess BUFFER_ACCESS;
 };
 
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max);

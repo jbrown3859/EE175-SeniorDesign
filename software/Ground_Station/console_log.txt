@@ -1,0 +1,798 @@
+[2023-03-13 01:16:31] UHF Modem Connection Accepted
+[2023-03-13 01:16:31] Set UHF packet length to 32 bytes
+[2023-03-13 01:16:31] Warning: UHF buffer overflowed!
+[2023-03-13 01:18:33] Warning: telemetry timestamp checksum failed, t=1744
+[2023-03-13 01:18:39] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:18:40] Warning: telemetry timestamp checksum failed, t=12584681
+[2023-03-13 01:18:41] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:24:12] UHF Modem Disconnected
+[2023-03-13 01:24:15] UHF Modem Connection Accepted
+[2023-03-13 01:24:15] Set UHF packet length to 32 bytes
+[2023-03-13 01:24:16] Warning: UHF buffer overflowed!
+[2023-03-13 01:24:30] Cleared all telemetry plots
+[2023-03-13 01:25:26] Warning: telemetry timestamp checksum failed, t=3171
+[2023-03-13 01:25:26] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:25:33] Warning: telemetry timestamp checksum failed, t=2155873534
+[2023-03-13 01:25:33] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:25:49] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:25:51] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:27] Warning: telemetry timestamp checksum failed, t=3378
+[2023-03-13 01:26:27] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:48] Warning: telemetry timestamp checksum failed, t=396795
+[2023-03-13 01:26:48] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:48] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:54] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:54] Warning: telemetry timestamp checksum failed, t=537537938
+[2023-03-13 01:26:54] Warning: 8 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:55] Warning: telemetry timestamp checksum failed, t=2282261788
+[2023-03-13 01:26:55] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:55] Warning: telemetry timestamp checksum failed, t=2827101629
+[2023-03-13 01:26:55] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:26:58] Warning: telemetry timestamp checksum failed, t=3485
+[2023-03-13 01:26:58] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:05] Warning: telemetry timestamp checksum failed, t=3479547270
+[2023-03-13 01:27:05] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:12] Warning: telemetry timestamp checksum failed, t=2326299981
+[2023-03-13 01:27:12] Warning: 8 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:15] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:19] Warning: telemetry timestamp checksum failed, t=12264
+[2023-03-13 01:27:19] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:24] Warning: telemetry timestamp checksum failed, t=3576
+[2023-03-13 01:27:24] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:39] UHF received uncategorized packet: b'\xef\x00S\x06-\xfb"\x01\x03\xe8\xd3\xc4\xbe\xfe!\xc4\xb0p\x00v\x02i3\x17D\\LRC\xd0A\n'
+[2023-03-13 01:27:40] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:47] Warning: telemetry timestamp checksum failed, t=2567544533
+[2023-03-13 01:27:49] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:52] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:54] Warning: telemetry timestamp checksum failed, t=2415922886
+[2023-03-13 01:27:54] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:27:55] Warning: telemetry timestamp checksum failed, t=1617300996
+[2023-03-13 01:27:57] Warning: telemetry timestamp checksum failed, t=2848524009
+[2023-03-13 01:27:57] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:00] Warning: telemetry timestamp checksum failed, t=3702
+[2023-03-13 01:28:00] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:02] Warning: telemetry timestamp checksum failed, t=3377830881
+[2023-03-13 01:28:02] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:05] Warning: telemetry timestamp checksum failed, t=3444575194
+[2023-03-13 01:28:05] Warning: 8 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:06] Warning: telemetry timestamp checksum failed, t=2694123163
+[2023-03-13 01:28:06] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:07] Warning: telemetry timestamp checksum failed, t=3725
+[2023-03-13 01:28:07] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:08] Warning: telemetry timestamp checksum failed, t=3729
+[2023-03-13 01:28:08] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:10] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:10] Warning: telemetry timestamp checksum failed, t=3737
+[2023-03-13 01:28:10] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:11] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:12] Warning: telemetry timestamp checksum failed, t=3742
+[2023-03-13 01:28:12] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:13] Warning: telemetry timestamp checksum failed, t=3746
+[2023-03-13 01:28:13] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:15] Warning: telemetry timestamp checksum failed, t=3752
+[2023-03-13 01:28:15] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:15] Warning: telemetry timestamp checksum failed, t=3753
+[2023-03-13 01:28:15] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:16] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:18] Warning: telemetry timestamp checksum failed, t=3763
+[2023-03-13 01:28:18] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:23] Warning: telemetry timestamp checksum failed, t=10530511
+[2023-03-13 01:28:23] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:26] Warning: telemetry timestamp checksum failed, t=3137711426
+[2023-03-13 01:28:26] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:27] Warning: telemetry timestamp checksum failed, t=3795
+[2023-03-13 01:28:27] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:27] Warning: telemetry timestamp checksum failed, t=2290616028
+[2023-03-13 01:28:27] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:35] Warning: telemetry timestamp checksum failed, t=3816
+[2023-03-13 01:28:35] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:35] Warning: telemetry timestamp checksum failed, t=3817
+[2023-03-13 01:28:35] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:37] Warning: telemetry timestamp checksum failed, t=3823
+[2023-03-13 01:28:37] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:37] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:37] Warning: telemetry timestamp checksum failed, t=3825
+[2023-03-13 01:28:37] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:37] Warning: telemetry timestamp checksum failed, t=3794
+[2023-03-13 01:28:37] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:38] Warning: telemetry timestamp checksum failed, t=3827
+[2023-03-13 01:28:38] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:38] Warning: telemetry timestamp checksum failed, t=3828
+[2023-03-13 01:28:38] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:38] Warning: telemetry timestamp checksum failed, t=3829
+[2023-03-13 01:28:38] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:39] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:39] Warning: telemetry timestamp checksum failed, t=3833
+[2023-03-13 01:28:39] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:41] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:41] Warning: telemetry timestamp checksum failed, t=3840
+[2023-03-13 01:28:41] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:42] Warning: telemetry timestamp checksum failed, t=711197093
+[2023-03-13 01:28:42] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:42] Warning: telemetry timestamp checksum failed, t=3842
+[2023-03-13 01:28:42] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:45] Warning: telemetry timestamp checksum failed, t=3851
+[2023-03-13 01:28:46] Warning: telemetry timestamp checksum failed, t=83910464
+[2023-03-13 01:28:46] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:48] Warning: telemetry timestamp checksum failed, t=3864
+[2023-03-13 01:28:48] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:53] Warning: telemetry timestamp checksum failed, t=1319
+[2023-03-13 01:28:53] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:53] Warning: telemetry timestamp checksum failed, t=3882
+[2023-03-13 01:28:53] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:28:57] Warning: telemetry timestamp checksum failed, t=3894
+[2023-03-13 01:28:57] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:00] Warning: telemetry timestamp checksum failed, t=2290749378
+[2023-03-13 01:29:00] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:01] Warning: telemetry timestamp checksum failed, t=3907
+[2023-03-13 01:29:01] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:04] Warning: telemetry timestamp checksum failed, t=3920
+[2023-03-13 01:29:04] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:06] Warning: telemetry timestamp checksum failed, t=200534
+[2023-03-13 01:29:06] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:08] Warning: telemetry timestamp checksum failed, t=2325751639
+[2023-03-13 01:29:08] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:10] Warning: telemetry timestamp checksum failed, t=142608357
+[2023-03-13 01:29:10] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:12] Warning: telemetry timestamp checksum failed, t=3948
+[2023-03-13 01:29:12] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:15] Warning: telemetry timestamp checksum failed, t=3957
+[2023-03-13 01:29:15] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:24] Warning: telemetry timestamp checksum failed, t=2883749300
+[2023-03-13 01:29:24] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:25] Warning: telemetry timestamp checksum failed, t=3993
+[2023-03-13 01:29:25] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:29] Warning: telemetry timestamp checksum failed, t=4006
+[2023-03-13 01:29:29] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:36] Warning: telemetry timestamp checksum failed, t=4030
+[2023-03-13 01:29:36] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:45] Warning: telemetry timestamp checksum failed, t=4061
+[2023-03-13 01:29:45] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:55] Warning: telemetry timestamp checksum failed, t=1052688
+[2023-03-13 01:29:55] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:29:57] Warning: telemetry timestamp checksum failed, t=470292871
+[2023-03-13 01:29:57] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:30:11] Warning: telemetry timestamp checksum failed, t=4241893489
+[2023-03-13 01:30:11] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:30:20] Warning: telemetry timestamp checksum failed, t=4185
+[2023-03-13 01:30:20] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:30:21] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:30:33] Warning: telemetry timestamp checksum failed, t=50335878
+[2023-03-13 01:31:08] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:13] Warning: telemetry timestamp checksum failed, t=4366
+[2023-03-13 01:31:13] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:21] Warning: telemetry timestamp checksum failed, t=2738370600
+[2023-03-13 01:31:21] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:21] Warning: telemetry timestamp checksum failed, t=956989877
+[2023-03-13 01:31:24] Warning: telemetry timestamp checksum failed, t=201014
+[2023-03-13 01:31:31] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:31] Warning: telemetry timestamp checksum failed, t=40252747
+[2023-03-13 01:31:31] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:32] Warning: telemetry timestamp checksum failed, t=33567056
+[2023-03-13 01:31:32] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:32] Warning: telemetry timestamp checksum failed, t=71323989
+[2023-03-13 01:31:32] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:32] UHF received uncategorized packet: b'\xd7\x1d\xc0\x84\x06\xfc\xeb__kZB:\xad\xed\x93\x90\xe8\x80\xb3R=3r\xb3xv\x05\xb5\x95\x14N'
+[2023-03-13 01:31:36] Warning: telemetry timestamp checksum failed, t=1717596472
+[2023-03-13 01:31:38] Warning: telemetry timestamp checksum failed, t=142643557
+[2023-03-13 01:31:38] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:50] Warning: telemetry timestamp checksum failed, t=4497
+[2023-03-13 01:31:50] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:54] Warning: telemetry timestamp checksum failed, t=911241632
+[2023-03-13 01:31:54] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:55] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:57] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:58] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:31:58] Warning: telemetry timestamp checksum failed, t=174111620
+[2023-03-13 01:31:58] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:32:00] Warning: telemetry timestamp checksum failed, t=3719561831
+[2023-03-13 01:32:00] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:32:01] Warning: telemetry timestamp checksum failed, t=4536
+[2023-03-13 01:32:01] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:32:02] Warning: telemetry timestamp checksum failed, t=4539
+[2023-03-13 01:32:02] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:32:02] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:32:03] Cleared all telemetry plots
+[2023-03-13 01:33:49] Warning: telemetry timestamp checksum failed, t=1955507
+[2023-03-13 01:33:49] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:34:32] Cleared all telemetry plots
+[2023-03-13 01:34:46] UHF received uncategorized packet: b'De\xc0S\xec\x91\xe5\x0f_\x008\xbc`\x04bO\xd4\xf0\x04v\x02i3\x17\xc0|\xce\xd0Lsw:'
+[2023-03-13 01:34:51] Warning: telemetry timestamp checksum failed, t=1778654134
+[2023-03-13 01:34:51] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:34:52] Warning: telemetry timestamp checksum failed, t=3681139012
+[2023-03-13 01:34:52] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:34:55] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:34:56] Warning: telemetry timestamp checksum failed, t=2367655366
+[2023-03-13 01:34:56] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:34:58] Warning: telemetry timestamp checksum failed, t=101061673
+[2023-03-13 01:34:58] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:00] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:03] Warning: telemetry timestamp checksum failed, t=3450510466
+[2023-03-13 01:35:03] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:09] Warning: telemetry timestamp checksum failed, t=50533438
+[2023-03-13 01:35:09] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:12] Warning: telemetry timestamp checksum failed, t=570434132
+[2023-03-13 01:35:12] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:13] Warning: telemetry timestamp checksum failed, t=5189
+[2023-03-13 01:35:13] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:18] Warning: telemetry timestamp checksum failed, t=2434307317
+[2023-03-13 01:35:18] Warning: telemetry timestamp checksum failed, t=1078202392
+[2023-03-13 01:35:18] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:20] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:27] Warning: telemetry timestamp checksum failed, t=5240
+[2023-03-13 01:35:27] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:28] Warning: telemetry timestamp checksum failed, t=2104955
+[2023-03-13 01:35:28] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:31] Warning: telemetry timestamp checksum failed, t=50730115
+[2023-03-13 01:35:33] Warning: telemetry timestamp checksum failed, t=5259
+[2023-03-13 01:35:39] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:41] Warning: telemetry timestamp checksum failed, t=5543
+[2023-03-13 01:35:41] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:43] Warning: telemetry timestamp checksum failed, t=5293
+[2023-03-13 01:35:43] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:44] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:44] Cleared all telemetry plots
+[2023-03-13 01:35:49] Warning: telemetry timestamp checksum failed, t=1078202566
+[2023-03-13 01:35:49] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 01:35:52] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:36:03] Cleared all telemetry plots
+[2023-03-13 01:36:14] Warning: telemetry timestamp checksum failed, t=5402
+[2023-03-13 01:36:14] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:36:15] Warning: telemetry timestamp checksum failed, t=5407
+[2023-03-13 01:36:15] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:36:16] Warning: telemetry timestamp checksum failed, t=1111888133
+[2023-03-13 01:36:16] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:36:26] Warning: telemetry timestamp checksum failed, t=5443
+[2023-03-13 01:36:26] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:39:51] Warning: telemetry timestamp checksum failed, t=12589061
+[2023-03-13 01:40:21] UHF Modem Disconnected
+[2023-03-13 01:40:25] UHF Modem Connection Accepted
+[2023-03-13 01:40:25] Set UHF packet length to 32 bytes
+[2023-03-13 01:40:26] UHF Modem Disconnected
+[2023-03-13 01:40:36] S-Band Modem Connection Accepted
+[2023-03-13 01:40:36] Set S-Band packet length to 18 bytes
+[2023-03-13 01:40:41] UHF Modem Connection Accepted
+[2023-03-13 01:40:41] Set UHF packet length to 32 bytes
+[2023-03-13 01:40:56] Command hex: 20010102
+[2023-03-13 01:40:57] SBand Entering Transmit Mode
+[2023-03-13 01:40:57] SBand Transmission Complete
+[2023-03-13 01:41:21] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 01:41:21] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 01:41:29] Saved image to images/range_test_1.png
+[2023-03-13 01:41:59] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:42:35] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:42:37] Command hex: 20010102
+[2023-03-13 01:42:37] SBand Entering Transmit Mode
+[2023-03-13 01:42:38] Command hex: 20010102
+[2023-03-13 01:42:38] SBand Transmission Complete
+[2023-03-13 01:42:38] SBand Entering Transmit Mode
+[2023-03-13 01:42:39] SBand Transmission Complete
+[2023-03-13 01:42:46] Command hex: 20010102
+[2023-03-13 01:42:46] SBand Entering Transmit Mode
+[2023-03-13 01:42:46] Command hex: 20010102
+[2023-03-13 01:42:46] Command hex: 20010102
+[2023-03-13 01:42:47] SBand Transmission Complete
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:47] SBand Entering Transmit Mode
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:47] Command hex: 20010102
+[2023-03-13 01:42:48] Command hex: 20010102
+[2023-03-13 01:42:48] SBand Transmission Complete
+[2023-03-13 01:42:48] Command hex: 20010102
+[2023-03-13 01:42:48] Command hex: 20010102
+[2023-03-13 01:42:48] SBand Entering Transmit Mode
+[2023-03-13 01:42:49] SBand Transmission Complete
+[2023-03-13 01:42:52] Error decoding image packet: b'\x8a\x80Pp\x04@\x08HHPHHHH@@@H'
+[2023-03-13 01:42:52] Error decoding image packet: b'\x88\x00PP@@HHHPHHHH@@@H'
+[2023-03-13 01:42:52] SBand received uncategorized packet: b'\x00\x018888888888<888<:'
+[2023-03-13 01:42:52] SBand received uncategorized packet: b'\x00\x11\x10\x11\x10\x12\x10\x10\x10\x18\x18\x18\x18\x18 (8\x18'
+[2023-03-13 01:42:53] SBand received uncategorized packet: b'\x00\x16@@@@@@@@B@@@8888'
+[2023-03-13 01:42:53] Error decoding image packet: b'\xa0\x1a  \x18\x10\x18\x18\x18\x18\x100\x10\x10\x10\x10\x10\x10'
+[2023-03-13 01:42:53] Error decoding image packet: b'\x84\xc28\x12\x10\x100\x11\x10\x00P8\x18\x18\x18\x18\x18\x18'
+[2023-03-13 01:42:53] Error decoding image packet: b'\x90T\x11\x08\x10\x18\x18\x18 8(\x98 $ ( \x10'
+[2023-03-13 01:42:54] Error decoding image packet: b'\xb0e\x182\x1aX\x98\x1a\x10\x90\x18\x1c\x10\x91\x14\x10\x10\x10'
+[2023-03-13 01:42:54] Error decoding image packet: b'\x88\xfa@@@@H@H\xd0R@@8\x00@@@'
+[2023-03-13 01:42:54] Error decoding image packet: b'\x88\x8a\x18\x18      8@8P(\x18\x18\x18'
+[2023-03-13 01:42:55] Error decoding image packet: b'\x88\x9a \x18\x18\x10\x10\x18X\x19\x18  (\xa8(!\x14'
+[2023-03-13 01:42:55] Error decoding image packet: b'\x88\xbe \xb8(@@HQPH@@HPH@='
+[2023-03-13 01:42:55] Error decoding image packet: b'\xc0\xc3\x10\x10\x10\x18  \x18\x18\x18 @PZXPP'
+[2023-03-13 01:42:56] SBand received uncategorized packet: b'\x00\xe3\x10\x18\x18  \x10\x10\x188@HHPPXX'
+[2023-03-13 01:42:56] Error decoding image packet: b'\x84\xef(Y80 8X\xd8\x19\xe8x\x10 x\xf8\xe0'
+[2023-03-13 01:42:56] Error decoding image packet: b'\xa1\t\x10\x18( \x18\x10\x18$(8HHRPXX'
+[2023-03-13 01:42:56] Error decoding image packet: b'\xc1\x16xX88xPx`P@x\xf8\xf8\xf8\xf0\xd0'
+[2023-03-13 01:42:57] Error decoding image packet: b'\x85_08Xy,\xce\xaa)@~yHQ(8('
+[2023-03-13 01:42:57] Error decoding image packet: b'\x89!@J9Pxxx@Xp8xx2X8'
+[2023-03-13 01:42:57] Error decoding image packet: b'\x89$HHHH\x00HHPPPI\x08HHHH'
+[2023-03-13 01:42:57] Error decoding image packet: b'\x897P(\x08XI8Xx\xd8\xf8\xf8\xd0\xd0\xc0xx'
+[2023-03-13 01:42:57] Error decoding image packet: b'\xc1TjPH8(\x18P\x10\x18\x18\x18 (88\xb8'
+[2023-03-13 01:42:58] Error decoding image packet: b'\x89x((( (((  (888x\xc8\xd8'
+[2023-03-13 01:42:58] Error decoding image packet: b'\x89\x80H@@@98((    8((\x18'
+[2023-03-13 01:42:59] SBand received uncategorized packet: b'\x01\xad8(\x188X`xx\xc0\xf0\xc8XHX\xd0\xf8'
+[2023-03-13 01:42:59] Error decoding image packet: b'\x91\x858@@@@@@@@\x00@@@@HH'
+[2023-03-13 01:43:00] Error decoding image packet: b'\x91\xe0PPPPPPHH@(\x18\x10\x08\x10\x18 '
+[2023-03-13 01:43:00] Error decoding image packet: b'\xa2\x02QP\xd0P\xcaH@88(\x088  \x18R'
+[2023-03-13 01:43:00] Error decoding image packet: b'\xc2\x07\xf0\xf8\xf8\xd8x\xd8\xf2\xdax\xf0\xea\xe8xx\xe0z'
+[2023-03-13 01:43:00] Error decoding image packet: b'\x87\x17\x10\x90R\x100QS@>H\xd8\xd8\xd8\xd8\xd8\xd8'
+[2023-03-13 01:43:01] SBand received uncategorized packet: b'\x026 QpP \x94T\x00\x10\x1a\x18\x02\x18\x19(\x08'
+[2023-03-13 01:43:02] Error decoding image packet: b'\xa2W (8pxp\xc8\xec\xe4\xf0\xf0\xf0\xf0\xcc\xc8\xd0'
+[2023-03-13 01:43:02] SBand received uncategorized packet: b'\x02d@@\x08HHPPHPPPP\xd0PPP'
+[2023-03-13 01:43:03] Error decoding image packet: b'\x92vPPHx \x10\x0c\x08\x08(\x18 ((8D'
+[2023-03-13 01:43:05] Error decoding image packet: b'\x87M8\xb8@@@@88@Hp@`HHH'
+[2023-03-13 01:43:05] Error decoding image packet: b'\x93\x1c\x1e @hx\xf2XA`88p\xc0tx\xc0'
+[2023-03-13 01:43:05] Error decoding image packet: b'\xc3#PTPPHJPRHHHaLH@@'
+[2023-03-13 01:43:05] Error decoding image packet: b'\xa3+`@h@\xc0@L8@@@\xc0@JJH'
+[2023-03-13 01:43:05] SBand received uncategorized packet: b'\x039\xc0\xc0\xc0\xc8\xc8x8\x18((pxX\xc0x@'
+[2023-03-13 01:43:05] SBand received uncategorized packet: b'\x03>@BHHHH@@H888<888'
+[2023-03-13 01:43:05] Error decoding image packet: b'\x8b1@(@xx\xc0\xc8xH8 \x19X \x18 '
+[2023-03-13 01:43:05] Error decoding image packet: b'\x93:XpXx\xc8\xf0xx\xf0\xd0\xf8\xf8\xf8xxx'
+[2023-03-13 01:43:06] Error decoding image packet: b'\x87NBpxxQ\xc8\xd0\x94\x98\xd8\xf8\xd0\xb8PX8'
+[2023-03-13 01:43:06] Error decoding image packet: b'\xa3\\PPH@HHH@8(88(888'
+[2023-03-13 01:43:06] Error decoding image packet: b'\x93]2@8xA8H@ABB@h\xccb@'
+[2023-03-13 01:43:06] Error decoding image packet: b'\x93aXRPb((\x08"(\x08P\x98`$\x81"'
+[2023-03-13 01:43:07] Error decoding image packet: b'\x87q88@@888@@@@@\xc0@@H'
+[2023-03-13 01:43:07] Error decoding image packet: b'\x8b\x8eHHHHhHHA88(888<8'
+[2023-03-13 01:43:07] Error decoding image packet: b'\x93\xa2PHHH@@89(88(8888'
+[2023-03-13 01:43:07] Error decoding image packet: b'\x8b\xb6@HN@@@ \x98h 8)x888'
+[2023-03-13 01:43:07] Error decoding image packet: b'\x87\xaf(88((((( `(()8(('
+[2023-03-13 01:43:08] Error decoding image packet: b'\x8b\xd888\x00@988888<8@PQ@'
+[2023-03-13 01:43:08] Error decoding image packet: b'\xa3\xe6P\xc8xrHPp8  $((((('
+[2023-03-13 01:43:08] Error decoding image packet: b'\xc3\xf3\xe0@8\xb8228@8888@@@`'
+[2023-03-13 01:43:08] SBand received uncategorized packet: b'\x13\xf9xH@8(88(\x18\x18h@\xc0\xc8P8'
+[2023-03-13 01:43:09] Error decoding image packet: b'\x8b\xf9xH@\x18(\xb88(\x10\x1a(@\xc0\xc8\xd08'
+[2023-03-13 01:43:09] Error decoding image packet: b'\x87\xfa\x15yxDhy8X8\x146b \x0c\x08p'
+[2023-03-13 01:43:09] Error decoding image packet: b'\x93\xfe8\x00`B@@\xc0@@J@H@X@\x00'
+[2023-03-13 01:43:09] Error decoding image packet: b'\x8c\x00@@888:8888888HXX'
+[2023-03-13 01:43:09] Error decoding image packet: b'\x94\x0bpX8H@8@:(Xz8   !'
+[2023-03-13 01:43:09] SBand received uncategorized packet: b'\x04\x1aP@@H8<x*8\xb8880x<8'
+[2023-03-13 01:43:09] SBand received uncategorized packet: b'd;D@8@@@8888880888'
+[2023-03-13 01:43:10] Error decoding image packet: b'\x85\x16\x18X\x18\x18\x188\x10(88  888H'
+[2023-03-13 01:43:10] Error decoding image packet: b'\xa4#HH( (@@@8\n(( XX9'
+[2023-03-13 01:43:10] Error decoding image packet: b'\xe40@@@@D@@@H`BHH@@A'
+[2023-03-13 01:43:10] Error decoding image packet: b'\xa44   \x19  \x18\x18\x18\x1c (  0('
+[2023-03-13 01:43:10] Error decoding image packet: b'\xc4C8888x8D8@@89D88|'
+[2023-03-13 01:43:10] Error decoding image packet: b'\x94W \x18\x08\x18 8(\x18\x1a` \x18\x10\x18 \x18'
+[2023-03-13 01:43:10] SBand received uncategorized packet: b'\x04[\x00\x904\x10\x18\x1a\x18\x98\x13\x18 \x19\x08 88'
+[2023-03-13 01:43:10] Error decoding image packet: b'\x8cJ8D:   @p\xd4xP(  \x18\x18'
+[2023-03-13 01:43:10] Error decoding image packet: b'\x95e\x18\x18\x18\x18\x18\x18\x18\x10\x18\x18\x08\x18\x18 (8'
+[2023-03-13 01:43:10] Error decoding image packet: b'\xc4l@PptX8\x01\x1888\xd001@ x'
+[2023-03-13 01:43:11] Error decoding image packet: b'\x8ctHHD\xc0@8=( (80\xb8<8\x18'
+[2023-03-13 01:43:11] Error decoding image packet: b'\x8cv@P@@\x00@@H@@@@@8@@'
+[2023-03-13 01:43:11] Error decoding image packet: b'\xc4\xde@DA8A98) (((888:'
+[2023-03-13 01:43:11] SBand received uncategorized packet: b'\x04\xa1\x10\x10\x10\x18\x08\x14\x10\x08\x10\x10\x18\x10\x10\x18\x1a\x98'
+[2023-03-13 01:43:11] SBand received uncategorized packet: b'\x04\xa988888((80@PppH@('
+[2023-03-13 01:43:11] Error decoding image packet: b'\xc4\x8e\x18\x10\x10\x10\x10\x10\x10\x18\x08\x18\x18\x18\x18\x1d \x18'
+[2023-03-13 01:43:11] Error decoding image packet: b'\x85\x8f  $\x18 8H`(PXxH88x'
+[2023-03-13 01:43:18] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:19] Warning: telemetry timestamp checksum failed, t=6706
+[2023-03-13 01:43:19] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:20] Warning: telemetry timestamp checksum failed, t=6708
+[2023-03-13 01:43:20] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:20] Warning: telemetry timestamp checksum failed, t=4202101
+[2023-03-13 01:43:20] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:21] Warning: telemetry timestamp checksum failed, t=105143358
+[2023-03-13 01:43:21] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:22] Warning: telemetry timestamp checksum failed, t=3276806829
+[2023-03-13 01:43:22] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:23] Warning: telemetry timestamp checksum failed, t=6719
+[2023-03-13 01:43:23] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:24] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:26] Warning: telemetry timestamp checksum failed, t=6729
+[2023-03-13 01:43:26] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:27] Warning: telemetry timestamp checksum failed, t=6733
+[2023-03-13 01:43:27] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:29] Warning: telemetry timestamp checksum failed, t=6739
+[2023-03-13 01:43:29] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:30] Warning: telemetry timestamp checksum failed, t=4270489408
+[2023-03-13 01:43:30] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:32] Warning: telemetry timestamp checksum failed, t=6750
+[2023-03-13 01:43:32] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:32] Warning: telemetry timestamp checksum failed, t=6753
+[2023-03-13 01:43:32] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 01:43:40] Command hex: 20010102
+[2023-03-13 01:43:40] SBand Entering Transmit Mode
+[2023-03-13 01:43:40] Command hex: 20010102
+[2023-03-13 01:43:40] Command hex: 20010102
+[2023-03-13 01:43:40] Command hex: 20010102
+[2023-03-13 01:43:40] SBand Transmission Complete
+[2023-03-13 01:43:40] Command hex: 20010102
+[2023-03-13 01:43:41] Command hex: 20010102
+[2023-03-13 01:43:41] Command hex: 20010102
+[2023-03-13 01:43:41] Command hex: 20010102
+[2023-03-13 01:43:41] SBand Entering Transmit Mode
+[2023-03-13 01:43:41] Command hex: 20010102
+[2023-03-13 01:43:41] Command hex: 20010102
+[2023-03-13 01:43:41] SBand Transmission Complete
+[2023-03-13 01:43:42] SBand Entering Transmit Mode
+[2023-03-13 01:43:42] SBand Transmission Complete
+[2023-03-13 01:43:46] SBand received uncategorized packet: b'\x00\x03  ! ((Xp\xf8\xe8\xf8x\xf8\xf8\xf8\xd0'
+[2023-03-13 01:43:46] SBand received uncategorized packet: b' s:a  9(\xc0\xb0\xfc\xf8\xd8\xe0\xf8\xf8\xe0d'
+[2023-03-13 01:43:46] SBand received uncategorized packet: b'\x00#\xf0\xf8\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:43:46] Error decoding image packet: b'\xa0\x10\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xd8\xf8\xf8\xd8\xf8x\xf8\xf8\xf8'
+[2023-03-13 01:43:48] Error decoding image packet: b'\x94^\xfa\xe5\xf8\xf8\xf8\xf8\xf0\xf8\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:43:48] Error decoding image packet: b'\x88r\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:43:48] SBand received uncategorized packet: b'\x00\x9b\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:43:49] Error decoding image packet: b'\x88\xa1  \x18\x18\x18\x18 \x18\x18 (@\xe8\xf0\xf0\xf8'
+[2023-03-13 01:43:49] Error decoding image packet: b'\xc0\xb588888@@@@@@Hxpx\xf8'
+[2023-03-13 01:43:49] Error decoding image packet: b'\xc0\xb6\xf8\xf8x\xf8\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:43:50] SBand received uncategorized packet: b'\x01\x18\x18  ((((\x08<HHH(\x18  '
+[2023-03-13 01:43:52] Error decoding image packet: b'\x89C\x18\x18( \x10\x18(\x18\x10((\x10\x088(\x10'
+[2023-03-13 01:43:53] Error decoding image packet: b'\x89\x96@P(@X88X@8P88P8@'
+[2023-03-13 01:43:53] Error decoding image packet: b'\xc1\xa58((888888@@@@HHX'
+[2023-03-13 01:43:53] Error decoding image packet: b'\x91\xb2H8(@P 8H((H8(HH8'
+[2023-03-13 01:43:53] Error decoding image packet: b'\x91\xb5P(@H\x18@@!H8 H8 @('
+[2023-03-13 01:43:53] Error decoding image packet: b'\x89\xd0H( Hx @8 P@ H@8H'
+[2023-03-13 01:43:54] Error decoding image packet: b'\xc1\xeb8,\x1a\x08\x08\x08\x08\x18\x08(QXZXXX'
+[2023-03-13 01:43:54] SBand received uncategorized packet: b'\x02$H 8H (@<8P@H@RPp'
+[2023-03-13 01:43:55] Error decoding image packet: b'\x86\x0bX(@(\x1888 (@8(H@(@'
+[2023-03-13 01:43:55] Error decoding image packet: b'\xc2!P88H@(@@(H8 @@ 8'
+[2023-03-13 01:43:55] Error decoding image packet: b'\x86"H\x188H\x108@ (@(8H88@'
+[2023-03-13 01:43:55] Error decoding image packet: b'\xc2&\x08\x92P\x10\x08\x08\x10\x10\x10\x10\x08\t\x10\x18 <'
+[2023-03-13 01:43:56] Error decoding image packet: b'\x86L` (@\x1888\x188( @\x18 8\x10'
+[2023-03-13 01:43:56] Error decoding image packet: b'\x92N\x08\x10\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x10(8('
+[2023-03-13 01:43:56] SBand received uncategorized packet: b'\x02m\x08\x08\x08\x08\x08\x08\x08\x08\x18XPXXXPX'
+[2023-03-13 01:43:57] Error decoding image packet: b'\xa2\xabxxxxxxxxxxxxxxxx'
+[2023-03-13 01:43:58] Error decoding image packet: b'\xa2\xd9888( (\x18  \x10 \x10\x10(\x18 '
+[2023-03-13 01:43:58] SBand received uncategorized packet: b'\x02\xf2(HH8PP@HX88P@8H8'
+[2023-03-13 01:44:00] Error decoding image packet: b'\x877XXpppppppppppppp'
+[2023-03-13 01:44:00] SBand received uncategorized packet: b'\x03LxXxxxxxxxxxxxxxp'
+[2023-03-13 01:44:00] Error decoding image packet: b'\x8bWxxx8hxxxxxxxxxxx'
+[2023-03-13 01:44:01] Error decoding image packet: b'\x8b}\xf8\xf8\xf8\xf8\xf8\xf0\xf8\xf8\xf8\xf8\xf0\xe8\xe8\xe0\xe0\xe0'
+[2023-03-13 01:44:01] SBand received uncategorized packet: b'\x03\xae\x18\x18\x1c\x18  88\xc0\xe8\xf8\xf8\xf8\xf8\xf8\xf0'
+[2023-03-13 01:44:01] Error decoding image packet: b'\x87\xa5\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:02] Error decoding image packet: b'\xc3\xd2\x18\x18\x18   88Px\xe0\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:02] Error decoding image packet: b'\xc3\xe2\xf8\xf8\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:02] Error decoding image packet: b'\xa3\xf4\x10\x11\x18 (8L@P\xd0\xf0\xb8\xf0\xf8\xf8\xf8'
+[2023-03-13 01:44:03] SBand received uncategorized packet: b'\x04!\xf8\xf8\xf8\xf8\xf9\xd8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf9'
+[2023-03-13 01:44:03] Error decoding image packet: b'\x94\x01\xf8\xf8\xf8\xfc\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:03] SBand received uncategorized packet: b'\x04(\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf8\xf8'
+[2023-03-13 01:44:04] Error decoding image packet: b'\x85>\xf8\xf8\xf8\xf8\xf8\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:04] Error decoding image packet: b'\x84\xbf\xf8\xf8\xf8\xf8\xfc\xf8\xf8\xf8\xfc\xf8\xf8\xfb\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:04] Error decoding image packet: b'\xa4Y\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xb8\xf8\xf8'
+[2023-03-13 01:44:04] Error decoding image packet: b'\x86a\x08\x08\x08\x08\x08\x08\x08P\x10\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 01:44:04] Error decoding image packet: b'\x8cg\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:04] Error decoding image packet: b'\x94tx(80`H*\x10\x10P\x10\x10\x10\x10\x10\x10'
+[2023-03-13 01:44:05] SBand received uncategorized packet: b'\x04\x9a\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf0'
+[2023-03-13 01:44:05] SBand received uncategorized packet: b'\x04\x9d\x08H\n\n\x08\x10\x10\x10\x10\x14\x18P\x18\x188\x98'
+[2023-03-13 01:44:05] Error decoding image packet: b'\x86\x82\xf8\xf8\xf8\xd8\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:05] Error decoding image packet: b'\x94\x82\xf8\xf9\xf8\xf8\xf8\xfa\xfa\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:05] Error decoding image packet: b'\x84\xc9\x18\x08\x10\x10\x12\x18\x10\x10\x12\x19\x10\x10\x14\x10\x11\x10'
+[2023-03-13 01:44:05] Error decoding image packet: b'\x85\xd3\x08\x08\t\x100\x10\x10\x10\x11\x11\x10\x00\x00\x10\x10\x10'
+[2023-03-13 01:44:05] Error decoding image packet: b'\x84\xb0\x80\x00\x00\x00\x00 \x00\x00\x10\x10\x00\x00\x00\x00\x00\x00'
+[2023-03-13 01:44:12] Saved image to images/clktwr.png
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] SBand Entering Transmit Mode
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] SBand Transmission Complete
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:26] Command hex: 20020102
+[2023-03-13 01:44:27] Command hex: 20020102
+[2023-03-13 01:44:27] Command hex: 20020102
+[2023-03-13 01:44:27] Command hex: 20020102
+[2023-03-13 01:44:27] SBand Entering Transmit Mode
+[2023-03-13 01:44:27] Command hex: 20020102
+[2023-03-13 01:44:27] Command hex: 20020102
+[2023-03-13 01:44:27] SBand Transmission Complete
+[2023-03-13 01:44:28] SBand Entering Transmit Mode
+[2023-03-13 01:44:28] SBand Transmission Complete
+[2023-03-13 01:44:32] Set image resolution to 320x240
+[2023-03-13 01:44:32] Error decoding image packet: b'\xc3\x07"\xa4x\x10\x18\x18\x18\x18\x18\x18\x18\x18\x18\x1888'
+[2023-03-13 01:44:32] SBand received uncategorized packet: b'\x00\x16XPPHHHHH@HHH@@88'
+[2023-03-13 01:44:33] SBand received uncategorized packet: b'\x00K\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:33] SBand received uncategorized packet: b'\x00QXXPH@@@@@@@@HHHH'
+[2023-03-13 01:44:34] Error decoding image packet: b'\xa0zHJPXHHPPH@HJH@@8'
+[2023-03-13 01:44:34] SBand received uncategorized packet: b'\x00\xacP T\xf8\xf8\xd8\xe0\xf8\xf0\xf0\xb8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:34] Error decoding image packet: b'\xa0\x95            \x18   '
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x00\xdeH@H@HXPPHHh@@@`@'
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x00\xf0HHHHBH\\iH@PPYppx'
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x00\xf4\xd0\x90\xd0\xd0\xd0\xd8\xd8\xd8\xe0\xf0\xd0\xf0\xd8\xd8\xd8\xda'
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x01\x17\xf8\xb8\xf8\xf8\xf8x\xf0\xf0\xf0\xf0\xf0\xb0\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x01\x1aHHHHH@PXPHHHHHH@'
+[2023-03-13 01:44:36] SBand received uncategorized packet: b'\x01\x1fH8\xa8@p8888Xh8(0x\xf8'
+[2023-03-13 01:44:36] Error decoding image packet: b'\xd1(\xf8\xd9\xf9\xf8\xf8\xb9\xf8\xf8\xfa\xd8\xf8\xfa\xf8\xb8\xf8\xfa'
+[2023-03-13 01:44:36] Error decoding image packet: b'\xa1)\xf8\xf8y\xf8\xf8\xf8\xf8\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:37] SBand received uncategorized packet: b'\x11T\xd0\xd0\xd0\xd0\xd8\xd8\xdc\xd8\xd8\xc0\xf0\xe0\xf0\xf0\xf0\xb0'
+[2023-03-13 01:44:37] Error decoding image packet: b'\xa1EPx,\x18x H@\x10\x80\xc0H\xb88K8'
+[2023-03-13 01:44:37] Error decoding image packet: b'\xc1GPH)  ((  \x00 \x908X\xf0\xec'
+[2023-03-13 01:44:37] Error decoding image packet: b'\xc9T@HH@9@Ded\rHHHPx\xf0'
+[2023-03-13 01:44:38] Error decoding image packet: b'\xa1\x80\xd0\xd2\xd0\xd8\xd8\xd8\xd8\xd8\xf0\xe0pp\xdc\xd8\xe1\xd8'
+[2023-03-13 01:44:39] SBand received uncategorized packet: b'\x01\xab8HXxp8x\xd0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:39] SBand received uncategorized packet: b'\x05\xb9XXp\xd8PBHI\xc0P@@HpPH'
+[2023-03-13 01:44:39] SBand received uncategorized packet: b'\x01\xc0@\x00\xf1%r\x1cp\xf0\xc2\xd0\xd0\x90\xc8\xd8\xd0\xd0'
+[2023-03-13 01:44:39] Error decoding image packet: b'\xa1\xceHP\x90PPPPPP@H\x10HPPX'
+[2023-03-13 01:44:40] SBand received uncategorized packet: b'\x02\x10x\xc8\xc8\xf0\xf0\xf8\xe8\xf0\xf8\xf8\xf8\xf8\xf8\xf0\xf8x'
+[2023-03-13 01:44:40] Error decoding image packet: b'\xa1\xe4\xd2\xd0\xd0\xd0\xd8\xd8\xd8\xf0\xf8\xf8\x80\xd0\xf8\xf0\xf0\xf0'
+[2023-03-13 01:44:40] Error decoding image packet: b'\xa2\x04\xf9\xf8\xf8\xf8\xf8\xf9\xf8x\xf8\xf0\xf8\xf8\xb8\xf8\xf8\xf8'
+[2023-03-13 01:44:40] Error decoding image packet: b'\xa2\x1c@@HHHHHH@HHHHHHP'
+[2023-03-13 01:44:41] SBand received uncategorized packet: b'\x02B\xf8\xc8\xf8\xd8\xf0\xf8\xf8\xf8\xf8\xf8\xfc\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:42] Error decoding image packet: b'\xc2T\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:42] Error decoding image packet: b'\xa3{\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xfd'
+[2023-03-13 01:44:42] Error decoding image packet: b'\xa2\x99\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8x'
+[2023-03-13 01:44:43] SBand received uncategorized packet: b'\x02\xa0\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xea\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0'
+[2023-03-13 01:44:43] SBand received uncategorized packet: b'\x02\xb6\xd0\xd0XP\xd8\xf0\xf8\xf8\xf8\xf0\xf8\xf8\xf8\xe8\xf8\xf0'
+[2023-03-13 01:44:44] Error decoding image packet: b'\xc2\xb1(h(H\xf8\xf0\xd0\xf0@88   8('
+[2023-03-13 01:44:44] Error decoding image packet: b'\xc2\xc58888PxPPxP@( \x08(('
+[2023-03-13 01:44:44] Error decoding image packet: b'\xa2\xfe8 \x18\x18\x18\x18\x18\x18\x10\x10\x10\x10\x18\x18\x18\x18'
+[2023-03-13 01:44:44] SBand received uncategorized packet: b'\x03\x0b\xf8x\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf0\xf0\xf8'
+[2023-03-13 01:44:45] Error decoding image packet: b'\xa3\xbb\xf8\xe8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf0'
+[2023-03-13 01:44:45] Error decoding image packet: b'\xc35@@@@@@@@@@@\xc0HHHP'
+[2023-03-13 01:44:45] Error decoding image packet: b'\xc7T\xf8\xf8\xf8\xf8\xf8\xe8\xf8\xf8\xf8\xf0\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:46] Error decoding image packet: b'\xa7\xdd (\x00( 8;88@@@HHHH'
+[2023-03-13 01:44:46] SBand received uncategorized packet: b'\x03\x9b \x000P\x18p\xc0\xc8\xd8\xf0\xd8\xd8x (('
+[2023-03-13 01:44:47] Error decoding image packet: b'\x93\x9e((\x18\x10\x18\x18\x18\x18 \x18     \x18'
+[2023-03-13 01:44:47] Error decoding image packet: b'\xa3\xadHH@@@@@P8@@@HHHH'
+[2023-03-13 01:44:47] Error decoding image packet: b'\xa3\xc2HHHHHhHHH@HH@@8('
+[2023-03-13 01:44:49] SBand received uncategorized packet: b'\x042\xf8\xf8\xf8\xf8\xf8\xf8x\xf0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:50] Error decoding image packet: b'\x94`(  \x18  (88888((( '
+[2023-03-13 01:44:51] Error decoding image packet: b'\xa4n\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8x\xd8\xf8\xfa\xf8'
+[2023-03-13 01:44:51] Error decoding image packet: b'\xc5s\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:51] Error decoding image packet: b'\xa4x\xccxpp\xd8@8P@@HPQX\xf0X'
+[2023-03-13 01:44:51] SBand received uncategorized packet: b'\x04\x9a\xf8\xf8\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xc8\xf8\xf8\xf8'
+[2023-03-13 01:44:52] SBand received uncategorized packet: b'\x04\xb58@@@D@H@H@HJHHXh'
+[2023-03-13 01:44:52] Error decoding image packet: b'\x94\xce\xe0\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:52] Error decoding image packet: b'\x94\xd5\xf8\xf0\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8x\xf8\xf8\xf8\xf8\xb0'
+[2023-03-13 01:44:53] Error decoding image packet: b'\x94\xf0x@88((8@888\x08<8@D'
+[2023-03-13 01:44:53] Error decoding image packet: b'\x94\xfb\xf8\xf8\xf8\xf8\xf8\xf8\xd8\xf8\xf8\xfc\xf9\xe8\xf8\xf8\xe8\xb8'
+[2023-03-13 01:44:53] Error decoding image packet: b'\xa0\xff\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xe8\xf8\xf8\xf5\xf8\xf2'
+[2023-03-13 01:44:53] Error decoding image packet: b'\xa5\x08xxxyxx\xf8xxx|xx\xf8xx'
+[2023-03-13 01:44:53] SBand received uncategorized packet: b'\x05K\xf8\xf8\xf8x\xfcx\xd8\xf8\xf8\xfc\xf8\xf8\xb8\xf8\xf8\xfa'
+[2023-03-13 01:44:53] Error decoding image packet: b'\x95\x0e\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xe8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:53] Error decoding image packet: b'\x95\x03\xf8\xf8\xf8\xf8\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:53] Error decoding image packet: b'\x95\x19D@8@\x008@H@@@@A@BE'
+[2023-03-13 01:44:54] SBand received uncategorized packet: b'\x05RHH@\xc0L@8@@@@\xa88880'
+[2023-03-13 01:44:54] Error decoding image packet: b"\x95'\xf8\xf8\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8"
+[2023-03-13 01:44:54] Error decoding image packet: b'\x95( ((8(((8@HhPHRhH'
+[2023-03-13 01:44:54] Error decoding image packet: b"\xb5'\xf8\xf8x\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xf8\xf8\xf8"
+[2023-03-13 01:44:54] SBand received uncategorized packet: b'\x05b\xf8\xf8\xf8\xe8\xf8\xf9\xf8\xfa\xf8\xf8\xf8\xf0\xf8\xf0\xe8\xf8'
+[2023-03-13 01:44:54] SBand received uncategorized packet: b'\x05fH@@\xc0@\x008880888888'
+[2023-03-13 01:44:54] Error decoding image packet: b'\xc5XPPHXXXXxppppp0pq'
+[2023-03-13 01:44:54] Error decoding image packet: b'\xc5]bppppqppppx\xf8xxxx'
+[2023-03-13 01:44:54] Error decoding image packet: b'\x9deIAP\xc4HHP88((\x18\x18\x18\x10\x18'
+[2023-03-13 01:44:55] SBand received uncategorized packet: b'\x05s\xf8\xd8\xf8\xf8\xf8\xf8\xf8\xf8\xb8\xfa\xf8x\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:55] SBand received uncategorized packet: b'\x05\x86ppXPPHTXHPpppXrp'
+[2023-03-13 01:44:55] Error decoding image packet: b'\xc5\x85xxx\xc0\xc8\xd8\xfa\xf8\xfa\xe0\xe0\xe8\xe0\xf8\xf8\xf8'
+[2023-03-13 01:44:55] Error decoding image packet: b'\xc5\xa0@\xb8HHI@@\xb8@P8 ( \x18\x18'
+[2023-03-13 01:44:56] Error decoding image packet: b'\xa5\xd5\xf0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xfc'
+[2023-03-13 01:44:56] Error decoding image packet: b'\xc5\xd4pxx\xf8xxxhxxxxxxyx'
+[2023-03-13 01:44:56] Error decoding image packet: b'\xa5\xd9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xd8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:57] SBand received uncategorized packet: b'\x06"H@PPPLPPPPPXXXXx'
+[2023-03-13 01:44:57] Error decoding image packet: b'\xa5\xef\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:44:57] Error decoding image packet: b'\xa6\x0eHHXXPPHPPPH@HPPX'
+[2023-03-13 01:44:57] Error decoding image packet: b'\xc6 HHP\x10PPTQ\x18\xd4\\PHPPP'
+[2023-03-13 01:44:58] Error decoding image packet: b'\xa63\x00(8880x \x08\xa4,x888('
+[2023-03-13 01:44:58] Error decoding image packet: b'\x96A* \x18\x18\x100\x18 88@B@88@'
+[2023-03-13 01:44:58] Error decoding image packet: b'\x96E( \x90\x0cH )((4\x100H(\xac '
+[2023-03-13 01:44:58] Error decoding image packet: b'\xa6_PPPPPPPPPXXXXX\x18X'
+[2023-03-13 01:44:59] SBand received uncategorized packet: b'\x06\x82\x10888\xb8\x18\x10\x10<8\xb8(\x18\x10\x108'
+[2023-03-13 01:44:59] SBand received uncategorized packet: b'\x06\x8cX\x18XXXXXXXXXXXXXP'
+[2023-03-13 01:45:00] SBand received uncategorized packet: b'\x06\xc12\x18 0@@@\x18\x101\x08@\x018\x18\x00'
+[2023-03-13 01:45:00] SBand received uncategorized packet: b'\x06\xc5\x00@@\x188(8@@HH88P@@'
+[2023-03-13 01:45:00] SBand received uncategorized packet: b'\x06\xcfxHHH888(((((((1\xe4'
+[2023-03-13 01:45:00] SBand received uncategorized packet: b'\x06\xd9HH@9( 8hi8(  @@\xb8'
+[2023-03-13 01:45:00] Error decoding image packet: b'\xa6\xd3\x18808(\x10\x10\x188@8(( "8'
+[2023-03-13 01:45:01] SBand received uncategorized packet: b'\x0f\x1089\x18\x08\x08 \x1888\x10\x10\x10 8(8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa6\xf9 \x18\x10\x10\x10  \x18 \x18\x18\x18((\xa6!'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xd7\x01HH8   8HP88\x18(HH@'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7\x06HHL@@@@@@@@@@@@F'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7\n8P@\xb8888888:88988'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7\r \x10\x08\x08\x18"(\x18\x18\x10\x10\x18    '
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7\x0e\x98\x1a\x18(\x08( \x08\x18\x18888\x08( '
+[2023-03-13 01:45:02] SBand received uncategorized packet: b'\x07/@@888@8@@@@@88@@'
+[2023-03-13 01:45:02] Error decoding image packet: b'\x97!\x18\tX8@@8\x10\x10\x1c<XR(\x00\x11'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7)HP8\x08\x10\x18@HX\x08\x10\x10(HH\xb8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\x97088@@88888(@@@@8@'
+[2023-03-13 01:45:02] Error decoding image packet: b'\x976\x18\x188(h"  88(J   8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xc7>\x10\x10 HH@8(\x188H\xc88\x10\x10('
+[2023-03-13 01:45:02] Error decoding image packet: b'\x97P  (HH8;*(\xc8HD80 8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7SRH\xb8\x08\x10\x188@@ P\x10 @@8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xc7\x19P88( \x18\x10\x10\x08\x08\x10\x18\x10 (8'
+[2023-03-13 01:45:02] Error decoding image packet: b'\xa7f\x00()H@88(\x18@HH@\xa0\x18('
+[2023-03-13 01:45:03] SBand received uncategorized packet: b'\x07\x9c88( \x1a(888( \x18888('
+[2023-03-13 01:45:03] SBand received uncategorized packet: b'\x07\xa998\x1c( \x10P\x10\x11\x10\x14\x10\x18((<'
+[2023-03-13 01:45:04] Error decoding image packet: b'\x97}t@8\x08\x14\x188@@ \x10\x10 @P8'
+[2023-03-13 01:45:04] Error decoding image packet: b'\xa5\x9e\xc088(X\xc8x@A@\x0c\x10\x1a\xa8pA'
+[2023-03-13 01:45:04] Error decoding image packet: b'\xa7\xa48  @889 \x108AB8(\x19('
+[2023-03-13 01:45:04] Error decoding image packet: b'\xa7\xa7(x!\x10\x08\xa088\xb8\x18\x10\x18 8(('
+[2023-03-13 01:45:04] Error decoding image packet: b'\x97\xd3PXP\xb888(988(( 8@('
+[2023-03-13 01:45:05] Error decoding image packet: b'\x97\xda8@88@8"@P@08 (@@'
+[2023-03-13 01:45:05] SBand received uncategorized packet: b'\x08&PPPPXPXXXXXXXXXX'
+[2023-03-13 01:45:05] Error decoding image packet: b'\xc8\x01\x10\x10 888\x18\x08\x10(8\x18((\xf0\xe8'
+[2023-03-13 01:45:05] Error decoding image packet: b'\xa0E@8(\x08\x10\xb8@\x00(\x08\x18\x00hPP\x10'
+[2023-03-13 01:45:05] Error decoding image packet: b'\xa8\r@98 \x18\x11\x10\x08\x08\x08\x10\x10\x10\x10(H'
+[2023-03-13 01:45:06] Error decoding image packet: b'\x98C8( \x11\x08(\x18(\x18\x08\x10\x0888\x18\x08'
+[2023-03-13 01:45:06] Error decoding image packet: b'\xa8Rxxxxpxxhhxxhxxxx'
+[2023-03-13 01:45:07] Error decoding image packet: b'\x98\xdebHH@@8@8888888(x'
+[2023-03-13 01:45:07] Error decoding image packet: b'\xc8exxxxxxxxxxxX\xf8\xf8xh'
+[2023-03-13 01:45:07] Error decoding image packet: b'\xa8q8 \x18\x10\x10\x08\x08\x08\x08\x08\x10\x18\x18(8\x08'
+[2023-03-13 01:45:09] Error decoding image packet: b'\xaa\xb1\x08\x08\x08\x10\x10\x10\x10\x142\x10\x10\x14\x10\x14\x10\x10'
+[2023-03-13 01:45:09] Error decoding image packet: b'\xc9\xabppXXXXPPH@0@@@8\x10'
+[2023-03-13 01:45:09] Error decoding image packet: b'\xa8\xd6PH@8@@\x00A@@88888H'
+[2023-03-13 01:45:09] Error decoding image packet: b'\xc8\xef\x08(Xppppppp`xpppp'
+[2023-03-13 01:45:09] SBand received uncategorized packet: b'\t\x1b \x08\x1088b8\x10\x10\x108@H(\x11\x10'
+[2023-03-13 01:45:10] Error decoding image packet: b'\xb9\rH\xd9\na\xa8@@@888HHHPP'
+[2023-03-13 01:45:10] Error decoding image packet: b'\xc9\x03HI8((((     (@8\x10'
+[2023-03-13 01:45:10] Error decoding image packet: b'\x99\x16\x10\x10\x00\x10\x18P\x12\x10\x08\x08\x08\x08\x10\x10\x10\xd0'
+[2023-03-13 01:45:10] Error decoding image packet: b'\xe9\x1f\x10xpppppppp`xpppy'
+[2023-03-13 01:45:10] Error decoding image packet: b'\xa9%\x08\x08\x08\x08\x08\x00\x88\x08\x90\x10 HPXPP'
+[2023-03-13 01:45:10] SBand received uncategorized packet: b'\t*\x10\x10\x10\x10\x10\x10\x10\x08\x08\x08\t\x08\x08\x08\x10\x10'
+[2023-03-13 01:45:11] Error decoding image packet: b'\xa9S\x10Dpxpppppppprpxx'
+[2023-03-13 01:45:11] Error decoding image packet: b'\xa9_PPRPPQP\xd0PPPPPXJP'
+[2023-03-13 01:45:11] Error decoding image packet: b'\xa9j@@8\x10\x10\x188@@ \x10\x08(@@8'
+[2023-03-13 01:45:11] SBand received uncategorized packet: b'\x0bwH\x088(8\xb8((  ((  \x18\x10'
+[2023-03-13 01:45:11] SBand received uncategorized packet: b'\ry\x10\x10\x100\x10\x11\x10\x10\x10\x08\x10P\x100\x10P'
+[2023-03-13 01:45:11] Error decoding image packet: b'\xedm\xc08(\x188@@8x(*@x88 '
+[2023-03-13 01:45:11] Error decoding image packet: b'\xc9z\x10\x10\x100\x10\x08\x08\x08\x08\x08\x08\x10\x08\x08\n\x08'
+[2023-03-13 01:45:12] SBand received uncategorized packet: b'\t\xad8\x18\x08\x08 ,8\x18\x08\x08\x1888(\x10\x08'
+[2023-03-13 01:45:12] SBand received uncategorized packet: b'\x08\xb6\x10\x10\x00\x10\x10\x10\x08\x08\x08\x08\x08\x08\x08\x00\x08\x08'
+[2023-03-13 01:45:13] SBand received uncategorized packet: b'\t\xc1(( \x08(88 \x18\x10\x1888(\x10r'
+[2023-03-13 01:45:13] SBand received uncategorized packet: b'\t\xdf\x18XppppPrxxxxxppp'
+[2023-03-13 01:45:13] Error decoding image packet: b'\xa1\xc68808888\x18080\xb8:8\x02\x08'
+[2023-03-13 01:45:13] SBand received uncategorized packet: b'\n\x05\x10\x10\x10\x10\x08\x14\x10\x08\x08\x08\x10\x10\x10\x10\x00\x10'
+[2023-03-13 01:45:14] Error decoding image packet: b'\x99\xdcH88\xb8\x18\x08\t 88(\t\x08\x10(8'
+[2023-03-13 01:45:14] Error decoding image packet: b'\xaa\n@@88((89@8(\x1a\x188@>'
+[2023-03-13 01:45:14] Error decoding image packet: b'\x9a\x19\x90\x18\x10\x10\x10\x10\x10\x10\x10\x10(\x08\x10\x10\x10\x10'
+[2023-03-13 01:45:14] Error decoding image packet: b'\xca$\x188888(\x18 888 \x18\x1888'
+[2023-03-13 01:45:14] Error decoding image packet: b'\xca<H<8 \x18P\x10\x10\x08\x08\x08\x08\x08\x08\x00\x08'
+[2023-03-13 01:45:15] SBand received uncategorized packet: b'\x08\x99D\xca\x1b5\xb1\xc8p88888\x18 88'
+[2023-03-13 01:45:15] Error decoding image packet: b'\xc0P8( \x18\x08\x10\x08\x08\x08\x08\x08\x08\x08\x08\x08\x10'
+[2023-03-13 01:45:15] Error decoding image packet: b'\x9aXxxxpxxxxpXXY.*<\x11'
+[2023-03-13 01:45:15] Error decoding image packet: b'\xcb\\8H@\x18\x08\x10(@H8\x10\x08\x10\xb8@@'
+[2023-03-13 01:45:15] Error decoding image packet: b'\x9ak8xpxqppBspp\xf0p`xp'
+[2023-03-13 01:45:15] Error decoding image packet: b'\x9av 88\x18\x08\x10\x1888(\x12\x10\x00(8('
+[2023-03-13 01:45:15] Error decoding image packet: b'\xaa~\n\x08h\x08\x08\x08\x14\x11\x100\x0c\x88\t\x08\t\x10'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\x9b\x10\x08\x08(88 \x10\x10\x18(8(\x10\x10\x12'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\xa68@@h\x18\x18\x18888\x18\x080888'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\x02\xb6@@@@8888889(08H\xd1'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\xc8\x00\x08\t\x08\x08\x08\x08\x08\x08\x08\x10\x10\x188@H'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\xd6,@@(8 \x188880(\x10(88'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\xd9 \x08\x10(888\x01P\x0880@\x10\x10\x10'
+[2023-03-13 01:45:17] SBand received uncategorized packet: b'\n\xf2@@B@@@@(888*;J8\xe5'
+[2023-03-13 01:45:18] Error decoding image packet: b'\xaa\x12\x08\x08\t\n\x90\x10\x98\x08\x08\x18\x10\x08\x08\n\x10\x10'
+[2023-03-13 01:45:18] Error decoding image packet: b'\x9a\xc38 \x10 8<8\x18\x10\x1088@\x18\x10\x10'
+[2023-03-13 01:45:18] Error decoding image packet: b'\x9a\xe2\x08\x10\x08=\x1c\x11)\x0c\x98\x83\t\x89\x08\x08\x08\x10'
+[2023-03-13 01:45:18] Error decoding image packet: b'\x9a\xff\x10\x08\x10(88(\x10\x10\x18888( \x10'
+[2023-03-13 01:45:18] SBand received uncategorized packet: b'\t\x14(08 \x10\x10\x988\xbc,0\x10\x08(\xb98'
+[2023-03-13 01:45:18] SBand received uncategorized packet: b'\x0b\x15(\x1a\x10\n888 \x18\x18889(\x00\x00'
+[2023-03-13 01:45:18] SBand received uncategorized packet: b'\x0b\x16(8\x18((\x10 (:(\x18\x10\x10<8('
+[2023-03-13 01:45:18] SBand received uncategorized packet: b'\x0b\x1a@@@@@\x18@@@88(   "'
+[2023-03-13 01:45:18] Error decoding image packet: b'\xaa\xff\x10\x08\x10(8\x18!\x10\x10\x18888, \x10'
+[2023-03-13 01:45:19] SBand received uncategorized packet: b'IP:\x18888\x18 88(\x18\x10\x08(88'
+[2023-03-13 01:45:19] SBand received uncategorized packet: b'\x0bW@8:(((((" (@08@@'
+[2023-03-13 01:45:20] SBand received uncategorized packet: b'\x0b\x8f`\x10\t\t(`\x18\x08\n8( \x18P\x10 '
+[2023-03-13 01:45:20] Error decoding image packet: b'\xeb\x87\x10 8\xb8\x88\x18\x10\x10(8(*\x18\x18\x888'
+[2023-03-13 01:45:20] Error decoding image packet: b'\xab\xa1\x08\x08\x10(88\x10\x08\x08 88"\x10\x10 '
+[2023-03-13 01:45:20] SBand received uncategorized packet: b'\x0b\xaaPPPPPPPPPHHHHPPP'
+[2023-03-13 01:45:20] SBand received uncategorized packet: b'\x0b9@A@@H@\x10@@\x00hH@@@@'
+[2023-03-13 01:45:21] Error decoding image packet: b'\xab\xb8\x10\x10 8@HHH@@@@@@`@'
+[2023-03-13 01:45:22] Error decoding image packet: b'\x9c\x94xxxxxxxxxxxxhxxx'
+[2023-03-13 01:45:22] Error decoding image packet: b'\xcc\x1cHTHX@@@@@@@@B\x188@'
+[2023-03-13 01:45:22] SBand received uncategorized packet: b'\x0c)xxXpx\xf8x\xf8xxXxxx8x'
+[2023-03-13 01:45:23] SBand received uncategorized packet: b'\x0cG898(((((((8H\x12%\x16\xf0'
+[2023-03-13 01:45:23] SBand received uncategorized packet: b'\x0cI <8x8\x18\x18 (08((  8'
+[2023-03-13 01:45:23] SBand received uncategorized packet: b'\x0cR8xhxhxxhpxxxxxpp'
+[2023-03-13 01:45:23] SBand received uncategorized packet: b'\x08U\xbb\xb8IN\xf0p`t0tPpppp`'
+[2023-03-13 01:45:23] Error decoding image packet: b'\xcc@PHH@88888) (\xb98( '
+[2023-03-13 01:45:23] Error decoding image packet: b'\xc8a((@@@8<((\xb8A@08(8'
+[2023-03-13 01:45:24] SBand received uncategorized packet: b'\x04\x81HHHHH@@@@\x00H@<8@@'
+[2023-03-13 01:45:25] Error decoding image packet: b'\xac\x8b(HHH8((:AH8 \x08 8@'
+[2023-03-13 01:45:25] Error decoding image packet: b'\xac\xb9TPXUX\\xHp@XXPXXP'
+[2023-03-13 01:45:25] SBand received uncategorized packet: b'\x0c\xd9HH@8:88HH88 hHH@'
+[2023-03-13 01:45:25] SBand received uncategorized packet: b'\x0c\xe4@@\x00@@@8@@@@\xc0@@HH'
+[2023-03-13 01:45:25] SBand received uncategorized packet: b'\x0c\xeb\x18\x00\x188888\x10\x10\x188@@8) '
+[2023-03-13 01:45:25] Error decoding image packet: b'\xac\xdd (8@@( \x188@88h (@'
+[2023-03-13 01:45:25] Error decoding image packet: b'\xac\xe088\x10\x08\x10*88\x18\x08\x08(88(\x10'
+[2023-03-13 01:45:26] Error decoding image packet: b'\xac\xf288 \x1c\x108(@8 \x18(888('
+[2023-03-13 01:45:26] Error decoding image packet: b'\x9c{@888((   8@@ \x18\x10\x08'
+[2023-03-13 01:45:26] Error decoding image packet: b'\x9d\x0e@HH\x18@@8x8\x1888@\tH@'
+[2023-03-13 01:45:26] SBand received uncategorized packet: b'\x1c5\x18 888\x18\x18\x1888:((\x18 8'
+[2023-03-13 01:45:27] Error decoding image packet: b'\x9d\x1e\x10 (8\x18\x08\x08\x18 ) ,\x08\x100('
+[2023-03-13 01:45:27] Error decoding image packet: b'\x9d!8@@@@@@@HHHHHHHH'
+[2023-03-13 01:45:27] Error decoding image packet: b'\xa55@D@H@B@@HHIHHHHH'
+[2023-03-13 01:45:27] SBand received uncategorized packet: b'\rR8 (HHH(( 8\xc8JH(  '
+[2023-03-13 01:45:27] SBand received uncategorized packet: b'\tf@HH@8((@\x00@8 \x188@J'
+[2023-03-13 01:45:27] Error decoding image packet: b'\x9dS@PH0\x18\x18 @H@(\x10\x188@H'
+[2023-03-13 01:45:27] Error decoding image packet: b'\xcdg@HH@8((H@@8 \x188@H'
+[2023-03-13 01:45:28] SBand received uncategorized packet: b'\r\xab\x1088((\x18\x08 (((\x18\x10\x1888'
+[2023-03-13 01:45:29] Error decoding image packet: b'\xad\x9d( (8888(88888\x08(8'
+[2023-03-13 01:45:29] SBand received uncategorized packet: b'\r\xd78888(8)  DH(( \xa08'
+[2023-03-13 01:45:30] Error decoding image packet: b'\xad\xcd @@8\x180\x188@@ \x10\x10 8@'
+[2023-03-13 01:45:30] Error decoding image packet: b'\xcd\xd8888(<88808898x(8'
+[2023-03-13 01:45:30] Error decoding image packet: b'\xad\xe08\xa8 8@H@\xb8\x00 8HH8 \x18'
+[2023-03-13 01:45:30] Error decoding image packet: b'\xad\xfd@X\xc8HHH\xccPHHHHHH\xc8H'
+[2023-03-13 01:45:31] Error decoding image packet: b'\xae\r\x00<8( \x10\x00(2\x18(\x10\x10\x1888'
+[2023-03-13 01:45:31] Error decoding image packet: b'\xae#\x1888( \x18\x08 (( \x10\x08 (8'
+[2023-03-13 01:45:31] SBand received uncategorized packet: b'\x0eNHHHHH@H\x008\x188@HHPP'
+[2023-03-13 01:45:31] Error decoding image packet: b'\xc6.XX\x18XPXXXXXXXPYyX'
+[2023-03-13 01:45:31] Error decoding image packet: b'\xae2\xb8@8<8@@:: 8@88(!'
+[2023-03-13 01:45:31] Error decoding image packet: b'\xaeB\xd8XXXPXXXXzXXXXXP'
+[2023-03-13 01:45:32] SBand received uncategorized packet: b'\x1eR\x00@@HH@HXHHHH\xc0@H\n'
+[2023-03-13 01:45:32] Error decoding image packet: b'\xceP8888x88888880888'
+[2023-03-13 01:45:32] Error decoding image packet: b'\xdeaHLHHHHH@HHHHHHHX'
+[2023-03-13 01:45:32] Error decoding image packet: b'\xaes\x1888( \x10\x10 (( \x10\x08 88'
+[2023-03-13 01:45:33] Error decoding image packet: b'\x9e\xc5)2880( h8,(\x18\x08 99'
+[2023-03-13 01:45:33] Error decoding image packet: b'\xca\x90XXXXXXXX@XXXXXXX'
+[2023-03-13 01:45:33] SBand received uncategorized packet: b'\x0e\xc6@@\x08PHHD888@HHXpx'
+[2023-03-13 01:45:33] Error decoding image packet: b'\xae\xa1@@@\x18@@@D@@@\x00@@@D'
+[2023-03-13 01:45:33] Error decoding image packet: b'\xcc\xc5HHHPHXHHPPHHH@@H'
+[2023-03-13 01:45:33] SBand received uncategorized packet: b'\x0e\xc5ptpp0pXp0ppppPpp'
+[2023-03-13 01:45:33] SBand received uncategorized packet: b'\x0e\xf0pppprppppppPXppp'
+[2023-03-13 01:45:34] Error decoding image packet: b'\xce\xd4PPHPPPPPPPPPHhhH'
+[2023-03-13 01:45:34] SBand received uncategorized packet: b'\x0cxXxp0ppptpppppppp'
+[2023-03-13 01:45:35] Error decoding image packet: b'\xee\xedH\x08HLBHHHHHPP\xc8@@P'
+[2023-03-13 01:45:35] Error decoding image packet: b'\xcf\x01@HHIHPHH\x08HPPL@BN'
+[2023-03-13 01:45:35] Error decoding image packet: b'\xaf\x11PPHhH@HHhH@HHHHh'
+[2023-03-13 01:45:35] Error decoding image packet: b'\x9f\x14@@\x08H@@@@HH@@\xc8HHH'
+[2023-03-13 01:45:35] Error decoding image packet: b'\xcf9HHHHHHHHH@HHHHHH'
+[2023-03-13 01:45:36] Error decoding image packet: b'\xcfH\xc8\xc0xxxxxxxxxxxxxx'
+[2023-03-13 01:45:36] Error decoding image packet: b'\x9fUP(\x18\x10\x00\x10\x10\x10\x08\x08\x08\x00\x08\x08\x08\x08'
+[2023-03-13 01:45:36] SBand received uncategorized packet: b'\x0f\x17pppXPXp0pp\x10`X\x08XX'
+[2023-03-13 01:45:36] SBand received uncategorized packet: b'\x0e"\x08AHH@HHHHI@@@A`\xc0'
+[2023-03-13 01:45:37] Error decoding image packet: b'\xddfX@\x04\x01\x08\x08Hh\x08L@Dh\x08JD'
+[2023-03-13 01:45:37] Error decoding image packet: b'\x9f\x86\xf8\xf8\xf8\xf0\xf8\xf4\xf8\xe8`\xe0\xe0\xf8\xf8\xfc\xf2\xf0'
+[2023-03-13 01:45:37] Error decoding image packet: b'\xab\xa6\t\x10\x10\x12\x10\x14\x10\x90\x08\x10\x10\x12\x10\x10\x10\x10'
+[2023-03-13 01:45:37] SBand received uncategorized packet: b'\x0f\xac\xf8\xf8\xf8\xf8\xf8\xf0\xf7\xc8D\xe1\x1c\xdb\xd8z\xb8\xf8'
+[2023-03-13 01:45:38] Error decoding image packet: b'\xcf\xac\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xe8\xf8\xd8\xf8\xfa\xf8\xf8'
+[2023-03-13 01:45:38] Error decoding image packet: b'\x9f\xb0\xf8\xf0\xf8\xe8\xf8\xf8\xf8\xf8\xf0\xf8\xe8\xe8\xf0\xf8\xf8\xe0'
+[2023-03-13 01:45:39] Error decoding image packet: b'\x9f\xd8\xfd\x14\xe3\x10\xec\xba\n\xf8\xf8\xd8\xf8x\xe8\xb8\xf8\xf8'
+[2023-03-13 01:45:39] Error decoding image packet: b'\xd0\t8\x18\x18\x10\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08'
+[2023-03-13 01:45:39] Error decoding image packet: b'\x98\x0b\x10\x90\x11\x12\x10\x100\x102\x00\x19\x18\x100\x18\x18'
+[2023-03-13 01:45:39] Error decoding image packet: b'\x98\x18HHhH@@HPPP@HHHHH'
+[2023-03-13 01:45:40] SBand received uncategorized packet: b'\x10B@@@A808  \x18\x98\x18    '
+[2023-03-13 01:45:40] SBand received uncategorized packet: b'\x10M\xb8\xf9\xf8\xf8\xf8\xf8\xf8\xd8\xf8\xf9\xf8\xf8\xf8\xd8\xf8\xf8'
+[2023-03-13 01:45:40] Error decoding image packet: b'\x9cM\xf8\xf8\xf8\xf8\xf8\xfa\xdc\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:40] Error decoding image packet: b'\xb0Z\x88\x08\x08\x08\x08\x08\x08\x08\x10\x10\x10\x10\x10\x10\x11\x10'
+[2023-03-13 01:45:41] SBand received uncategorized packet: b'\x10}XXXXXXPPHHHHH@@@'
+[2023-03-13 01:45:41] Error decoding image packet: b'\x94\x80\xc8\xd0\xd0\xf0\xc8\xe0P(P@8H(@pH'
+[2023-03-13 01:45:41] Error decoding image packet: b'\x94\x88\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:41] Error decoding image packet: b'\x94\xae\xf8\xf8\xf8\xf8\xf8\xd8\xf8\xf8\xe8\xfa\xfa\xf8\xd8\xf8\xf8\xf8'
+[2023-03-13 01:45:41] Error decoding image packet: b'\xb4\x99XP\xc0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:42] SBand received uncategorized packet: b'\x10\xa2\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xb8\xf8\xf8\xe8\xf8\xf0\xf8\xf9\xf9'
+[2023-03-13 01:45:42] SBand received uncategorized packet: b'\x10\xbe\x08\x08\x08\x08\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 01:45:42] SBand received uncategorized packet: b'\x10\xceH@PPPpp@@PP\xf8\xc0\xc28\xc0'
+[2023-03-13 01:45:42] SBand received uncategorized packet: b'\x10\xd7\xf8\xf8\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xb8\xf8\xf8\xf8'
+[2023-03-13 01:45:42] Error decoding image packet: b'\x94\xb4\xf8\xf8\xf8\xf8\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xfa'
+[2023-03-13 01:45:42] Error decoding image packet: b'\xb0\xb5\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:42] Error decoding image packet: b'\xd0\xb5$\x10\x10\x1c\x10\n\x08\x08\x08\x08\x08\x08\x00\x08\x08\x08'
+[2023-03-13 01:45:42] Error decoding image packet: b'\xb0\x85\xf8\xf8\xb8\xf8\xf8\xf8\xf8\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:42] Error decoding image packet: b'\x94\xe88(\x18\x18\x18\x18" <8Xx\xd8\xc8p@'
+[2023-03-13 01:45:43] Error decoding image packet: b'\x93\x14\xf8\xf9\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xbbY\xa0\x8a\xc9\xf2\xf0'
+[2023-03-13 01:45:43] Error decoding image packet: b'\xd1\x1c@\x08HHHHhP\xd0PPTPPPP'
+[2023-03-13 01:45:43] Error decoding image packet: b'\x95"\x08\x08\x100\x10\x08\x10\x10\x10\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 01:45:44] Error decoding image packet: b'\x936\x08\x08\x08\x08\x10\x10\x10\x10\x10\x10\x08\x08\x10\x10\x10\x10'
+[2023-03-13 01:45:44] Error decoding image packet: b'\xd1?\xf8\xf8\xb8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xe88\xf8\xf8\xf8'
+[2023-03-13 01:45:45] Error decoding image packet: b'\x95Y\xf8\xf0\xf0\xf8\xf8\xf8\xea\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:45] Error decoding image packet: b'\xd1e\xf8\xf8\xf8\xf8\xf9\xfa\xf8\xf8\xf8\xf8\xb8\xf8\xd8\xf0\xf8\xf8'
+[2023-03-13 01:45:45] Error decoding image packet: b'\x93mHHPPPPPPHPPPPXP@'
+[2023-03-13 01:45:45] Error decoding image packet: b'\x93x\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:45] Error decoding image packet: b'\x93\x83\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8'
+[2023-03-13 01:45:45] SBand received uncategorized packet: b'\x11\x9f\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:45] Error decoding image packet: b'\x93\x86\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x88\x14\x10\x10\x10\x10'
+[2023-03-13 01:45:45] Error decoding image packet: b'\xd1\x8dX\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:46] Error decoding image packet: b'\xb1\xca\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xf8'
+[2023-03-13 01:45:47] Error decoding image packet: b'\x99\xe4HH\xc8HPPXXPPHPHHHH'
+[2023-03-13 01:45:47] Error decoding image packet: b'\xb1\xeb\x10\x10\x18 \x10\x10\x10\x10\x10\x18\x18\x18\x18\x10\x10\x10'
+[2023-03-13 01:45:49] SBand received uncategorized packet: b'\x12}\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:49] Error decoding image packet: b'\xb2\x1c@HHPHHXPPPPHH@PP'
+[2023-03-13 01:45:49] Error decoding image packet: b'\x96_\xc0\xc0\xc0\xc4\xc0\xc0\xc0\xc2\xc8\xc8\xc8\xc8\xc8\xc0\xc8\xc0'
+[2023-03-13 01:45:49] Error decoding image packet: b'\xb2u\x10\x08\x08\x08\x08H\x18\x18  \x10\x10\x08\t\x08\x08'
+[2023-03-13 01:45:49] SBand received uncategorized packet: b'\x12\xa5\xf8\xf8\xf8\xfa\xf8\xf8\xf8\xf8\xf8\xf8\xfa\xf0x\xf8\xfc\xf8'
+[2023-03-13 01:45:50] Error decoding image packet: b'\xb2\x8d\xf8\xf8\xf8\xf8\xf8\xf8\xf9\xf9\xf9\xf8\xf8\xe8\xe8\xf8\xf8\xf8'
+[2023-03-13 01:45:50] Error decoding image packet: b'\xd2\x98HHHHHHHQ\x08HPHHHHH'
+[2023-03-13 01:45:50] Error decoding image packet: b'\xb2\x9b\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc9\xc8\xc8\xc8\xc8\xc8\xc0\xc0'
+[2023-03-13 01:45:50] Error decoding image packet: b'\xde\x9d\x18\x10\x08\x08\x08\x08\x08\x08\x10\x10\x08\x08\x08\x08\x08('
+[2023-03-13 01:45:50] Error decoding image packet: b'\xb2\x9e\x0c\x08\x80\x08\x0c\x08\x08\x89\n\x08\x08\x00)\x10\x10\x10'
+[2023-03-13 01:45:50] Error decoding image packet: b'\x92\xfe\xf9\xf8\xf8\xf9x\xd8\xf8\xf8\xbc\xf8\xe8\xd8\xf8\xf8\xf8\xf8'
+[2023-03-13 01:45:50] Error decoding image packet: b'\x92\xc0\x00\x00\x06\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 01:46:11] Warning: telemetry timestamp checksum failed, t=2625902534
+[2023-03-13 01:46:13] Saved image to images/clocktower2.png
+[2023-03-13 01:46:39] Warning: 5 telemetry datapoint(s) failed parity check
+[2023-03-13 01:47:01] Warning: telemetry timestamp checksum failed, t=808483800
+[2023-03-13 01:47:23] Warning: telemetry timestamp checksum failed, t=7175
+[2023-03-13 01:47:23] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 01:48:54] S-Band Modem Disconnected
+[2023-03-13 01:48:55] UHF Modem Disconnected

@@ -18,11 +18,10 @@
 #include <rfm95w.h>
 #endif
 
+#define WDT_INTERVAL WDTIS_4
+
 /* Globals */
 char RX_done = 0;
-
-struct packet_buffer RXbuf;
-struct packet_buffer TXbuf;
 
 struct RadioInfo info;
 
@@ -30,13 +29,41 @@ struct RadioInfo info;
 struct RadioPersistent RadioConfigs = {.radio_packet_length = 0}; //get packets of any length by default
 
 /* TX/RX arrays */
-char TXbuf_data[TX_SIZE];
-unsigned int TXbuf_ptrs[TX_PACKETS];
+#pragma PERSISTENT(TXbuf_data)
+char TXbuf_data[TX_SIZE] = {0};
+#pragma PERSISTENT(TXbuf_ptrs)
+unsigned int TXbuf_ptrs[TX_PACKETS] = {0};
 
 #pragma PERSISTENT(RXbuf_data)
 char RXbuf_data[RX_SIZE] = {0};
 #pragma PERSISTENT(RXbuf_ptrs)
 unsigned int RXbuf_ptrs[RX_PACKETS] = {0};
+
+//#pragma PERSISTENT(RXbuf);
+struct packet_buffer RXbuf = {.data=RXbuf_data,
+                              .max_data=RX_SIZE,
+                              .data_head=0,
+                              .data_base=0,
+                              .pointers=RXbuf_ptrs,
+                              .max_packets=RX_PACKETS,
+                              .ptr_head=0,
+                              .ptr_base=0,
+                              .flags=0,
+                              .BUFFER_ACCESS = FREE};
+
+//#pragma PERSISTENT(TXbuf);
+struct packet_buffer TXbuf = {.data=TXbuf_data,
+                              .max_data=TX_SIZE,
+                              .data_head=0,
+                              .data_base=0,
+                              .pointers=TXbuf_ptrs,
+                              .max_packets=TX_PACKETS,
+                              .ptr_head=0,
+                              .ptr_base=0,
+                              .flags=0,
+                              .BUFFER_ACCESS = FREE};
+
+//TODO: add middleman buffer for ISR to avoid race conditions with RXbuf
 
 /* helper functions */
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
@@ -133,45 +160,57 @@ unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
     unsigned char i;
 
-    if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
-        buffer->flags |= 0x01;
-    }
-    else {
-        buffer->flags &= ~0x01;
-    }
+    if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        buffer->BUFFER_ACCESS = ACTIVE;
+        enable_FRAM_write(FRAM_WRITE_ENABLE);
 
-    if (get_buffer_packet_count(buffer) == (buffer->max_packets - 1)) { //packet overflow
-        buffer->flags |= 0x02;
-    }
-    else {
-        buffer->flags &= ~0x02;
-    }
-
-    if ((buffer->flags & 0x03) == 0) { //if no overflows
-        enable_FRAM_write(FRAM_WRITE_ENABLE); //enable FRAM access for write
-
-        for(i=0;i<len;i++) {
-            buffer->data[buffer->data_head] = data[i];
-            buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
+        if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
+            buffer->flags |= 0x01;
+        }
+        else {
+            buffer->flags &= ~0x01;
         }
 
-        buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
-        buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
+        if (get_buffer_packet_count(buffer) == (buffer->max_packets - 1)) { //packet overflow
+            buffer->flags |= 0x02;
+        }
+        else {
+            buffer->flags &= ~0x02;
+        }
 
-        enable_FRAM_write(FRAM_WRITE_DISABLE); //set back to read-only
+        if ((buffer->flags & 0x03) == 0) { //if no overflows
+            for(i=0;i<len;i++) {
+                buffer->data[buffer->data_head] = data[i];
+                buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
+            }
+
+            buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
+            buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
+        }
+        enable_FRAM_write(FRAM_WRITE_DISABLE);
+        buffer->BUFFER_ACCESS = FREE;
     }
 }
 
 unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest) {
     unsigned int i;
     unsigned int j = 0;
-    if (buffer->ptr_head != buffer->ptr_base) { //if not empty
-        for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
-            dest[j] = buffer->data[buffer->data_base];
-            buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
-            j++;
+
+    if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        buffer->BUFFER_ACCESS = ACTIVE;
+        enable_FRAM_write(FRAM_WRITE_ENABLE);
+
+        if (buffer->ptr_head != buffer->ptr_base) { //if not empty
+            for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
+                dest[j] = buffer->data[buffer->data_base];
+                buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
+                j++;
+            }
+            buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
         }
-        buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
+
+        enable_FRAM_write(FRAM_WRITE_DISABLE);
+        buffer->BUFFER_ACCESS = FREE;
     }
     return j;
 }
@@ -236,11 +275,11 @@ __interrupt void PORT2_ISR(void) {
     }
 
     P2IFG &= ~(0x05); //reset interrupt flags
-    //P2IFG &= ~(0x01);
 }
 
 void main_loop(void) {
-    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_4; //watchdog on, slow clock source, reset watchdog, 1s expiration
+    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDT_INTERVAL; //watchdog on, slow clock source, reset watchdog, 1s expiration
+    //enable_FRAM_write(FRAM_WRITE_ENABLE); //enable FRAM access, this should probably not be given unconditionally but the MPU should also offer some safety
 
     enum State state = INIT;
     unsigned int temp;
@@ -254,38 +293,11 @@ void main_loop(void) {
     char regs[128];
 
     unsigned int i = 0;
-    //unsigned int j = 0;
 
     char addr;
     char data;
 
     char radio_state;
-
-    /* RX buffer */
-    //char RXbuf_data[RX_SIZE];
-    //unsigned int RXbuf_ptrs[RX_PACKETS];
-    RXbuf.data = RXbuf_data;
-    RXbuf.max_data = RX_SIZE;
-    RXbuf.pointers = RXbuf_ptrs;
-    RXbuf.max_packets = RX_PACKETS;
-    RXbuf.data_base = 0;
-    RXbuf.data_head = 0;
-    RXbuf.ptr_base = 0;
-    RXbuf.ptr_head = 0;
-    RXbuf.flags = 0;
-
-    /* TX buffer */
-    //char TXbuf_data[TX_SIZE];
-    //unsigned int TXbuf_ptrs[TX_PACKETS];
-    TXbuf.data = TXbuf_data;
-    TXbuf.max_data = TX_SIZE;
-    TXbuf.pointers = TXbuf_ptrs;
-    TXbuf.max_packets = TX_PACKETS;
-    TXbuf.data_base = 0;
-    TXbuf.data_head = 0;
-    TXbuf.ptr_base = 0;
-    TXbuf.ptr_head = 0;
-    TXbuf.flags = 0;
 
     /* GPIO inits */
     #ifdef RADIOTYPE_SBAND
@@ -402,12 +414,7 @@ void main_loop(void) {
         case FLUSH_RX:
             while (get_buffer_packet_count(&RXbuf) != 0) {
                 pkt_len = read_packet_buffer(&RXbuf, pkt);
-
-                if (pkt_len != 0 && pkt_len < RX_SIZE) { //skip bad packets
-                    //putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
-                    putchar((unsigned char)(pkt_len & 0xFF));
-                    putnchars(pkt, pkt_len);
-                }
+                putnchars(pkt, pkt_len);
             }
             state = WAIT;
             break;
@@ -459,12 +466,7 @@ void main_loop(void) {
         case FLUSH_TX:
             while (get_buffer_packet_count(&TXbuf) != 0) {
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-
-                if (pkt_len != 0) {
-                    putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
-                    putchar((unsigned char)(pkt_len & 0xFF));
-                    putnchars(pkt, pkt_len);
-                }
+                putnchars(pkt, pkt_len);
             }
             state = WAIT;
             break;
@@ -487,12 +489,16 @@ void main_loop(void) {
             state = WAIT;
             break;
         case CLEAR_RX_FLAGS:
+            enable_FRAM_write(FRAM_WRITE_ENABLE);
             RXbuf.flags = 0x00;
+            enable_FRAM_write(FRAM_WRITE_DISABLE);
             putchar(RXbuf.flags | get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
         case CLEAR_TX_FLAGS:
+            enable_FRAM_write(FRAM_WRITE_ENABLE);
             TXbuf.flags = 0x00;
+            enable_FRAM_write(FRAM_WRITE_DISABLE);
             putchar(TXbuf.flags | get_flag_from_state(info.radio_mode));
             state = WAIT;
             break;
@@ -732,6 +738,6 @@ void main_loop(void) {
             }
             break;
         }
-        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_4; //reset watchdog count
+        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDT_INTERVAL; //reset watchdog count
     }
 }

@@ -31,6 +31,19 @@ def to_signed(n):
     if (n >= 128):
         n = n - 256
     return n
+    
+def sum_bits(data, length):
+    sum = 0
+    for i in range(length):
+        sum += (data >> i) & 0x01;
+        
+    return sum
+    
+def get_parity(data, length):
+    return sum_bits(data, length) % 2
+    
+def get_bit(data, index):
+    return (data >> index) & 0x01
 
 class MainWindow():
     def __init__(self, window):
@@ -322,10 +335,15 @@ class MainWindow():
         self.update_command()
 
     def write_console(self, string):
+        output_string = time.strftime("[%Y-%m-%d %H:%M:%S] ",time.gmtime()) + string + "\n"
+    
         self.widgets['console'].config(state=tk.NORMAL)
-        self.widgets['console'].insert(tk.END, time.strftime("[%Y-%m-%d %H:%M:%S] ",time.gmtime()) + string + "\n")
+        self.widgets['console'].insert(tk.END, output_string)
         self.widgets['console'].see(tk.END)
         self.widgets['console'].config(state=tk.DISABLED)
+        
+        with open('console_log.txt', 'a') as f:
+            f.write(output_string)
         
     def set_image_resolution(self, new_res):
         self.res = new_res
@@ -375,7 +393,31 @@ class MainWindow():
                     self.telemetry_packets.pop(0)
 
                 telem = self.telem_queue.get()
-                self.telemetry_packets.append(telem)
+                
+                if (telem['Timestamp Checksum'] != sum_bits(telem['Timestamp'], 32)):
+                    self.write_console('Warning: telemetry timestamp checksum failed, t={}'.format(telem['Timestamp']))
+                else:
+                    self.telemetry_packets.append(telem)
+                    
+                failures = 0
+                for i, datapoint in enumerate(telem['Acceleration']):
+                    if (get_parity(datapoint, 8) != get_bit(telem['Parity 0'], 7-i)):
+                        failures += 1
+                        
+                for i, datapoint in enumerate(telem['Angular Rate']):
+                    if (get_parity(datapoint, 8) != get_bit(telem['Parity 0'], 4-i)):
+                        failures += 1
+                        
+                for i, datapoint in enumerate(telem['Magnetic Field']):
+                    if (get_parity(datapoint, 8) != get_bit(telem['Parity 1'], 7-i)):
+                        failures += 1
+                        
+                if get_parity(int(telem['Temperature'] * 2), 8) != get_bit(telem['Parity 1'], 4):
+                    failures += 1
+                    
+                if failures != 0:
+                    self.write_console('Warning: {} telemetry datapoint(s) failed parity check'.format(failures))
+                
 
             for packet in self.telemetry_packets:
                 if (len(self.a_x) >= 100):
@@ -677,6 +719,9 @@ class MainWindow():
                         packet_data['Angular Rate'] = packet[8:11]
                         packet_data['Magnetic Field'] = packet[11:14]
                         packet_data['Temperature'] = (int(packet[14]) / 2)
+                        packet_data['Timestamp Checksum'] = packet[15]
+                        packet_data['Parity 0'] = packet[16]
+                        packet_data['Parity 1'] = packet[17]
                         self.telem_queue.put(packet_data)
                         
                         with open('telemetry_log.txt', 'a') as f:
@@ -686,8 +731,9 @@ class MainWindow():
                             f.write('\n')
                     else:
                         self.write_console("{} received uncategorized packet: {}".format(rx_radio.type, packet))
-                
-            return len(packets)
+                return len(packets)
+            else:
+                return 0
         else:
             return 0
             
