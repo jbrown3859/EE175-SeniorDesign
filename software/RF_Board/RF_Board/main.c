@@ -4,8 +4,8 @@
 #include <serial.h>
 #include <backend.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
@@ -59,7 +59,7 @@ int main(void) {
     rfm95w_set_frequency_mode(0x00);
     rfm95w_set_carrier_frequency(433500000);
 
-    rfm95w_set_tx_power(PA_BOOST, 0x0, 0x0);
+    rfm95w_set_tx_power(PA_BOOST, 0x07, 0x0F);
     rfm95w_agc_auto_on(AGC_ON);
 
     rfm95w_set_lora_bandwidth(BW_125);

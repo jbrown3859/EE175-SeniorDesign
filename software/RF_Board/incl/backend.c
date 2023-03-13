@@ -3,8 +3,8 @@
 #include <serial.h>
 #include <util.h>
 
-#define RADIOTYPE_SBAND 1
-//#define RADIOTYPE_UHF 1
+//#define RADIOTYPE_SBAND 1
+#define RADIOTYPE_UHF 1
 
 #define RX_SIZE 4080
 #define RX_PACKETS 255
@@ -17,6 +17,8 @@
 #ifdef RADIOTYPE_UHF
 #include <rfm95w.h>
 #endif
+
+#define WDT_INTERVAL WDTIS_4
 
 /* Globals */
 char RX_done = 0;
@@ -46,7 +48,8 @@ struct packet_buffer RXbuf = {.data=RXbuf_data,
                               .max_packets=RX_PACKETS,
                               .ptr_head=0,
                               .ptr_base=0,
-                              .flags=0};
+                              .flags=0,
+                              .BUFFER_ACCESS = FREE};
 
 //#pragma PERSISTENT(TXbuf);
 struct packet_buffer TXbuf = {.data=TXbuf_data,
@@ -57,7 +60,8 @@ struct packet_buffer TXbuf = {.data=TXbuf_data,
                               .max_packets=TX_PACKETS,
                               .ptr_head=0,
                               .ptr_base=0,
-                              .flags=0};
+                              .flags=0,
+                              .BUFFER_ACCESS = FREE};
 
 //TODO: add middleman buffer for ISR to avoid race conditions with RXbuf
 
@@ -156,50 +160,58 @@ unsigned int get_next_buffer_packet_size(struct packet_buffer* buffer) {
 void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigned char len) {
     unsigned char i;
 
-    enable_FRAM_write(FRAM_WRITE_ENABLE);
+    if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        buffer->BUFFER_ACCESS = ACTIVE;
+        enable_FRAM_write(FRAM_WRITE_ENABLE);
 
-    if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
-        buffer->flags |= 0x01;
-    }
-    else {
-        buffer->flags &= ~0x01;
-    }
-
-    if (get_buffer_packet_count(buffer) == (buffer->max_packets - 1)) { //packet overflow
-        buffer->flags |= 0x02;
-    }
-    else {
-        buffer->flags &= ~0x02;
-    }
-
-    if ((buffer->flags & 0x03) == 0) { //if no overflows
-        for(i=0;i<len;i++) {
-            buffer->data[buffer->data_head] = data[i];
-            buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
+        if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
+            buffer->flags |= 0x01;
+        }
+        else {
+            buffer->flags &= ~0x01;
         }
 
-        buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
-        buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
+        if (get_buffer_packet_count(buffer) == (buffer->max_packets - 1)) { //packet overflow
+            buffer->flags |= 0x02;
+        }
+        else {
+            buffer->flags &= ~0x02;
+        }
+
+        if ((buffer->flags & 0x03) == 0) { //if no overflows
+            for(i=0;i<len;i++) {
+                buffer->data[buffer->data_head] = data[i];
+                buffer->data_head = buffer->data_head < (buffer->max_data - 1) ? buffer->data_head + 1 : 0;
+            }
+
+            buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
+            buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
+        }
+        enable_FRAM_write(FRAM_WRITE_DISABLE);
+        buffer->BUFFER_ACCESS = FREE;
     }
-    enable_FRAM_write(FRAM_WRITE_DISABLE);
 }
 
 unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest) {
     unsigned int i;
     unsigned int j = 0;
 
-    enable_FRAM_write(FRAM_WRITE_ENABLE);
+    if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        buffer->BUFFER_ACCESS = ACTIVE;
+        enable_FRAM_write(FRAM_WRITE_ENABLE);
 
-    if (buffer->ptr_head != buffer->ptr_base) { //if not empty
-        for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
-            dest[j] = buffer->data[buffer->data_base];
-            buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
-            j++;
+        if (buffer->ptr_head != buffer->ptr_base) { //if not empty
+            for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
+                dest[j] = buffer->data[buffer->data_base];
+                buffer->data_base = buffer->data_base < (buffer->max_data-1) ? buffer->data_base + 1 : 0;
+                j++;
+            }
+            buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
         }
-        buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
-    }
 
-    enable_FRAM_write(FRAM_WRITE_DISABLE);
+        enable_FRAM_write(FRAM_WRITE_DISABLE);
+        buffer->BUFFER_ACCESS = FREE;
+    }
     return j;
 }
 
@@ -266,7 +278,7 @@ __interrupt void PORT2_ISR(void) {
 }
 
 void main_loop(void) {
-    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_5; //watchdog on, slow clock source, reset watchdog, 1s expiration
+    WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDT_INTERVAL; //watchdog on, slow clock source, reset watchdog, 1s expiration
     //enable_FRAM_write(FRAM_WRITE_ENABLE); //enable FRAM access, this should probably not be given unconditionally but the MPU should also offer some safety
 
     enum State state = INIT;
@@ -402,11 +414,7 @@ void main_loop(void) {
         case FLUSH_RX:
             while (get_buffer_packet_count(&RXbuf) != 0) {
                 pkt_len = read_packet_buffer(&RXbuf, pkt);
-
-                if (pkt_len != 0 && pkt_len < RX_SIZE) { //skip bad packets
-                    putchar((unsigned char)(pkt_len & 0xFF));
-                    putnchars(pkt, pkt_len);
-                }
+                putnchars(pkt, pkt_len);
             }
             state = WAIT;
             break;
@@ -458,12 +466,7 @@ void main_loop(void) {
         case FLUSH_TX:
             while (get_buffer_packet_count(&TXbuf) != 0) {
                 pkt_len = read_packet_buffer(&TXbuf, pkt);
-
-                if (pkt_len != 0) {
-                    putchar((unsigned char)((pkt_len >> 8) & 0xFF)); //add length to each packet
-                    putchar((unsigned char)(pkt_len & 0xFF));
-                    putnchars(pkt, pkt_len);
-                }
+                putnchars(pkt, pkt_len);
             }
             state = WAIT;
             break;
@@ -735,6 +738,6 @@ void main_loop(void) {
             }
             break;
         }
-        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDTIS_5; //reset watchdog count
+        WDTCTL = WDTPW | WDTSSEL_1 | WDTCNTCL | WDT_INTERVAL; //reset watchdog count
     }
 }
