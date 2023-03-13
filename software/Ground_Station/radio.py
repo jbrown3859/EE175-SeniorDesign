@@ -23,7 +23,7 @@ class Radio():
         self.type = type #radio type string
         self.port = serial.Serial()
         self.port.baudrate = baudrate
-        self.port.timeout = 0.5 #seconds
+        self.port.timeout = 1 #seconds
         self.port.inter_byte_timeout = 0.25
         self.portname = None
         self.frequency = None
@@ -80,8 +80,15 @@ class Radio():
         
     def get_rx_buffer_state(self): #poll rx to get the number of packets in queue
         self.port.write(b'b') #get rx info
-        reply = self.port.read(5)
-        return reply
+        reply = self.port.read(6)
+        
+        buffer_state = {}
+        buffer_state['Flags'] = int(reply[0])
+        buffer_state['Packet Count'] = int.from_bytes(reply[1:3], byteorder='big', signed=False)
+        buffer_state['Bytes'] = int.from_bytes(reply[3:5], byteorder='big', signed=False)
+        buffer_state['Packet Size'] = int(reply[5])
+        
+        return buffer_state
             
     def read_rx_buffer(self, size):
         self.port.write(b'c')
@@ -105,19 +112,20 @@ class Radio():
             return packets
         
     def flush_rx(self):
-        state = self.get_rx_buffer_state()
-        len = int.from_bytes(state[2:4], byteorder='big', signed=False)
-        num_pkts = int(state[1])
-    
         self.port.write(b'e')
-        
-        #print("Buffer size: {}".format(len))
-        return self.port.read(2048)
+        return self.port.read(10000)
         
     def get_tx_buffer_state(self):
         self.port.write(b'f')
-        reply = self.port.read(5)
-        return reply
+        reply = self.port.read(6)
+        
+        buffer_state = {}
+        buffer_state['Flags'] = int(reply[0])
+        buffer_state['Packet Count'] = int.from_bytes(reply[1:3], byteorder='big', signed=False)
+        buffer_state['Bytes'] = int.from_bytes(reply[3:5], byteorder='big', signed=False)
+        buffer_state['Packet Size'] = int(reply[5])
+        
+        return buffer_state
         
     def write_tx_buffer(self, packet):
         self.port.write(b'g')
