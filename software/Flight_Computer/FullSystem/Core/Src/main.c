@@ -351,6 +351,17 @@ int main(void) {
 			TXPacket[3] = (uint8_t) (count >> 8) & 0xFF;
 			TXPacket[4] = (uint8_t) count & 0xFF;
 			TXPacket[14] = getTempLM75(hi2c1, huart2);
+			TXPacket[15] = sum_bits(count, 32);
+			TXPacket[16] = 0;
+			for (int i = 0; i < 6; i++) {
+				TXPacket[16] |= (sum_bits(TXPacket[i + 5], 8) & 0x01)
+						<< (7 - i);
+			}
+			TXPacket[17] = 0;
+			for (int i = 0; i < 4; i++) {
+				TXPacket[17] |= (sum_bits(TXPacket[i + 11], 8) & 0x01)
+						<< (7 - i);
+			}
 			TXPacket[31] = '\n';
 			//newline(huart2);
 			//print_string(huart2, "Sending Packet: ");
