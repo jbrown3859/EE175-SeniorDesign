@@ -796,3 +796,1210 @@
 [2023-03-13 01:47:23] Warning: 4 telemetry datapoint(s) failed parity check
 [2023-03-13 01:48:54] S-Band Modem Disconnected
 [2023-03-13 01:48:55] UHF Modem Disconnected
+[2023-03-13 02:04:27] UHF Modem Connection Accepted
+[2023-03-13 02:04:27] Set UHF packet length to 32 bytes
+[2023-03-13 02:04:28] S-Band Modem Connection Accepted
+[2023-03-13 02:04:28] Set S-Band packet length to 18 bytes
+[2023-03-13 02:07:42] Command hex: 20020102
+[2023-03-13 02:07:42] SBand Entering Transmit Mode
+[2023-03-13 02:07:43] SBand Transmission Complete
+[2023-03-13 02:07:47] Set image resolution to 320x240
+[2023-03-13 02:09:05] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:21:31] S-Band Modem Disconnected
+[2023-03-13 02:21:34] UHF Modem Disconnected
+[2023-03-13 02:22:19] UHF Modem Connection Accepted
+[2023-03-13 02:22:19] Set UHF packet length to 32 bytes
+[2023-03-13 02:22:22] S-Band Modem Connection Accepted
+[2023-03-13 02:22:22] Set S-Band packet length to 18 bytes
+[2023-03-13 02:23:04] Command hex: 20010102
+[2023-03-13 02:23:05] SBand Entering Transmit Mode
+[2023-03-13 02:23:05] SBand Transmission Complete
+[2023-03-13 02:23:29] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:23:29] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:23:36] Command hex: 20020102
+[2023-03-13 02:23:37] SBand Entering Transmit Mode
+[2023-03-13 02:23:37] SBand Transmission Complete
+[2023-03-13 02:23:41] Set image resolution to 320x240
+[2023-03-13 02:25:00] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:25:00] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:27:00] Warning: telemetry timestamp checksum failed, t=533
+[2023-03-13 02:28:11] Command hex: 20010102
+[2023-03-13 02:28:12] SBand Entering Transmit Mode
+[2023-03-13 02:28:12] SBand Transmission Complete
+[2023-03-13 02:28:16] Set image resolution to 160x120
+[2023-03-13 02:28:36] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:28:36] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:31:41] Command hex: 20010102
+[2023-03-13 02:31:41] SBand Entering Transmit Mode
+[2023-03-13 02:31:42] SBand Transmission Complete
+[2023-03-13 02:32:06] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:32:06] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:32:16] Command hex: 20010102
+[2023-03-13 02:32:17] SBand Entering Transmit Mode
+[2023-03-13 02:32:17] SBand Transmission Complete
+[2023-03-13 02:32:41] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:32:41] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x008@@@@@@8@@@@'
+[2023-03-13 02:32:52] Command hex: 20020102
+[2023-03-13 02:32:53] SBand Entering Transmit Mode
+[2023-03-13 02:32:53] SBand Transmission Complete
+[2023-03-13 02:32:58] Set image resolution to 320x240
+[2023-03-13 02:34:16] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:34:16] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:35:01] Command hex: 20020102
+[2023-03-13 02:35:01] SBand Entering Transmit Mode
+[2023-03-13 02:35:02] SBand Transmission Complete
+[2023-03-13 02:36:19] Warning: SBand buffer overflowed!
+[2023-03-13 02:36:20] Warning: SBand buffer overflowed!
+[2023-03-13 02:36:24] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:36:24] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:36:31] Command hex: 20010102
+[2023-03-13 02:36:31] SBand Entering Transmit Mode
+[2023-03-13 02:36:31] SBand Transmission Complete
+[2023-03-13 02:36:36] Set image resolution to 160x120
+[2023-03-13 02:36:55] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:36:55] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:37:16] Command hex: 20010102
+[2023-03-13 02:37:16] SBand Entering Transmit Mode
+[2023-03-13 02:37:16] SBand Transmission Complete
+[2023-03-13 02:37:29] Warning: SBand buffer overflowed!
+[2023-03-13 02:37:30] Warning: SBand buffer overflowed!
+[2023-03-13 02:37:40] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:37:40] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:37:43] Command hex: 20010102
+[2023-03-13 02:37:43] SBand Entering Transmit Mode
+[2023-03-13 02:37:44] SBand Transmission Complete
+[2023-03-13 02:38:08] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:38:08] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:38:38] Command hex: 20010102
+[2023-03-13 02:38:38] SBand Entering Transmit Mode
+[2023-03-13 02:38:39] SBand Transmission Complete
+[2023-03-13 02:38:48] Command hex: 20010102
+[2023-03-13 02:38:49] Command hex: 20010102
+[2023-03-13 02:38:49] SBand Entering Transmit Mode
+[2023-03-13 02:38:49] SBand Transmission Complete
+[2023-03-13 02:39:13] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:39:13] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:40:18] Command hex: 20010102
+[2023-03-13 02:40:18] SBand Entering Transmit Mode
+[2023-03-13 02:40:19] SBand Transmission Complete
+[2023-03-13 02:40:26] Command hex: 20010102
+[2023-03-13 02:40:26] SBand Entering Transmit Mode
+[2023-03-13 02:40:26] Command hex: 20010102
+[2023-03-13 02:40:26] SBand Transmission Complete
+[2023-03-13 02:40:27] SBand Entering Transmit Mode
+[2023-03-13 02:40:27] SBand Transmission Complete
+[2023-03-13 02:40:33] Command hex: 20010102
+[2023-03-13 02:40:34] Command hex: 20010102
+[2023-03-13 02:40:34] Command hex: 20010102
+[2023-03-13 02:40:34] Command hex: 20010102
+[2023-03-13 02:40:34] SBand Entering Transmit Mode
+[2023-03-13 02:40:34] SBand Transmission Complete
+[2023-03-13 02:40:34] SBand Entering Transmit Mode
+[2023-03-13 02:40:35] SBand Transmission Complete
+[2023-03-13 02:40:43] Warning: SBand buffer overflowed!
+[2023-03-13 02:40:59] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:40:59] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:43:22] Command hex: 20020102
+[2023-03-13 02:43:22] SBand Entering Transmit Mode
+[2023-03-13 02:43:22] SBand Transmission Complete
+[2023-03-13 02:43:50] UHF Modem Connection Accepted
+[2023-03-13 02:43:50] Set UHF packet length to 32 bytes
+[2023-03-13 02:43:51] S-Band Modem Connection Accepted
+[2023-03-13 02:43:51] Set S-Band packet length to 18 bytes
+[2023-03-13 02:44:01] Command hex: 20010102
+[2023-03-13 02:44:01] SBand Entering Transmit Mode
+[2023-03-13 02:44:01] SBand Transmission Complete
+[2023-03-13 02:44:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:44:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:44:28] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:44:35] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:45:18] Command hex: 20010102
+[2023-03-13 02:45:18] SBand Entering Transmit Mode
+[2023-03-13 02:45:19] SBand Transmission Complete
+[2023-03-13 02:45:43] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:45:43] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:46:02] Command hex: 20010102
+[2023-03-13 02:46:02] SBand Entering Transmit Mode
+[2023-03-13 02:46:02] SBand Transmission Complete
+[2023-03-13 02:46:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:46:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:46:29] Command hex: 20010102
+[2023-03-13 02:46:29] SBand Entering Transmit Mode
+[2023-03-13 02:46:29] SBand Transmission Complete
+[2023-03-13 02:46:53] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:46:53] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00@@@888@@@@@H'
+[2023-03-13 02:47:10] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:47:47] Command hex: 20020102
+[2023-03-13 02:47:47] SBand Entering Transmit Mode
+[2023-03-13 02:47:48] SBand Transmission Complete
+[2023-03-13 02:47:53] Set image resolution to 320x240
+[2023-03-13 02:49:11] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:49:11] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 02:49:34] Warning: telemetry timestamp checksum failed, t=199977
+[2023-03-13 02:49:34] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:49:53] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:50:08] Warning: telemetry timestamp checksum failed, t=396707
+[2023-03-13 02:50:11] Warning: telemetry timestamp checksum failed, t=12914093
+[2023-03-13 02:50:11] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 02:51:30] UHF Modem Disconnected
+[2023-03-13 02:51:30] S-Band Modem Disconnected
+[2023-03-13 02:51:35] UHF Modem Connection Accepted
+[2023-03-13 02:51:35] Set UHF packet length to 32 bytes
+[2023-03-13 02:54:38] S-Band Modem Connection Accepted
+[2023-03-13 02:54:38] Set S-Band packet length to 18 bytes
+[2023-03-13 02:54:43] UHF Modem Connection Accepted
+[2023-03-13 02:54:43] Set UHF packet length to 32 bytes
+[2023-03-13 02:54:55] Command hex: 20010102
+[2023-03-13 02:54:55] SBand Entering Transmit Mode
+[2023-03-13 02:54:55] SBand Transmission Complete
+[2023-03-13 02:55:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:55:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:55:20] Command hex: 20010102
+[2023-03-13 02:55:20] SBand Entering Transmit Mode
+[2023-03-13 02:55:21] SBand Transmission Complete
+[2023-03-13 02:55:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:55:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:55:49] Command hex: 20010102
+[2023-03-13 02:55:50] SBand Entering Transmit Mode
+[2023-03-13 02:55:50] SBand Transmission Complete
+[2023-03-13 02:55:59] Warning: SBand buffer overflowed!
+[2023-03-13 02:56:11] Warning: SBand buffer overflowed!
+[2023-03-13 02:56:14] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:56:14] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 02:56:24] Command hex: 20010102
+[2023-03-13 02:56:24] SBand Entering Transmit Mode
+[2023-03-13 02:56:24] SBand Transmission Complete
+[2023-03-13 02:56:40] Warning: SBand buffer overflowed!
+[2023-03-13 02:57:42] Warning: telemetry timestamp checksum failed, t=4718
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'\xaa\xaaU04335000000000001250000945@\x08\x01'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'\x00 T\x00\x00\x14\xfb\xff?\xff\xfd\x00\x00\xc8\xf0\x0b2\t\x10\xb0\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x14\xfc\xff@\xff\xfd\x00\x00\xc4\xf3\x0b2\x08P\xb0\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x14\xfd\xff?\xff\xfd\x00\x00\xc6\xf0\x0c2\t\x10\x10\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x14\xfe\xff?\xfe\xfd\x00\x00\xc5\xef\x0b2\t0p\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x14\xff\xff?\xfe\xfd\x00\x00\xc5\xf0\x0c2\n0\x10\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x15\x00\xff?\xfe\xfd\x00\x00\xc5\xf0\n2\x030\x10\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] UHF received uncategorized packet: b'o\nT\x00\x00\x15\x01\xff?\xfe\xfd\x00\x00\xc3\xf0\x0b2\x0400\xf8\n\xb2\xa8\xc8\xf2\x02]LVF\xf5'
+[2023-03-13 03:00:54] Warning: UHF buffer overflowed!
+[2023-03-13 03:00:54] Warning: UHF buffer overflowed!
+[2023-03-13 03:01:27] S-Band Modem Connection Accepted
+[2023-03-13 03:01:27] Set S-Band packet length to 18 bytes
+[2023-03-13 03:03:36] UHF Modem Connection Accepted
+[2023-03-13 03:03:36] Set UHF packet length to 32 bytes
+[2023-03-13 03:03:37] S-Band Modem Connection Accepted
+[2023-03-13 03:03:37] Set S-Band packet length to 18 bytes
+[2023-03-13 03:03:37] SBand received uncategorized packet: b',\x8dyS\x05\xd8\x9f\xbf-\xb2\x18\xcd\x8d\xf3\xb3#\xff\x1e\xfbu\x1f\xed9\x97'
+[2023-03-13 03:03:50] Command hex: 20010102
+[2023-03-13 03:03:51] SBand Entering Transmit Mode
+[2023-03-13 03:03:51] SBand Transmission Complete
+[2023-03-13 03:04:09] Warning: SBand buffer overflowed!
+[2023-03-13 03:04:15] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:04:15] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:04:30] Warning: telemetry timestamp checksum failed, t=6039
+[2023-03-13 03:04:30] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 03:04:48] UHF Modem Disconnected
+[2023-03-13 03:05:43] UHF Modem Connection Accepted
+[2023-03-13 03:05:43] Set UHF packet length to 32 bytes
+[2023-03-13 03:05:52] UHF Modem Disconnected
+[2023-03-13 03:06:07] S-Band Modem Connection Accepted
+[2023-03-13 03:06:07] Set S-Band packet length to 18 bytes
+[2023-03-13 03:06:10] UHF Modem Connection Accepted
+[2023-03-13 03:06:10] Set UHF packet length to 32 bytes
+[2023-03-13 03:06:21] Command hex: 20010102
+[2023-03-13 03:06:22] SBand Entering Transmit Mode
+[2023-03-13 03:06:22] SBand Transmission Complete
+[2023-03-13 03:06:42] Warning: SBand buffer overflowed!
+[2023-03-13 03:06:47] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:06:47] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:08:30] UHF Modem Connection Accepted
+[2023-03-13 03:08:30] Set UHF packet length to 32 bytes
+[2023-03-13 03:08:30] S-Band Modem Connection Accepted
+[2023-03-13 03:08:30] Set S-Band packet length to 18 bytes
+[2023-03-13 03:08:42] Command hex: 20010102
+[2023-03-13 03:08:43] SBand Entering Transmit Mode
+[2023-03-13 03:08:43] SBand Transmission Complete
+[2023-03-13 03:09:07] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:09:07] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:10:43] S-Band Modem Connection Accepted
+[2023-03-13 03:10:43] Set S-Band packet length to 18 bytes
+[2023-03-13 03:10:49] Command hex: 20010102
+[2023-03-13 03:10:50] SBand Entering Transmit Mode
+[2023-03-13 03:10:50] SBand Transmission Complete
+[2023-03-13 03:11:14] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:11:14] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:11:17] Command hex: 20010102
+[2023-03-13 03:11:17] SBand Entering Transmit Mode
+[2023-03-13 03:11:17] SBand Transmission Complete
+[2023-03-13 03:11:41] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:11:41] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:11:45] UHF Modem Connection Accepted
+[2023-03-13 03:11:45] Set UHF packet length to 32 bytes
+[2023-03-13 03:11:45] Warning: UHF buffer overflowed!
+[2023-03-13 03:11:59] Command hex: 20010102
+[2023-03-13 03:12:00] SBand Entering Transmit Mode
+[2023-03-13 03:12:00] SBand Transmission Complete
+[2023-03-13 03:12:32] Command hex: 20020102
+[2023-03-13 03:12:32] SBand Entering Transmit Mode
+[2023-03-13 03:12:32] SBand Transmission Complete
+[2023-03-13 03:12:37] Set image resolution to 320x240
+[2023-03-13 03:13:55] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:13:55] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:14:49] UHF Modem Disconnected
+[2023-03-13 03:16:24] S-Band Modem Connection Accepted
+[2023-03-13 03:16:24] Set S-Band packet length to 18 bytes
+[2023-03-13 03:16:31] Command hex: 20010102
+[2023-03-13 03:16:32] SBand Entering Transmit Mode
+[2023-03-13 03:16:32] SBand Transmission Complete
+[2023-03-13 03:16:56] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:16:56] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:17:14] Command hex: 20010102
+[2023-03-13 03:17:14] SBand Entering Transmit Mode
+[2023-03-13 03:17:14] SBand Transmission Complete
+[2023-03-13 03:17:38] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:17:38] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:17:41] Command hex: 20010102
+[2023-03-13 03:17:42] SBand Entering Transmit Mode
+[2023-03-13 03:17:42] SBand Transmission Complete
+[2023-03-13 03:18:06] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:18:06] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:18:11] Command hex: 20010102
+[2023-03-13 03:18:11] SBand Entering Transmit Mode
+[2023-03-13 03:18:11] SBand Transmission Complete
+[2023-03-13 03:18:35] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:18:35] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:18:40] Command hex: 20010102
+[2023-03-13 03:18:41] SBand Entering Transmit Mode
+[2023-03-13 03:18:41] SBand Transmission Complete
+[2023-03-13 03:19:05] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:19:05] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:19:06] Command hex: 20010102
+[2023-03-13 03:19:06] SBand Entering Transmit Mode
+[2023-03-13 03:19:07] SBand Transmission Complete
+[2023-03-13 03:19:30] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:19:30] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:19:32] Command hex: 20010102
+[2023-03-13 03:19:33] SBand Entering Transmit Mode
+[2023-03-13 03:19:33] SBand Transmission Complete
+[2023-03-13 03:19:57] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:19:57] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:20:00] Command hex: 20010102
+[2023-03-13 03:20:00] SBand Entering Transmit Mode
+[2023-03-13 03:20:01] SBand Transmission Complete
+[2023-03-13 03:20:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:20:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:20:49] Command hex: 20020102
+[2023-03-13 03:20:49] SBand Entering Transmit Mode
+[2023-03-13 03:20:49] SBand Transmission Complete
+[2023-03-13 03:20:54] Set image resolution to 320x240
+[2023-03-13 03:22:12] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:22:12] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:23:22] Warning: SBand buffer overflowed!
+[2023-03-13 03:23:23] SBand received uncategorized packet: b'00000000@\x00\x00\x00\x00@\x00\x00\x00\x00@\x00\x00\x00\x00\xaa\xaaS2463999877038383000000'
+[2023-03-13 03:23:31] S-Band Modem Connection Accepted
+[2023-03-13 03:23:31] Set S-Band packet length to 18 bytes
+[2023-03-13 03:23:32] SBand received uncategorized packet: b'\x96\xb9\xd7:\xeb\xd0$\xa1\x81\xdd\x97S\xf2\xba\x91v:\xba\xfc}\xf4:\xdf\xcd\x9ez\\\xedW\x8dZ\xbb\xfd\x17o\xca1'
+[2023-03-13 03:24:01] Command hex: 20010102
+[2023-03-13 03:24:02] SBand Entering Transmit Mode
+[2023-03-13 03:24:02] SBand Transmission Complete
+[2023-03-13 03:24:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0xx'
+[2023-03-13 03:24:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0xx'
+[2023-03-13 03:24:27] Command hex: 20010102
+[2023-03-13 03:24:27] SBand Entering Transmit Mode
+[2023-03-13 03:24:27] SBand Transmission Complete
+[2023-03-13 03:24:52] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0xx'
+[2023-03-13 03:24:52] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxx\xc0\xc0\xc0\xc0xx'
+[2023-03-13 03:24:56] Command hex: 20020102
+[2023-03-13 03:24:56] SBand Entering Transmit Mode
+[2023-03-13 03:24:56] SBand Transmission Complete
+[2023-03-13 03:25:01] Set image resolution to 320x240
+[2023-03-13 03:26:19] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:26:19] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:27:26] S-Band Modem Connection Accepted
+[2023-03-13 03:27:26] Set S-Band packet length to 18 bytes
+[2023-03-13 03:27:27] SBand received uncategorized packet: b'/\x14+!\x9e\xa3\xbf\xce\xf6\xf9ls=\x861\xdd\xc1\xae\xc1\xd1\xf1@\x04/0:\x06\xda?\x8a\x02\x9c\xb1\x9d\x0e\xd0D'
+[2023-03-13 03:27:33] Command hex: 20010102
+[2023-03-13 03:27:34] SBand Entering Transmit Mode
+[2023-03-13 03:27:34] SBand Transmission Complete
+[2023-03-13 03:27:58] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:27:58] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:28:01] Command hex: 20010102
+[2023-03-13 03:28:01] SBand Entering Transmit Mode
+[2023-03-13 03:28:02] SBand Transmission Complete
+[2023-03-13 03:28:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:28:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:28:29] Command hex: 20010102
+[2023-03-13 03:28:29] SBand Entering Transmit Mode
+[2023-03-13 03:28:29] SBand Transmission Complete
+[2023-03-13 03:28:54] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:28:54] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:28:56] Command hex: 20010102
+[2023-03-13 03:28:56] SBand Entering Transmit Mode
+[2023-03-13 03:28:56] SBand Transmission Complete
+[2023-03-13 03:29:20] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:29:20] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:29:42] Command hex: 20020102
+[2023-03-13 03:29:42] SBand Entering Transmit Mode
+[2023-03-13 03:29:43] SBand Transmission Complete
+[2023-03-13 03:29:48] Set image resolution to 320x240
+[2023-03-13 03:31:06] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:31:06] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:31:11] Command hex: 20020102
+[2023-03-13 03:31:12] SBand Entering Transmit Mode
+[2023-03-13 03:31:12] SBand Transmission Complete
+[2023-03-13 03:32:34] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:32:34] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:32:37] Command hex: 20020102
+[2023-03-13 03:32:37] SBand Entering Transmit Mode
+[2023-03-13 03:32:37] SBand Transmission Complete
+[2023-03-13 03:34:00] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:34:00] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:34:25] Command hex: 20030102
+[2023-03-13 03:34:25] SBand Entering Transmit Mode
+[2023-03-13 03:34:25] SBand Transmission Complete
+[2023-03-13 03:34:31] Set image resolution to 640x480
+[2023-03-13 03:35:05] Warning: SBand buffer overflowed!
+[2023-03-13 03:37:57] Warning: SBand buffer overflowed!
+[2023-03-13 03:38:15] Warning: SBand buffer overflowed!
+[2023-03-13 03:38:29] Warning: SBand buffer overflowed!
+[2023-03-13 03:38:45] Warning: SBand buffer overflowed!
+[2023-03-13 03:38:52] Warning: SBand buffer overflowed!
+[2023-03-13 03:39:01] Warning: SBand buffer overflowed!
+[2023-03-13 03:39:44] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:39:44] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 03:39:54] Command hex: 20010102
+[2023-03-13 03:39:55] SBand Entering Transmit Mode
+[2023-03-13 03:39:55] Command hex: 20010102
+[2023-03-13 03:39:55] SBand Transmission Complete
+[2023-03-13 03:39:56] SBand Entering Transmit Mode
+[2023-03-13 03:39:56] SBand Transmission Complete
+[2023-03-13 03:40:01] Warning: SBand buffer overflowed!
+[2023-03-13 03:40:02] Set image resolution to 160x120
+[2023-03-13 03:40:19] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00HHHPHPPHHPPP'
+[2023-03-13 03:40:19] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00HHHPHPPHHPPP'
+[2023-03-13 03:40:45] Command hex: 20010102
+[2023-03-13 03:40:45] SBand Entering Transmit Mode
+[2023-03-13 03:40:46] SBand Transmission Complete
+[2023-03-13 03:41:09] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00HHHPHPPHHPPP'
+[2023-03-13 03:41:09] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00HHHPHPPHHPPP'
+[2023-03-13 03:41:33] Command hex: 20010102
+[2023-03-13 03:41:33] SBand Entering Transmit Mode
+[2023-03-13 03:41:34] SBand Transmission Complete
+[2023-03-13 03:42:11] UHF Modem Connection Accepted
+[2023-03-13 03:42:11] Set UHF packet length to 32 bytes
+[2023-03-13 03:42:21] Warning: telemetry timestamp checksum failed, t=402455
+[2023-03-13 03:42:21] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 03:42:26] Cleared all telemetry plots
+[2023-03-13 03:42:33] UHF Modem Disconnected
+[2023-03-13 03:42:35] S-Band Modem Connection Accepted
+[2023-03-13 03:42:35] Set S-Band packet length to 18 bytes
+[2023-03-13 03:42:35] Warning: SBand buffer overflowed!
+[2023-03-13 03:42:39] UHF Modem Connection Accepted
+[2023-03-13 03:42:39] Set UHF packet length to 32 bytes
+[2023-03-13 03:42:51] UHF Modem Connection Accepted
+[2023-03-13 03:42:51] Set UHF packet length to 32 bytes
+[2023-03-13 03:42:52] S-Band Modem Connection Accepted
+[2023-03-13 03:42:52] Set S-Band packet length to 18 bytes
+[2023-03-13 03:43:52] Command hex: 20020102
+[2023-03-13 03:43:52] SBand Entering Transmit Mode
+[2023-03-13 03:43:52] SBand Transmission Complete
+[2023-03-13 03:43:56] Set image resolution to 320x240
+[2023-03-13 03:45:15] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:45:15] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:46:49] S-Band Modem Connection Accepted
+[2023-03-13 03:46:49] Set S-Band packet length to 18 bytes
+[2023-03-13 03:46:56] UHF Modem Connection Accepted
+[2023-03-13 03:46:56] Set UHF packet length to 32 bytes
+[2023-03-13 03:46:57] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 03:47:06] Command hex: 20010102
+[2023-03-13 03:47:06] SBand Entering Transmit Mode
+[2023-03-13 03:47:07] SBand Transmission Complete
+[2023-03-13 03:47:31] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxx\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:47:31] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxx\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 03:47:48] Command hex: 20020102
+[2023-03-13 03:47:48] SBand Entering Transmit Mode
+[2023-03-13 03:47:49] SBand Transmission Complete
+[2023-03-13 03:47:54] Set image resolution to 320x240
+[2023-03-13 03:48:05] Warning: SBand buffer overflowed!
+[2023-03-13 03:48:29] Warning: SBand buffer overflowed!
+[2023-03-13 03:49:11] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:49:11] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:50:59] UHF Modem Connection Accepted
+[2023-03-13 03:50:59] Set UHF packet length to 32 bytes
+[2023-03-13 03:51:00] S-Band Modem Connection Accepted
+[2023-03-13 03:51:00] Set S-Band packet length to 18 bytes
+[2023-03-13 03:51:00] SBand received uncategorized packet: b'\xab\xf3\xef\x19\x9f\xdf\r\xc7h\xe9\xcf\xc5\xbf\xb6\xd4{\xf7j\xed\xfcG\xf7\xf2\xf3\x93=\x9a\xcey\xd4\n_\xbc\xf9\xf7/'
+[2023-03-13 03:51:09] Command hex: 20020102
+[2023-03-13 03:51:09] SBand Entering Transmit Mode
+[2023-03-13 03:51:09] SBand Transmission Complete
+[2023-03-13 03:51:14] Set image resolution to 320x240
+[2023-03-13 03:51:55] Warning: SBand buffer overflowed!
+[2023-03-13 03:52:19] SBand received uncategorized packet: b'\x12\x0f\x8f\x8f\xa0\xa0xxxxxxxxxxxx'
+[2023-03-13 03:52:33] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:52:33] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:52:43] Saved image to images/wdt5_320.png
+[2023-03-13 03:55:54] S-Band Modem Connection Accepted
+[2023-03-13 03:55:54] Set S-Band packet length to 18 bytes
+[2023-03-13 03:56:33] UHF Modem Connection Accepted
+[2023-03-13 03:56:34] Set UHF packet length to 32 bytes
+[2023-03-13 03:56:34] Warning: UHF buffer overflowed!
+[2023-03-13 03:56:55] UHF Modem Disconnected
+[2023-03-13 03:57:02] S-Band Modem Connection Accepted
+[2023-03-13 03:57:02] Set S-Band packet length to 18 bytes
+[2023-03-13 03:57:04] UHF Modem Connection Accepted
+[2023-03-13 03:57:05] Set UHF packet length to 32 bytes
+[2023-03-13 03:57:18] Command hex: 20020102
+[2023-03-13 03:57:19] SBand Entering Transmit Mode
+[2023-03-13 03:57:19] SBand Transmission Complete
+[2023-03-13 03:57:24] Set image resolution to 320x240
+[2023-03-13 03:58:07] Warning: SBand buffer overflowed!
+[2023-03-13 03:58:24] Warning: SBand buffer overflowed!
+[2023-03-13 03:58:43] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:58:43] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPPPPPXXXXX'
+[2023-03-13 03:59:10] Saved image to images/wdt4_320.png
+[2023-03-13 03:59:38] Warning: telemetry timestamp checksum failed, t=11606
+[2023-03-13 03:59:38] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 04:00:18] Command hex: 20010102
+[2023-03-13 04:00:19] SBand Entering Transmit Mode
+[2023-03-13 04:00:19] SBand Transmission Complete
+[2023-03-13 04:00:23] Set image resolution to 160x120
+[2023-03-13 04:00:43] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxxx\xc0\xc0\xc0\xc0'
+[2023-03-13 04:00:43] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxxx\xc0\xc0\xc0\xc0'
+[2023-03-13 04:08:37] UHF Modem Disconnected
+[2023-03-13 04:09:31] S-Band Modem Connection Accepted
+[2023-03-13 04:09:31] Set S-Band packet length to 18 bytes
+[2023-03-13 04:09:40] Command hex: 20010102
+[2023-03-13 04:09:40] SBand Entering Transmit Mode
+[2023-03-13 04:09:41] SBand Transmission Complete
+[2023-03-13 04:09:46] SBand received uncategorized packet: b' \x01\x01\x02'
+[2023-03-13 04:09:51] SBand received uncategorized packet: b' \x01\x01\x02'
+[2023-03-13 04:09:55] SBand received uncategorized packet: b' \x01\x01\x02'
+[2023-03-13 04:10:04] SBand received uncategorized packet: b' \x01\x01\x02'
+[2023-03-13 04:10:05] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:10:05] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:13:13] S-Band Modem Connection Accepted
+[2023-03-13 04:13:13] Set S-Band packet length to 18 bytes
+[2023-03-13 04:13:16] Error decoding image packet: b'\xb6\xcb\\\x01\xcb\xe7\xdd&\x1d\xb4\xb4\xf3w|\xef\xf6\xcf\xcd'
+[2023-03-13 04:13:20] Command hex: 20010102
+[2023-03-13 04:13:20] SBand Entering Transmit Mode
+[2023-03-13 04:13:21] SBand Transmission Complete
+[2023-03-13 04:13:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:13:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:14:02] Command hex: 20020102
+[2023-03-13 04:14:02] SBand Entering Transmit Mode
+[2023-03-13 04:14:03] SBand Transmission Complete
+[2023-03-13 04:14:08] Set image resolution to 320x240
+[2023-03-13 04:15:26] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:15:26] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:15:38] Saved image to images/wdt4_320-with_cache.png
+[2023-03-13 04:15:46] Command hex: 20030102
+[2023-03-13 04:15:46] SBand Entering Transmit Mode
+[2023-03-13 04:15:47] SBand Transmission Complete
+[2023-03-13 04:15:51] Set image resolution to 640x480
+[2023-03-13 04:19:02] Warning: SBand buffer overflowed!
+[2023-03-13 04:20:23] Warning: SBand buffer overflowed!
+[2023-03-13 04:20:23] Warning: SBand buffer overflowed!
+[2023-03-13 04:20:43] Warning: SBand buffer overflowed!
+[2023-03-13 04:21:04] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:21:04] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:22:06] S-Band Modem Connection Accepted
+[2023-03-13 04:22:06] Set S-Band packet length to 18 bytes
+[2023-03-13 04:22:13] Command hex: 20010102
+[2023-03-13 04:22:13] SBand Entering Transmit Mode
+[2023-03-13 04:22:13] SBand Transmission Complete
+[2023-03-13 04:22:37] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x08\x10\x10   888@'
+[2023-03-13 04:22:37] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x08\x10\x10   888@'
+[2023-03-13 04:34:48] S-Band Modem Connection Accepted
+[2023-03-13 04:34:48] Set S-Band packet length to 18 bytes
+[2023-03-13 04:34:54] Error: cannot have empty command argument
+[2023-03-13 04:34:57] Command hex: 20010102
+[2023-03-13 04:34:58] SBand Entering Transmit Mode
+[2023-03-13 04:34:58] SBand Transmission Complete
+[2023-03-13 04:37:49] S-Band Modem Connection Accepted
+[2023-03-13 04:37:49] Set S-Band packet length to 18 bytes
+[2023-03-13 04:37:55] Command hex: 20010102
+[2023-03-13 04:37:56] SBand Entering Transmit Mode
+[2023-03-13 04:37:56] SBand Transmission Complete
+[2023-03-13 04:45:41] Command hex: 20010102
+[2023-03-13 04:45:42] Error: radio is not connected, flushing command queue
+[2023-03-13 04:45:52] S-Band Modem Connection Accepted
+[2023-03-13 04:45:52] Set S-Band packet length to 18 bytes
+[2023-03-13 04:46:00] S-Band Modem Disconnected
+[2023-03-13 04:46:03] S-Band Modem Connection Accepted
+[2023-03-13 04:46:04] Set S-Band packet length to 18 bytes
+[2023-03-13 04:46:06] Command hex: 20010102
+[2023-03-13 04:46:07] SBand Entering Transmit Mode
+[2023-03-13 04:46:07] SBand Transmission Complete
+[2023-03-13 04:46:31] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x08\x10\x10   888@'
+[2023-03-13 04:46:31] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x08\x10\x10   888@'
+[2023-03-13 04:46:39] Command hex: 20020102
+[2023-03-13 04:46:39] SBand Entering Transmit Mode
+[2023-03-13 04:46:40] SBand Transmission Complete
+[2023-03-13 04:46:45] Set image resolution to 320x240
+[2023-03-13 04:48:02] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00PPPPPPPPXPPP'
+[2023-03-13 04:48:02] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00PPPPPPPPXPPP'
+[2023-03-13 04:48:07] Command hex: 20030102
+[2023-03-13 04:48:07] SBand Entering Transmit Mode
+[2023-03-13 04:48:08] SBand Transmission Complete
+[2023-03-13 04:48:13] Set image resolution to 640x480
+[2023-03-13 04:49:19] Warning: SBand buffer overflowed!
+[2023-03-13 04:52:08] Warning: SBand buffer overflowed!
+[2023-03-13 04:52:36] Warning: SBand buffer overflowed!
+[2023-03-13 04:53:25] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:53:25] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 04:53:31] UHF Modem Connection Accepted
+[2023-03-13 04:53:32] Set UHF packet length to 32 bytes
+[2023-03-13 04:53:49] Command hex: 20010102
+[2023-03-13 04:53:49] SBand Entering Transmit Mode
+[2023-03-13 04:53:49] SBand Transmission Complete
+[2023-03-13 04:53:55] Warning: SBand buffer overflowed!
+[2023-03-13 04:53:56] Set image resolution to 160x120
+[2023-03-13 04:54:13] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:54:13] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:54:15] Command hex: 20010102
+[2023-03-13 04:54:16] SBand Entering Transmit Mode
+[2023-03-13 04:54:16] SBand Transmission Complete
+[2023-03-13 04:54:40] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:54:40] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:54:45] Command hex: 20010102
+[2023-03-13 04:54:45] SBand Entering Transmit Mode
+[2023-03-13 04:54:45] SBand Transmission Complete
+[2023-03-13 04:54:54] Warning: SBand buffer overflowed!
+[2023-03-13 04:55:09] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:55:09] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:55:29] Command hex: 20010102
+[2023-03-13 04:55:29] SBand Entering Transmit Mode
+[2023-03-13 04:55:30] SBand Transmission Complete
+[2023-03-13 04:55:54] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:55:54] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:56:01] Command hex: 20010102
+[2023-03-13 04:56:01] SBand Entering Transmit Mode
+[2023-03-13 04:56:01] SBand Transmission Complete
+[2023-03-13 04:56:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:56:25] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x10\x18\x18 ((888@@'
+[2023-03-13 04:56:29] Command hex: 20020102
+[2023-03-13 04:56:29] SBand Entering Transmit Mode
+[2023-03-13 04:56:29] SBand Transmission Complete
+[2023-03-13 04:56:34] Set image resolution to 320x240
+[2023-03-13 04:56:49] Warning: SBand buffer overflowed!
+[2023-03-13 04:57:10] Warning: SBand buffer overflowed!
+[2023-03-13 04:57:41] Warning: SBand buffer overflowed!
+[2023-03-13 04:57:48] Cleared all telemetry plots
+[2023-03-13 04:57:51] Warning: SBand buffer overflowed!
+[2023-03-13 04:57:53] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00PPPPPPPPPPPP'
+[2023-03-13 04:57:53] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00PPPPPPPPPPPP'
+[2023-03-13 04:58:24] Command hex: 20010102
+[2023-03-13 04:58:24] SBand Entering Transmit Mode
+[2023-03-13 04:58:25] SBand Transmission Complete
+[2023-03-13 04:58:30] Set image resolution to 160x120
+[2023-03-13 04:58:50] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxxxxxxx'
+[2023-03-13 04:58:50] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxxxxxxxxxx'
+[2023-03-13 04:59:19] Warning: telemetry timestamp checksum failed, t=616878624
+[2023-03-13 04:59:19] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 05:16:45] S-Band Modem Connection Accepted
+[2023-03-13 05:16:45] Set S-Band packet length to 18 bytes
+[2023-03-13 05:18:09] S-Band Modem Connection Accepted
+[2023-03-13 05:18:09] Set S-Band packet length to 18 bytes
+[2023-03-13 05:18:56] S-Band Modem Connection Accepted
+[2023-03-13 05:18:56] Set S-Band packet length to 18 bytes
+[2023-03-13 05:19:57] S-Band Modem Connection Accepted
+[2023-03-13 05:19:57] Set S-Band packet length to 18 bytes
+[2023-03-13 05:19:57] SBand received uncategorized packet: b'2\x97*\x8cRmk\xc5\xea\x11gB\xd9\xd4\xf6\xdf/\xeb'
+[2023-03-13 05:20:26] Command hex: 20010102
+[2023-03-13 05:20:26] SBand Entering Transmit Mode
+[2023-03-13 05:20:27] SBand Transmission Complete
+[2023-03-13 05:21:38] UHF Modem Connection Accepted
+[2023-03-13 05:21:38] Set UHF packet length to 32 bytes
+[2023-03-13 05:25:53] UHF Modem Connection Accepted
+[2023-03-13 05:25:53] Set UHF packet length to 32 bytes
+[2023-03-13 05:26:33] S-Band Modem Connection Accepted
+[2023-03-13 05:26:33] Set S-Band packet length to 18 bytes
+[2023-03-13 05:26:41] UHF Modem Connection Accepted
+[2023-03-13 05:26:41] Set UHF packet length to 32 bytes
+[2023-03-13 05:26:51] Command hex: 20010102
+[2023-03-13 05:26:51] SBand Entering Transmit Mode
+[2023-03-13 05:26:52] SBand Transmission Complete
+[2023-03-13 05:27:08] Error decoding image packet: b'\x92\xc6\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xe0\xe0\xf8\xf8xX'
+[2023-03-13 05:27:11] SBand received uncategorized packet: b'\x03\x94888x\xd0\xd8\xd8\xd8\xd8\xd8\xd8\xd0\xd8\xd8\xd0\xd0'
+[2023-03-13 05:27:11] Error decoding image packet: b'\x8b\x86888988888:888\x1888'
+[2023-03-13 05:27:12] Error decoding image packet: b'\x8b\xbez\xf0XX\xc8\xd0\xe0\xfa\xe1\xb8\xf8\xf8\xf8\xf8\xf8\xfc'
+[2023-03-13 05:27:16] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:27:16] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:27:26] Command hex: 20020102
+[2023-03-13 05:27:26] SBand Entering Transmit Mode
+[2023-03-13 05:27:26] SBand Transmission Complete
+[2023-03-13 05:27:30] SBand received uncategorized packet: b'B\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:27:30] Set image resolution to 320x240
+[2023-03-13 05:27:30] SBand received uncategorized packet: b'\x02\x02\x00\x00\x00\x00\x00\x00\x00\x00\x19\x0c\x00\x00C\x19\x00\x00'
+[2023-03-13 05:27:31] SBand received uncategorized packet: b'\x00\x13\xe0\xe8\xe8\xe8\xe0\xe8\xe8\xe8\xf8\xf8\xf8\xf8\xf0\xe8\xf8`'
+[2023-03-13 05:27:31] SBand received uncategorized packet: b'\x00\x08px88xxXXxxXxxxX\xc0'
+[2023-03-13 05:27:31] Error decoding image packet: b'\xc0+\xe0\xe8\xe8\xe8\xe8\xe8\xe8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xe0`'
+[2023-03-13 05:27:31] Error decoding image packet: b'\xc0H\x18\x18\x08\x08\x109P@HH8(988('
+[2023-03-13 05:27:32] SBand received uncategorized packet: b'\x00\x84\x08\x08\x08\x08 PPH@8\x18\x18\x18\x18\x10 '
+[2023-03-13 05:27:32] Error decoding image packet: b'\xa0Y\x1a\x18\x108\x18\x18\x10\x18\x18\x18\x18\x18\x18\x10\x18\x18'
+[2023-03-13 05:27:33] SBand received uncategorized packet: b'\x00\xaePPXXXHXPPXX\x10\x10PPP'
+[2023-03-13 05:27:33] SBand received uncategorized packet: b'\x00E((HpXPpxxh\x088x\xc0\xc0@'
+[2023-03-13 05:27:34] SBand received uncategorized packet: b'\x00\xd3\x10\x10P\xa8pxx(\x00   \x18\x10\x10\x0c'
+[2023-03-13 05:27:34] SBand received uncategorized packet: b'\x00\xd7HHH@\x08\xc0@@@@@\x00@@8\x80'
+[2023-03-13 05:27:34] SBand received uncategorized packet: b'\x00\xe0HPPHH@H@@@@@@@@8'
+[2023-03-13 05:27:34] SBand received uncategorized packet: b'\x00\xe4\x10\x10\x18\x10\x10\x00\x08\x10\x10\x10\x08\x0c\x10\x10\x10\x00'
+[2023-03-13 05:27:35] Error decoding image packet: b'\xc1\x14H@@@@@@888888888'
+[2023-03-13 05:27:35] SBand received uncategorized packet: b'!4\x18\x18\x188\x18\x08\x10\x18\x18\x18\x10\x12\x18\x18\x10\x10'
+[2023-03-13 05:27:35] SBand received uncategorized packet: b'\x01>\xd0\xd4\xd8\xd8\xe2\xe0\xe8\xe8\xf8\xf8\xf8\xdaH\xe0\xe8\xa0'
+[2023-03-13 05:27:36] SBand received uncategorized packet: b'\x01W\x18(88@@@HPPPt\xd0P\xcc\xca'
+[2023-03-13 05:27:36] SBand received uncategorized packet: b'\x01\x05\x18\x18\x18\x18\x18\x10\x08\x1a\x00\x00\x98\x18\x10\x10P\x10'
+[2023-03-13 05:27:36] Error decoding image packet: b'\xa1\x8e\xd8\xe0\xe0\xec\xa8\xe9\xf8\xf8\xc8(8Hx\xf0\xe0\xe8'
+[2023-03-13 05:27:37] SBand received uncategorized packet: b'\x01\x95Hx\xd8Xx[88Y\\p\xfaxppp'
+[2023-03-13 05:27:37] SBand received uncategorized packet: b'\x01\x9d\t8PXX@88XZ`P\xf0\xf0\xf0q'
+[2023-03-13 05:27:37] SBand received uncategorized packet: b'\x01\xa5\xd0\xd8\xd8\xd8\xc8\xd8\xd8\xc8\xd0\xe0\xe0\xe0\xc8\xe0\xe0\xe0'
+[2023-03-13 05:27:37] SBand received uncategorized packet: b'\x01\xba\x10\x10\x10\x18\x18\x08\x08\x08\x18\x08\x08\x18\x10\x18\x18\x88'
+[2023-03-13 05:27:44] SBand received uncategorized packet: b'\x03DPPpPHH@HH@@@8888'
+[2023-03-13 05:27:46] SBand received uncategorized packet: b'\x03\x94\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:27:47] Error decoding image packet: b'\x93\xae\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:27:47] SBand received uncategorized packet: b'\x04\x05888888888888((( '
+[2023-03-13 05:27:48] Error decoding image packet: b'\xa40xxxxxxxxxxxxxxxx'
+[2023-03-13 05:28:30] SBand received uncategorized packet: b'\x0e;0\x10\x18\x18\x10\x10\x10\x18\x10\x18\x18\x18\x18\x18\x10\x10'
+[2023-03-13 05:28:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:28:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:28:53] Command hex: 20020102
+[2023-03-13 05:28:53] SBand Entering Transmit Mode
+[2023-03-13 05:28:53] SBand Transmission Complete
+[2023-03-13 05:29:02] SBand received uncategorized packet: b'\x01\x10\x18\x18 8XPH88888888 '
+[2023-03-13 05:29:13] SBand received uncategorized packet: b'\x03\x84xxx\xc0xxxxy\xc0\xc0\xc0\xc8\xc8\xc8\xd0'
+[2023-03-13 05:29:31] Error decoding image packet: b'\xc7\xf3ppXXPPPXPPPPPPHP'
+[2023-03-13 05:29:32] Error decoding image packet: b'\xc8 \xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 05:29:46] SBand received uncategorized packet: b'\x0b\x828888888888888888'
+[2023-03-13 05:29:46] Error decoding image packet: b'\xcbV\x10\x08\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10\x10\x18\x18'
+[2023-03-13 05:29:47] Error decoding image packet: b'\xab\x91\xc0\xc0\xc0\xc0\xc8H\xc8\xc8\xc8\xc0|(\x88\x08\x08\x08'
+[2023-03-13 05:29:47] Error decoding image packet: b'\xbb\xa6((((((  \x18\x10P\x10\x18\x10\x10\x12'
+[2023-03-13 05:29:47] Error decoding image packet: b'\xcb\xad\xdb\xd0\xd0\xd0\xc8\xc8\xc0\xc0\xc0\xc0x\xc0@@HX'
+[2023-03-13 05:29:47] Error decoding image packet: b'\xab\xb6\xc0\xc0\xd0\xd8\xe0\xe8\xe8\xe8\xe8\xe8\xe9\xe0\xe0\xe0\xe8\xe8'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xab\xd6PPXxxxxxxxxxxxxx'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xab\xd9Xxxxxxxxxxxxxxxx'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xcb\xe6\x18\x18\x1c\x18\x98\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x1c'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xab\xf1@HH\xc8@A@88@pxxxpX'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xab\xdd\x18\xb88\x18(\x9a\x198X\x18\x98\x18\x19\x18\x18\x18'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xcc\x08xx\xc0\xc0\xc0\xc0\xc0\xc0\xd0\xc8\xc8\xc8\xc8\xc8\xcc\xc8'
+[2023-03-13 05:29:48] Error decoding image packet: b'\xcc#\x18\x18\x18\x18\x10\x18\x18\x18\x18\x18\x18\x18\x18\x10\x10\x10'
+[2023-03-13 05:29:51] Error decoding image packet: b'\xbc\x9a\x18\x18\x18\x18\x18\x18\x18\x10\x18\x18\x18\x10\x18\x188\x18'
+[2023-03-13 05:29:51] Error decoding image packet: b'\xac\xac\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18'
+[2023-03-13 05:29:51] Error decoding image packet: b'\xcc\xcdx\xc0\xc8\xd0\xd0\xd8\xe0\xe0\xe8\xf8\xf8\xf8\xe0\xe0\xe0\xe8'
+[2023-03-13 05:30:12] Error decoding image packet: b'\xd1\xe5x8\x10\x10\x10\x10\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10'
+[2023-03-13 05:30:16] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:30:16] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:30:26] Command hex: 20020102
+[2023-03-13 05:30:26] SBand Entering Transmit Mode
+[2023-03-13 05:30:26] SBand Transmission Complete
+[2023-03-13 05:31:22] Error decoding image packet: b'\xac\x95xzxxxxxX}|zzx{}y'
+[2023-03-13 05:31:26] SBand received uncategorized packet: b'\rI\xd0\xd0\xc0\xd0\xd0\xd0\xd0\xd0P(((((  '
+[2023-03-13 05:31:30] Error decoding image packet: b'\x9eD8888( (Hppppppxx'
+[2023-03-13 05:31:38] SBand received uncategorized packet: b'\x109\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x08\x10\x10\x10\x10'
+[2023-03-13 05:31:40] Error decoding image packet: b'\xd0}\xc8\xc8\xc0P\x10\x10\x08\x10\x10\x10\x10\x10\x08\x10\x10\x10'
+[2023-03-13 05:31:40] SBand received uncategorized packet: b'\x10\x93\x10\x10\x10\x10\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x10'
+[2023-03-13 05:31:40] Error decoding image packet: b'\x94\xae\x08\x08\x08\x00\x00\x00\x08\x08\x08\x08\x00\x00\x00\x08\x00\x00'
+[2023-03-13 05:31:40] Error decoding image packet: b'\xd0\xb488\xc8\xf8\xf8\xf8x\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:31:40] Error decoding image packet: b'\x98\xb7\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8x\xf8\xf8\xf8\xf0'
+[2023-03-13 05:31:41] SBand received uncategorized packet: b'\x10\xc9\xc8\xd8\xe0\xf8\xf8\xe0h\xe0h\xc8xQXPH8'
+[2023-03-13 05:31:41] SBand received uncategorized packet: b'\x10\xe5\x18\x18\x18\x18\x10\x18\x18\x18\x18\x18\x19\x18\x10\x18\x18\x18'
+[2023-03-13 05:31:42] Error decoding image packet: b'\xb1\x01\x08\x08\x08\x08@\x00\x00\x00\x00\x08\x08\x08\x00\x00\x00\x00'
+[2023-03-13 05:31:42] Error decoding image packet: b'\x95\x02\x10888:HP@88888x88'
+[2023-03-13 05:31:48] SBand received uncategorized packet: b'\x12\x87\x10\x10\x00\x10\x18\x18\x18\x10\x18\x18\x18\x18\x18\x18\x18\x18'
+[2023-03-13 05:31:49] Error decoding image packet: b'\x92\xda\x10\x10\x08\x08\x10\x10\x10\x10\x10\x10\x10\x18\x18\x18\x10\x10'
+[2023-03-13 05:31:49] Error decoding image packet: b'\x9a\xa4\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x01 '
+[2023-03-13 05:31:49] Error decoding image packet: b'\xb2\xaf\x10\x10R\x10\x10\x10\x08\x18\x18\x18\x18\x18\x18\x18\x18\x18'
+[2023-03-13 05:31:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00'
+[2023-03-13 05:32:24] Command hex: 20020102
+[2023-03-13 05:32:24] SBand Entering Transmit Mode
+[2023-03-13 05:32:24] SBand Transmission Complete
+[2023-03-13 05:32:44] Error decoding image packet: b'\xe3\x96\xf8x\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:32:52] Error decoding image packet: b'\x95\x8d\xd0\xd0\xc8\xd0\xd0\xd0P\xd0\xd0\xd0\xd0\xd0P\xd8\xd8\xd8'
+[2023-03-13 05:32:59] Error decoding image packet: b'\xa7D\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8\xc8'
+[2023-03-13 05:41:08] S-Band Modem Connection Accepted
+[2023-03-13 05:41:08] Set S-Band packet length to 18 bytes
+[2023-03-13 05:41:14] Command hex: 20010102
+[2023-03-13 05:41:14] SBand Entering Transmit Mode
+[2023-03-13 05:41:15] SBand Transmission Complete
+[2023-03-13 05:41:19] Warning: SBand buffer overflowed!
+[2023-03-13 05:41:19] Warning: SBand buffer overflowed!
+[2023-03-13 05:41:19] Warning: SBand buffer overflowed!
+[2023-03-13 05:41:19] Warning: SBand buffer overflowed!
+[2023-03-13 05:41:19] Warning: SBand buffer overflowed!
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'xxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x00xxxxxxx\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xd8\x80\x01\xe0\xe0\xe0\xd8\xd0pH@H@@@@@@H\x80\x01\xe0\xe0\xe0\xd8\xd0pH@H@'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'@@@@@H\x80\x02H@@@@@@@8888@@@@\x80\x02H@@@@@@@8888@@@@\x80\x03888@@  \x18\x08\x10\x18\x18\x18 (8\x80\x03888@@  \x18\x08\x10\x18\x18\x18 (8\x80\x0488 \x18\x08\x10\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x80\x0488 \x18\x08\x10\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x80\x05\x18\x188('
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'@@ \x08\x08\x08\x08\x08  \x18\x18\x80\x05\x18\x188(@@ \x08\x08\x08\x08\x08  \x18\x18\x80\x06 \x18 8@  8@8\x10\x08\x10\x10\x10 \x80\x06 \x18 8@  8@8\x10\x08\x10\x10\x10 \x80\x07PXXXXPPPHHH@8888\x80\x07PXXXXPPPHHH@8888\x80\x088888888888Xpxxx\xc0'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'\x80\x088888888888Xpxxx\xc0\x80\t\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\xe0\xe0\xe0\xe8\xf8\xf8\xf8\x80\t\xc0\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\xe0\xe0\xe0\xe8\xf8\xf8\xf8\x80\nxxxxxxxx\xc8\xd0\xd0\xd0\xd0\xd8\xd8\xd8\x80\nxxxxxxxx\xc8\xd0\xd0\xd0\xd0\xd8\xd8\xd8\x80\x0b\xe0\xe0\xe0\xd8\xd0XHHHHH@@@@@\x80\x0b\xe0\xe0\xe0\xd8\xd0XHHHH'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'H@@@@@\x80\x0c@@H@@@@@8@88@@88\x80\x0c@@H@@@@@8@88@@88\x80\r88(88( \x18\x08\x10\x18\x18\x18  8\x80\r88(88( \x18\x08\x10\x18\x18\x18  8\x80\x0e88 \x18\x08\x08\x18\x18\x18\x18\x10\x18\x18\x18\x18\x18\x80\x0e88 \x18\x08\x08\x18\x18\x18\x18\x10\x18\x18\x18\x18\x18\x80\x0f\x18 8('
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'@8 \x08\x08\x08\x08\x18 \x18 \x18\x80\x0f\x18 8(@8 \x08\x08\x08\x08\x18 \x18 \x18\x80\x10\x18\x18(HH888@8  \x18  8\x80\x10\x18\x18(HH888@8  \x18  8\x80\x11XXXXPPHHHH@@@@8@\x80\x11XXXXPPHHHH@@@@8@\x80\x1288888888(8Xpxxx\xc0'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'\x80\x1288888888(8Xpxxx\xc0\x80\x13\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\xe0\xe0\xe0\xf8\xf8\xf8\xf8\xe0\x80\x13\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\xe0\xe0\xe0\xf8\xf8\xf8\xf8\xe0\x80\x14xxxxxx\xc0\xc0\xc8\xd0\xd0\xd0\xd0\xd8\xd8\xd8\x80\x14xxxxxx\xc0\xc0\xc8\xd0\xd0\xd0\xd0\xd8\xd8\xd8\x80\x15\xe0\xd8\xe0\xd8\xc8XH@HHHH@@@H\x80\x15\xe0\xd8\xe0\xd8\xc8XH@HH'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'HH@@@H\x80\x16H@H@8@88@@@@@@88\x80\x16H@H@8@88@@@@@@88\x80\x1788 \x18 ( \x18\x10\x10\x10\x10\x18\x18 8\x80\x1788 \x18 ( \x18\x10\x10\x10\x10\x18\x18 8\x80\x1888 \x18\x08\x08\x10\x18 \x18\x18\x18\x18\x18\x18\x18\x80\x1888 \x18\x08\x08\x10\x18 \x18\x18\x18\x18\x18\x18\x18\x80\x19\x18 8('
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'@@(\x18\x10\x188@  \x18\x18\x80\x19\x18 8(@@(\x18\x10\x188@  \x18\x18\x80\x1a\x18\x188HP  \x188( (8XPP\x80\x1a\x18\x188HP  \x188( (8XPP\x80\x1bpXXXPPPPHH@@8888\x80\x1bpXXXPPPPHH@@8888\x80\x1c88888888(@Xppxx\xc0'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'\x80\x1c88888888(@Xppxx\xc0\x80\x1d\xc0\xc8\xd0\xd8\xd8\xe0\xe0\xe8\xe8\xf8\xf8\xf8\xf8\xe0\xe0\xe8\x80\x1d\xc0\xc8\xd0\xd8\xd8\xe0\xe0\xe8\xe8\xf8\xf8\xf8\xf8\xe0\xe0\xe8\x80\x1exxxxxx\xc0\xc8\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\x80\x1exxxxxx\xc0\xc8\xc8\xc8\xd0\xd0\xd0\xd8\xd8\xe0\x80 HHH@@@@@8@8@@888\x80 HHH@@@@@8@'
+[2023-03-13 05:41:19] SBand received uncategorized packet: b'8@@888\x80!88(((( \x18\x10\x10\x08\x10\x18\x18 8\x80!88(((( \x18\x10\x10\x08\x10\x18\x18 8@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x02\x00$\x12@\x00\x03\x006\x12'
+[2023-03-13 05:41:38] SBand received uncategorized packet: b' \x84\x95\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x10\x10\x18\x18  \x84\x968@xxpX@ \x18  '
+[2023-03-13 05:41:38] SBand received uncategorized packet: b' \x18 \x10\x08\x84\x968@xxpX@ \x18   \x18 \x10\x08\x84\x97\x08\x08\x08\x08\x08\x08\x08'
+[2023-03-13 05:41:38] SBand received uncategorized packet: b'\x08\x00\x00\x00\x00\x08\x08\x08\x08\x84\x97\x08\x08\x08\x08\x08\x08\x08\x08\x00\x00\x00\x00\x08\x08\x08\x08\x84\x98\x08\x08\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x08\x84\x98\x08\x08\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x08\x84'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x998@@Pp88888888888\x84\x998@@Pp88888888'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'888\x84\x9a(((@PXpx\xc0\xd8\xe0\xf8\xe8\xf0\xf8\xf0\x84\x9a(((@PXpx\xc0'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xd8\xe0\xf8\xe8\xf0\xf8\xf0\x84\x9b\xf0\xf8\xf8\xf8\xf0\xf0\xf8\xf0\xf0\xf8\xf8\xf0\xf0\xf0\xf8\xf0\x84\x9b\xf0\xf8\xf8\xf8\xf0'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xf0\xf8\xf0\xf0\xf8\xf8\xf0\xf0\xf0\xf8\xf0\x84\x9cxxxxxxxxP\x10\x10\x10\x10\x10\x10\x10\x84\x9cx'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'xxxxxxxP\x10\x10\x10\x10\x10\x10\x10\x84\x9d\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10\x10\x10\x18\x18\x18'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x18\x84\x9d\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10\x10\x10\x18\x18\x18\x18\x84\x9e\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x18\x18\x18\x18\x18\x84\x9e\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x84\x9f\x18\x18\x18\x18\x18\x10\x10'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x10\x10\x10\x10\x10\x18\x18 (\x84\x9f\x18\x18\x18\x18\x18\x10\x10\x10\x10\x10\x10\x10\x18\x18 (\x84\xa08Hx'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'xXX8\x18      \x10\x00\x84\xa08HxxXX8\x18      \x10\x00\x84'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xa1\x08\x08\x08\x08\x08\x08\x08\x08\x00\x00\x00\x00\x00\x08\x00\x00\x84\xa1\x08\x08\x08\x08\x08\x08\x08\x08\x00\x00\x00\x00\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x08\x00\x00\x84\xa2\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x08\x00\x00\x00\x08\x84\xa2\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x00\x08\x08\x00\x00\x00\x08\x84\xa3888xx888888888((\x84\xa3888xx'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'888888888((\x84\xa4( (@PXpx\xc0\xd0\xe0\xf8\xf8\xe8\xf0\xf8\x84\xa4('
+[2023-03-13 05:41:39] SBand received uncategorized packet: b' (@PXpx\xc0\xd0\xe0\xf8\xf8\xe8\xf0\xf8\x84\xa5\xf8\xf0\xf0\xf0\xf0\xf0\xf0\xf8\xf8\xf0\xf8\xf0\xe0\xe8\xf0'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xe8\x84\xa5\xf8\xf0\xf0\xf0\xf0\xf0\xf0\xf8\xf8\xf0\xf8\xf0\xe0\xe8\xf0\xe8\x84\xa6xxxxxxxxH\x10\x10'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x10\x10\x10\x10\x08\x84\xa6xxxxxxxxH\x10\x10\x10\x10\x10\x10\x08\x84\xa7\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x10\x08\x10\x10\x18\x18\x18\x18\x18\x84\xa7\x10\x10\x10\x10\x10\x10\x10\x10\x08\x10\x10\x18\x18\x18\x18\x18\x84\xa8\x18\x18\x18'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x84\xa8\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x18\x84'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xa9\x18\x18\x10\x10\x18\x18\x18\x18\x10\x10\x10\x10\x18 ((\x84\xa9\x18\x18\x10\x10\x18\x18\x18\x18\x10\x10\x10\x10\x18'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b' ((\x84\xaa8HxxXX8\x18      \x10\x00\x84\xaa8HxxXX8\x18 '
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'     \x10\x00\x84\xab\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\xab\x00\x00\x00\x00\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x84\xac\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x84\xac\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x84\xad888HX8888888(88'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'8\x84\xad888HX8888888(888\x84\xae(((@HXpxx\xd0\xd8'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xe8\xf8\xe0\xe8\xf0\x84\xae(((@HXpxx\xd0\xd8\xe8\xf8\xe0\xe8\xf0\x84\xaf\xf0\xf0\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\xf0\xf0\xf0\xf0\xf0\xf0\xe0\xf8\xf8\x84\xaf\xf0\xf0\xf8\xf8\xf8\xf8\xf8\xf0\xf0\xf0\xf0\xf0\xf0\xe0\xf8\xf8\x84\xb0\x00\x00\x00'
+[2023-03-13 05:41:39] SBand received uncategorized packet: b'\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8@'
+[2023-03-13 05:41:48] Command hex: 20010102
+[2023-03-13 05:41:49] SBand Entering Transmit Mode
+[2023-03-13 05:41:49] SBand Transmission Complete
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'(\x80\xba\x08\x00\x08@x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xx8 (Hxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'pxx\x80\xba\x08\x00\x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@xxx8 (H'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xxpxx\x80\xbbx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'ppppXXPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PHHHHHH\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xbbxppppXX'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPPHHHHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H\x80\xbcHHHH@'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@@8Pxxx\xd0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xH@\x80\xbcHHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H@@@8Pxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'x\xd0xH@\x80\xbd8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xx\xe0\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xbd8xx\xe0\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\x80\xbexxxx\xc0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc8\xd0\xd0\xd0\xd8\xd8\xe0\xe8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe8\xe8\xf8\x80\xbexxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'x\xc0\xc8\xd0\xd0\xd0\xd8\xd8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe0\xe8\xe8\xe8\xf8\x80\xbf\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xe8P8XPPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPPPPXX\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xbf\xf8\xf8\xe8P8XP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPPPPPPX'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'X\x80\xc0PPPPH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPPPPPP8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18\x18\x18\x80\xc0PPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PHPPPPPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'P8\x18\x18\x18\x80\xc1@'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xXx\xc0\xc0x88'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'  ( (8@\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc1@xXx\xc0\xc0x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'88  ( (8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@\x80\xc28 ( \x18'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'   \x18 @@ '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b' \x18\x18\x80\xc28 ('
+[2023-03-13 05:41:57] SBand received uncategorized packet: b' \x18   \x18 @'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@  \x18\x18\x80\xc3\x18'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18\x188X \x10\x08\x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x10\x10\x10\x10\x00\x08\x08\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc3\x18\x18\x188X \x10'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x08\x08\x10\x10\x10\x10\x00\x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x08\x80\xc4\x08\x08 Hx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'X@H8 8Px'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xxx\x80\xc4\x08\x08 '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'HxX@H8 8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'Pxxxx\x80\xc5x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xppXXXPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'HPHHHHH\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc5xxppXXX'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPHPHHHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H\x80\xc6HHH@@'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@88Xxx\xc0\xc0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H@@\x80\xc6HHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@@@88Xxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc0\xc0H@@\x80\xc7x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'x\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc7xx\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\x80\xc8xxx\xc0\xc0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc8\xc8\xd0\xd0\xd8\xd8\xe0\xe8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe8\xe8\xe8\x80\xc8xxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc0\xc0\xc8\xc8\xd0\xd0\xd8\xd8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe0\xe8\xe8\xe8\xe8\x80\xc9\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xe8H XPPX'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'XXXXXXP\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc9\xf8\xf8\xe8H XP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PXXXXXXX'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'P\x80\xcaPPPPH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPPPPPP8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18\x18\x18\x80\xcaPPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PHPPPPPP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'P8\x18\x18\x18\x80\xcbP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'pX\xc0\xc0\xc0x8('
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18     (\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xcbPpX\xc0\xc0\xc0x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'8(\x18     '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'(\x80\xcc \x18  \x18'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18    88 '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'  \x18\x80\xcc \x18 '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b' \x18\x18    8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'8   \x18\x80\xcd\x18'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x18 @P \x08\x08\x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x10\x10\x18\x10\x08\x08\x08\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xcd\x18\x18 @P \x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x08\x08\x10\x10\x18\x10\x08\x08'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\x08\x80\xce\x08\x08(8@'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PHH8  8x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xxx\x80\xce\x08\x08('
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'8@PHH8  '
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'8xxxx\x80\xcfx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xxppppXP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'PPHHHHH\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xcfxxxpppp'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'XPPPHHHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H\x80\xd0HHHH@'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@88XxxxP'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'@@x\x80\xd0HHH'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'H@@88Xxx'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'xP@@x\x80\xd1x'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xd1x\xe0\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xf8\x80\xd2xxxx\xc0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xc0\xc8\xd0\xd0\xd8\xd8\xe0\xe0'
+[2023-03-13 05:41:57] SBand received uncategorized packet: b'\xe0\xe8\xe8\x80\xd2xxx'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'x\xc0\xc0\xc8\xd0\xd0\xd8\xd8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xe0\xe0\xe0\xe8\xe8\x80\xd3\xf8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\xe0@ XXXP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'XXXXXXX\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xd3\xf8\xf8\xe0@ XX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'XPXXXXXX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'X\x80\xd4XPPPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'PPPPPPP '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x10\x18\x18\x80\xd4XPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'PPPPPPPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'P \x10\x18\x18\x80\xd5X'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xp\xc0\xc0\xc0xH8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'  (( (8\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xd5Xxp\xc0\xc0\xc0x'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'H8  (( ('
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'8\x80\xd6(\x18 (\x18'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x18  \x18 88 '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b' \x18\x18\x80\xd6(\x18 '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'(\x18\x18  \x18 8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'8  \x18\x18\x80\xd7\x18'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x18 8P(\x08\x08\x10'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x10\x10\x18\x08\x00\x00\x00\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xd7\x18\x18 8P(\x08'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x08\x10\x10\x10\x18\x08\x00\x00'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x00\x80\xd8\x08\x08(8@'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'H@@8( 8x'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xxx\x80\xd8\x08\x08('
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'8@H@@8( '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'8xxxx\x80\xd9x'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xppppXXP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'PPHHHHP\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xd9xxppppX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'XPPPHHHH'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'P\x80\xdaPHHH@'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'@@8pxxP@'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'Hpx\x80\xdaPHH'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'H@@@8pxx'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'P@Hpx\x80\xdb\xe0'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xdb\xe0\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\x80\xdcxxxxx'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xc0\xc8\xd0\xd0\xd8\xd8\xd8\xe0'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xe8\xe8\xe8\x80\xdcxxx'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xx\xc0\xc8\xd0\xd0\xd8\xd8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xd8\xe0\xe8\xe8\xe8\x80\xdd\xf8'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xf8\xe08\x18XXXX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'XXXXXXX\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xdd\xf8\xf8\xe08\x18XX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'XXXXXXXX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'X\x80\xdeXPPPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'PPPPPPX '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x18\x18 \x80\xdeXPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'PPPPPPPP'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'X \x18\x18 \x80\xdfX'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xx\xc8\xc0\xc0\xc0P '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'       \x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xdfXxx\xc8\xc0\xc0\xc0'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'P       '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b' \x80\xe0    \x18'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'    \x1888 '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x18\x18\x18\x80\xe0   '
+[2023-03-13 05:41:58] SBand received uncategorized packet: b' \x18    \x188'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'8 \x18\x18\x18\x80\xe2\x08'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\x08(@HPHH('
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'  Hxxxx\x80'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'\xe2\x08\x08(@HPH'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'H(  Hxxx'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'x\x80\xe3xxppp'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'ppXPPHHH'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'HHH\x80\xe3xxp'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'ppppXPPH'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'HHHHH\x80\xe4H'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'HHH@@@8x'
+[2023-03-13 05:41:58] SBand received uncategorized packet: b'xX@@Px\xd8@'
+[2023-03-13 05:44:16] S-Band Modem Disconnected
+[2023-03-13 05:46:51] S-Band Modem Connection Accepted
+[2023-03-13 05:46:51] Set S-Band packet length to 18 bytes
+[2023-03-13 05:47:56] S-Band Modem Connection Accepted
+[2023-03-13 05:47:56] Set S-Band packet length to 18 bytes
+[2023-03-13 05:48:02] Command hex: 20010102
+[2023-03-13 05:48:03] SBand Entering Transmit Mode
+[2023-03-13 05:48:03] SBand Transmission Complete
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'8\x81Mpx\xd0\xc8\xc8\xc8\xc0xH@8@@HP@\x81Mpx\xd0'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xc8\xc8\xc8\xc0xH@8@@HP@\x81NP \x08\x08\x08(   '
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\x18\x18\x18\x18\x18\x18\x18\x81NP \x08\x08\x08(   \x18\x18\x18\x18\x18\x18'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\x18\x81O\x18 88@8888(8@HHPH\x81O\x18 8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'8@8888(8@HHPH\x81PPPPPPPPPH'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'HHHHpxx\x81PPPPPPPPPHHHHHpx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'x\x81QxxxxppppXXPPPPPH\x81Qxxx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'xppppXXPPPPPH\x81RHHHHxxHXx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'x\xc8\xe0\xf8\xf0\xf8\xf8\x81RHHHHxxHXxx\xc8\xe0\xf8\xf0\xf8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xf8\x81S\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81S\xf8\xf8\xf8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81Txxx\xc0\xc0\xc0\xc0\xc0\xc8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xc8\xd0\xd0\xd0\xd0\xd0\xd0\x81Txxx\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xd0\xd0\xd0\xd0\xd0'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xd0\x81U\xd0\xc8X \x18PXP8  \x18 \x18\x18\x18\x81U\xd0\xc8X'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b' \x18PXP8  \x18 \x18\x18\x18\x81V(8@HHPXXX'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'XX@\x18\x18\x188\x81V(8@HHPXXXXX@\x18\x18\x18'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'8\x81Wpx\xc8\xc8\xc8\xc8xxH@@@@HPH\x81Wpx\xc8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xc8\xc8\xc8xxH@@@@HPH\x81XP \x18\x18\x10    '
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\x18\x18\x10\x18\x18\x18\x18\x81XP \x18\x18\x10    \x18\x18\x10\x18\x18\x18'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\x18\x81Y\x18\x188@88888(8H@HpP\x81Y\x18\x188'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'@88888(8H@HpP\x81ZXpxxppppp'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'XXXXxxx\x81ZXpxxpppppXXXXxx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'x\x81[xxxxxppXXXPPPPPH\x81[xxx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'xxppXXXPPPPPH\x81\\HHPxxP8Xx'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xc0\xd0\xe8\xe0\xf0\xf8\xf8\x81\\HHPxxP8Xx\xc0\xd0\xe8\xe0\xf0\xf8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xf8\x81]\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81]\xf8\xf8\xf8'
+[2023-03-13 05:48:13] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81^xxx\xc0\xc0\xc0\xc0\xc0\xc8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc8\xc8\xc8\xd0\xd0\xd0\xd0\x81^xxx\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xd0\xd0\xd0'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xd0\x81_\xd0\xc0X  XXH8H8\x188H8(\x81_\xd0\xc0X'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'  XXH8H8\x188H8(\x81`\x18\x10\x18 (88@P'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'XX8\x18\x18\x188\x81`\x18\x10\x18 (88@PXX8\x18\x18\x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'8\x81axx\xc8\xc0\xc8\xc8xpHH@@@PPH\x81axx\xc8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc0\xc8\xc8xpHH@@@PPH\x81bP \x18      '
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x18\x18\x10\x10\x10\x10\x10\x81bP \x18      \x18\x18\x10\x10\x10\x10'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x10\x81c\x10\x10(88888( 8@@8xP\x81c\x10\x10('
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'88888( 8@@8xP\x81dpxxxxxxxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'xxxxxxx\x81dpxxxxxxxxxxxxxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'x\x81exxxppppXXXXPPPPP\x81exxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'ppppXXXXPPPPP\x81fHHpxXH@Xx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc0\xc8\xe0\xf8\xf0\xf8\xf8\x81fHHpxXH@Xx\xc0\xc8\xe0\xf8\xf0\xf8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xf8\x81g\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81g\xf8\xf8\xf8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x81hxxx\xc0\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc8\xc8\xc8\xc8\xd0\xd0\xd0\x81hxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xd0\xd0'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xd0\x81i\xd0\xc0P 8XP(PXX8 XpX\x81i\xd0\xc0P'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b' 8XP(PXX8 XpX\x81jPH8\x18\x18\x18\x18 ('
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'(88\x10\x10\x188\x81jPH8\x18\x18\x18\x18 ((88\x10\x10\x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'8\x81kpp\xc8\xc0\xc8\xc8\xc0XHH@@HPHH\x81kpp\xc8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc0\xc8\xc8\xc0XHH@@HPHH\x81lP\x18\x18     \x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x18\x10\x10\x10\x10\x10\x10\x81lP\x18\x18     \x18\x18\x10\x10\x10\x10\x10'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x10\x81m\x10\x10(88 (( \x18   \x18(X\x81m\x10\x10('
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'88 (( \x18   \x18(X\x81nxpxxxxxxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'xxxxxxx\x81nxpxxxxxxxxxxxxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'x\x81oxxxxxppXXXXPPPPH\x81oxxx'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'xxppXXXXPPPPH\x81pHPxPHH8px'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc0\xc8\xe8\xe0\xf0\xf8\xf8\x81pHPxPHH8px\xc0\xc8\xe8\xe0\xf0\xf8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xf8\x81q\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf0\x81q\xf8\xf8\xf8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf0\xf0\x81rxxxx\xc0\xc0\xc0\xc0\xc8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc8\xc8\xc8\xc8\xd0\xd0\xd0\x81rxxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xc8\xd0\xd0'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xd0\x81s\xd0xH\x188P@8pXXP\x10Hpp\x81s\xd0xH'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x188P@8pXXP\x10Hpp\x81tppppP@(\x10\x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x18\x18\x18\x10\x18\x188\x81tppppP@(\x10\x18\x18\x18\x18\x10\x18\x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'8\x81upp\xc8\xc0\xc8\xc0\xc0XHHHHHPPH\x81upp\xc8'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\xc0\xc8\xc0\xc0XHHHHHPPH\x81vH(   ( \x18\x18'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x18\x18\x18\x18\x10\x10\x10\x81vH(   ( \x18\x18\x18\x18\x18\x18\x10\x10'
+[2023-03-13 05:48:14] SBand received uncategorized packet: b'\x10\x81w\x10\x18888888(( \x18 88X\x81w\x10\x188'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'X\x82dXXH(ppppXP@8((( \x82dXXH(ppppXP@8((( \x82e (((HPP@88( \x18\x18  \x82e (((HPP@88( \x18\x18 '
+[2023-03-13 05:48:18] SBand received uncategorized packet: b' \x82f8px\xc0XPXpppxxxxxx\x82f8px\xc0XPXpppxxxxxx\x82gxxxxxxxxxxx\xc0\xc0\xc0\xc0\xc0\x82gxxxxxxxxxxx\xc0\xc0\xc0\xc0'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82h\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82h\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82ixxxxpppXXPXXXPPP\x82ixxxxpppXXPXXXPP'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'P\x82jHHHH@@xxx\xc0\xc0\xc0\xc0\xd8\xe0\xe8\x82jHHHH@@xxx\xc0\xc0\xc0\xc0\xd8\xe0\xe8\x82k\xe8\xe8\xe8\xe0\xe8\xe8\xe0\xe0\xe0\xe0\xd8\xd8\xd0\xd0\xc8\xc8\x82k\xe8\xe8\xe8\xe0\xe8\xe8\xe0\xe0\xe0\xe0\xd8\xd8\xd0\xd0\xc8'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc8\x82lxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8xH\x82lxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8xH\x82m888\x18 8@@@HHH (PX\x82m888\x18 8@@@HHH (P'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'X\x82nppH(pppppppxpXP@\x82nppH(pppppppxpXP@\x82o88(\x18  (88@@@8(  \x82o88(\x18  (88@@@8( '
+[2023-03-13 05:48:18] SBand received uncategorized packet: b' \x82p8px\xc0xXppxxxxxxxx\x82p8px\xc0xXppxxxxxxxx\x82qxxxxxxxxxxxx\xc0\xc0\xc0\xc0\x82qxxxxxxxxxxxx\xc0\xc0\xc0'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82r\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82r\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82sxxxxxppXXXXXPPPH\x82sxxxxxppXXXXXPPP'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'H\x82tHHH@@@xxxxx\xd0\xd8\xe0\xe0\xe0\x82tHHH@@@xxxxx\xd0\xd8\xe0\xe0\xe0\x82u\xe8\xe8\xe8\xe8\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd0\xd0\xd0\xc8\xc0\x82u\xe8\xe8\xe8\xe8\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd0\xd0\xd0\xc8'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82v\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8x@\x82v\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8x@\x82w888  8@@@@@H\x188PX\x82w888  8@@@@@H\x188P'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'X\x82xXX@(pppppppppppX\x82xXX@(pppppppppppX\x82yXXP(PH8( \x18\x18     \x82yXXP(PH8( \x18\x18    '
+[2023-03-13 05:48:18] SBand received uncategorized packet: b' \x82z8Xx\xc0xpppxxxxxxxx\x82z8Xx\xc0xpppxxxxxxxx\x82{xxxxxxxxxx\xc0\xc0\xc0\xc0\xc0\xc0\x82{xxxxxxxxxx\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82|\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82|\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82}xxxxxpXXPXXXXPPP\x82}xxxxxpXXPXXXXPP'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'P\x82~HHH@@@ppx\xc0\xc8\xd0\xd8\xd8\xe0\xe0\x82~HHH@@@ppx\xc0\xc8\xd0\xd8\xd8\xe0\xe0\x82\x7f\xe0\xe0\xe0\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd0\xd0\xd0\xd0\xc8\xc0\x82\x7f\xe0\xe0\xe0\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd0\xd0\xd0\xd0\xc8'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82\x80xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8x@\x82\x80xxxx\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc8\xc8x@\x82\x81888  88@@@@8\x108PP\x82\x81888  88@@@@8\x108P'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'P\x82\x82PX@(ppXXppppppXP\x82\x82PX@(ppXXppppppXP\x82\x83xpX8xxpXppP8  \x18\x18\x82\x83xpX8xxpXppP8  \x18'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\x18\x82\x848Pxxxppxpxxxxxxx\x82\x848Pxxxppxpxxxxxxx\x82\x85xxxxxxxxxx\xc0\xc0\xc0\xc0\xc0\xc0\x82\x85xxxxxxxxxx\xc0\xc0\xc0\xc0\xc0'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc0\x82\x86\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82\x86\xc0\xc0\xc0\xc0\xc0\xc0\xc0\xc0xxxxxxxx\x82\x87xxxppppXXXXXPPHP\x82\x87xxxppppXXXXXPPH'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'P\x82\x88HH@@@@pxx\xc0\xc8\xd0\xd0\xd8\xe0\xe0\x82\x88HH@@@@pxx\xc0\xc8\xd0\xd0\xd8\xe0\xe0\x82\x89\xe0\xe0\xe0\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd8\xd8\xd0\xc8\xc8\xc8\x82\x89\xe0\xe0\xe0\xe0\xe0\xe0\xd8\xd8\xd8\xd8\xd8\xd8\xd0\xc8\xc8'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'\xc8\x82\x8axxxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xc8x8\x82\x8axxxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8\xc8x8\x82\x8b888 \x1888@@@@8 @PP\x82\x8b888 \x1888@@@@8 @P'
+[2023-03-13 05:48:18] SBand received uncategorized packet: b'P\x82\x8dpXX8pxpXpppp8   \x82\x8dpXX8pxpXpppp8   \x82\x8e8@@@HXxp8@pxxxxx\x82\x8e8@@@HXxp8@pxxxx'
+[2023-03-13 05:48:26] Error decoding image packet: b'\xa4Q\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:48:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:48:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:49:43] S-Band Modem Connection Accepted
+[2023-03-13 05:49:43] Set S-Band packet length to 18 bytes
+[2023-03-13 05:49:47] Command hex: 20010102
+[2023-03-13 05:49:48] SBand Entering Transmit Mode
+[2023-03-13 05:49:48] SBand Transmission Complete
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'@@88Pxxx\xc8xH@\x80\xbd8xx\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xbd8xx\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xbexxxx\xc0\xc0\xc8\xc8\xd0\xd8\xd8\xe0\xe8\xe8\xf8\xf8\x80\xbexxxx'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'\xc0\xc0\xc8\xc8\xd0\xd8\xd8\xe0\xe8\xe8\xf8\xf8\x80\xbf\xf8\xf8\xe8P(PPPPPPPPPXP\x80\xbf\xf8\xf8\xe8P(PPPPPPPPPXP\x80\xc0PPHHHHHPHHPP8\x18\x18\x18\x80\xc0PPHH'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'HHHPHHPP8\x18\x18\x18\x80\xc1@xXx\xc0\xc0x8(\x18  \x18(8@\x80\xc1@xXx\xc0\xc0x8(\x18  \x18(8@\x80\xc28  \x18\x18  \x18  88\x18\x18\x18\x10\x80\xc28  \x18'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'\x18  \x18  88\x18\x18\x18\x10\x80\xc3\x18\x10\x188P\x18\x08\x00\x08\x08\x10\x10\x10\x08\x10\x08\x80\xc3\x18\x10\x188P\x18\x08\x00\x08\x08\x10\x10\x10\x08\x10\x08\x80\xc4\x10\x18PxxXpxxxxxxpxx\x80\xc4\x10\x18Px'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'xXpxxxxxxpxx\x80\xc5xxppXXXXPPHHHHHH\x80\xc5xxppXXXXPPHHHHHH\x80\xc6HHH@@@88Pxx\xc0xH@@\x80\xc6HHH@'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'@@88Pxx\xc0xH@@\x80\xc7xx\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xc7xx\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xc8xxxx\xc0\xc0\xc8\xc8\xd0\xd8\xd8\xe0\xe0\xe8\xe8\xe8\x80\xc8xxxx'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'\xc0\xc0\xc8\xc8\xd0\xd8\xd8\xe0\xe0\xe8\xe8\xe8\x80\xc9\xf8\xf8\xe0H XXXXXXXXPXX\x80\xc9\xf8\xf8\xe0H XXXXXXXXPXX\x80\xcaPHHPHHPPPPPP(\x18\x18\x18\x80\xcaPHHP'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'HHPPPPPP(\x18\x18\x18\x80\xcbPxX\xc0\xc0\xc0x8(\x18\x18     \x80\xcbPxX\xc0\xc0\xc0x8(\x18\x18     \x80\xcc \x18  \x18\x18\x18\x18  8@\x18\x18\x18\x18\x80\xcc \x18  '
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'\x18\x18\x18\x18  8@\x18\x18\x18\x18\x80\xcd\x10\x10 @P \x08\x08\x08\x08\x10\x10\x08\x00\x00\x08\x80\xcd\x10\x10 @P \x08\x08\x08\x08\x10\x10\x08\x00\x00\x08\x80\xce\x08\x10@XH 8Xxxxxxpxx\x80\xce\x08\x10@X'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'H 8Xxxxxxpxx\x80\xcfxxxppXXPPPHHHH@H\x80\xcfxxxppXXPPPHHHH@H\x80\xd0HHHH@@88XxxxP@@p\x80\xd0HHHH'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'@@88XxxxP@@p\x80\xd1x\xd8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xd1x\xd8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xd2xxxxx\xc0\xc8\xd0\xd0\xd8\xd8\xd8\xe0\xe0\xe8\xe8\x80\xd2xxxx'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'x\xc0\xc8\xd0\xd0\xd8\xd8\xd8\xe0\xe0\xe8\xe8\x80\xd3\xf8\xf8\xe08\x18XPPPPPXXXXP\x80\xd3\xf8\xf8\xe08\x18XPPPPPXXXXP\x80\xd4PPPPHHPPPPPP \x10\x18\x18\x80\xd4PPPP'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'HHPPPPPP \x10\x18\x18\x80\xd5Pxp\xc0\xc0\xc0\xc0H8 \x18 ( 88\x80\xd5Pxp\xc0\xc0\xc0\xc0H8 \x18 ( 88\x80\xd68 ((   \x18\x18\x1888\x18\x18\x18\x18\x80\xd68 (('
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'   \x18\x18\x1888\x18\x18\x18\x18\x80\xd7\x18\x10 8H \x08\x08\x08\x08\x10\x10\x10\x08\x00\x08\x80\xd7\x18\x10 8H \x08\x08\x08\x08\x10\x10\x10\x08\x00\x08\x80\xd8\x08 H@88 8Xxxxxpxx\x80\xd8\x08 H@'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'88 8Xxxxxpxx\x80\xd9xxxppXXPPPPHHHHH\x80\xd9xxxppXXPPPPHHHHH\x80\xdaHH@@@@@8XxxP@@Xx\x80\xdaHH@@'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'@@@8XxxP@@Xx\x80\xdb\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xdb\xe0\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\xf8\x80\xdcxxxxx\xc0\xc0\xc8\xd0\xd0\xd8\xd8\xd8\xe0\xe8\xe8\x80\xdcxxxx'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'x\xc0\xc0\xc8\xd0\xd0\xd8\xd8\xd8\xe0\xe8\xe8\x80\xdd\xf8\xf8\xe08\x18PPPPPXXXPXX\x80\xdd\xf8\xf8\xe08\x18PPPPPXXXPXX\x80\xdeXPPPHPPPPPPP\x18\x18\x18\x18\x80\xdeXPPP'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'HPPPPPPP\x18\x18\x18\x18\x80\xdfXxx\xc8\xc0\xc0\xc0H  \x18\x18    \x80\xdfXxx\xc8\xc0\xc0\xc0H  \x18\x18    \x80\xe0    \x18    \x1888 \x18\x18\x18\x80\xe0    '
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'\x18    \x1888 \x18\x18\x18\x80\xe1\x18\x10 8P8\x10\x08\x08\x08\x08\x08\x08\x00\x08\x08\x80\xe1\x18\x10 8P8\x10\x08\x08\x08\x08\x08\x08\x00\x08\x08\x80\xe3xxxxppXXXPPHHHHH\x80\xe3xxxx'
+[2023-03-13 05:49:56] SBand received uncategorized packet: b'ppXXXPPHHHHH\x80\xe4HH@@@@88xxXH@Px\xd8\x80\xe4HH@@@@88xxXH@Px\xd8\x80\xe6xxxxx\xc0\xc0\xc8\xc8\xd0\xd0\xd8\xd8\xe0\xe0\xe8\x80\xe6xxxx'
+[2023-03-13 05:50:12] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:50:12] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:53:17] UHF Modem Connection Accepted
+[2023-03-13 05:53:17] Set UHF packet length to 32 bytes
+[2023-03-13 05:54:11] Warning: UHF buffer overflowed!
+[2023-03-13 05:54:17] S-Band Modem Connection Accepted
+[2023-03-13 05:54:17] Set S-Band packet length to 18 bytes
+[2023-03-13 05:54:26] Command hex: 20010102
+[2023-03-13 05:54:26] SBand Entering Transmit Mode
+[2023-03-13 05:54:27] SBand Transmission Complete
+[2023-03-13 05:54:51] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:54:51] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00x\xc0\xc0\xc0\xc8\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 05:54:55] Command hex: 20020102
+[2023-03-13 05:54:55] SBand Entering Transmit Mode
+[2023-03-13 05:54:55] SBand Transmission Complete
+[2023-03-13 05:55:00] Set image resolution to 320x240
+[2023-03-13 05:56:02] SBand received uncategorized packet: b'\x0e\xe4@@@@88@HXXpppppp'
+[2023-03-13 05:56:18] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:56:18] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 05:56:22] Command hex: 20030102
+[2023-03-13 05:56:22] SBand Entering Transmit Mode
+[2023-03-13 05:56:23] SBand Transmission Complete
+[2023-03-13 05:56:27] Set image resolution to 640x480
+[2023-03-13 06:01:41] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:01:41] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:02:05] Saved image to images/lab_room.png
+[2023-03-13 06:03:27] Command hex: 20010102
+[2023-03-13 06:03:28] SBand Entering Transmit Mode
+[2023-03-13 06:03:28] SBand Transmission Complete
+[2023-03-13 06:03:34] Set image resolution to 160x120
+[2023-03-13 06:03:53] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00XXXXXppppppp'
+[2023-03-13 06:03:53] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00XXXXXppppppp'
+[2023-03-13 06:04:07] S-Band Modem Disconnected
+[2023-03-13 06:04:12] UHF Modem Connection Accepted
+[2023-03-13 06:04:12] Set UHF packet length to 32 bytes
+[2023-03-13 06:04:13] Warning: UHF buffer overflowed!
+[2023-03-13 06:04:13] Warning: UHF buffer overflowed!
+[2023-03-13 06:04:13] Warning: UHF buffer overflowed!
+[2023-03-13 06:04:13] Warning: telemetry timestamp checksum failed, t=394425
+[2023-03-13 06:06:23] UHF Modem Connection Accepted
+[2023-03-13 06:06:23] Set UHF packet length to 32 bytes
+[2023-03-13 06:07:10] UHF Modem Connection Accepted
+[2023-03-13 06:07:10] Set UHF packet length to 32 bytes
+[2023-03-13 06:09:04] UHF Modem Connection Accepted
+[2023-03-13 06:09:04] Set UHF packet length to 32 bytes
+[2023-03-13 06:09:04] Warning: UHF buffer overflowed!
+[2023-03-13 06:09:05] Warning: UHF buffer overflowed!
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\x00\x00\xc5\xf7\x0b2\x070p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf2\xff?\xff\xfd\x00\x00\xc4\xf8\x0b2\x07\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf3\xff?\xff\xfd\x00\x00\xc6\xfa\x0b2\x08\x100\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf4\xff@\xff\xfd\x00\x00\xc7\xfa\n2\x07P\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf5\xff?\xff\xfd\x00\x00\xc6\xfa\x0b2\x08\x100\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf6\xff?\xff\xfd\x00\x00\xc8\xfa\x0b2\x08\x10\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf7\xff?\xff\xfd\x00\x00\xc7\xfb\x0c2\t\x10\xd0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf8\xff?\xff\xfd\x00\x00\xc9\xf9\x0b2\x07\x100\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xf9\xff'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'?\xff\xfd\x00\x00\xc4\xfb\x0b2\x08\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xfa\xff?\xff\xfd\x00\x00\xc8\xf8\x0b2\x08\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xfb\xff?\xff\xfd\x00\x00\xc2\xfa\n2\t\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xfc\xff?\xfe\xfd\x00\x00\xc6\xf9\n2\x080\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xfd\xff?\xff\xfd\x00\x00\xc5\xf9\n2\t\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xfe\xff?\xfe\xfd\x00\x00\xc4\xfd\r2\t0\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x18\xff\xff@\xff\xfd\x00\x00\xc5\xfc\x0b2\nP0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x00\xff?\xfe\xfd\x00\x00\xc6\xfa\x0b2\x0300\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\x19\x01\xff?\xfe\xfd\x00\x00\xc5\xfa\x0b2\x0400\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x02\xff?\xfe\xfd\x00\x00\xc4\xf8\x0c2\x040\xd0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x03\xff?\xfe\xfd\x00\x00\xc6\xf6\x0c2\x050\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x04\xff@\xfe\xfd\x00\x00\xc6\xf8\x0b2\x04pp\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x05\xff?\xfe\xfd\x00\x00\xc8\xf9\x0b2\x050\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x06\xff?\xff\xfd\x00\x00\xc7\xfb\x0b2\x05\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x07\xff?\xff\xfd\x00\x00\xc7\xfc\x0c2\x06\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x08\xff?\xff\xfd\x00\x00\xc6\xf9\x0c2\x04\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'T\x00\x00\x19\t\xff?\xfe\xfd\x00\x00\xc6\xf8\x0b2\x050p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\n\xff?\xfe\xfd\x00\x00\xc5\xf7\x0b2\x050p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x0b\xff?\xff\xfd\x00\x00\xc4\xfa\x0b2\x06\x10\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x0c\xff?\xff\xfd\x00\x00\xc6\xfb\x0c2\x05\x10P\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\r\xff?\xff\xfd\x00\x00\xc3\xfc\x0c2\x06\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x0e\xff?\xff\xfd\x00\x00\xc4\xfc\x0b2\x06\x10\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x0f\xff?\xff\xfd\x00\x00\xc2\xfd\x0b2\x07\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x10\xff?\xff\xfd\x00\x00\xc3\xfe\x0c2\x04\x10P\xf0\n\xb29\xc8\xf2\x02]NRF'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\xf5|\nT\x00\x00\x19\x11\xff?\xfe\xfd\x00\x00\xc7\xf6\x0b2\x050\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x12\xff?\xfe\xfd\x00\x00\xc2\xfb\x0b2\x050\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x13\xff?\xff\xfd\x00\x00\xc6\xfe\x0b2\x06\x10p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x14\xff?\xff\xfd\x00\x00\xc7\xf7\x0b2\x05\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x15\xff?\xff\xfd\x00\x00\xc3\xf9\n2\x06\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x16\xff?\xff\xfd\x00\x00\xc7\xfb\x0c2\x06\x10\xd0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x17\xff?\xff\xfd\x00\x00\xc6\xf6\n2\x07\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\x18\xff?\xfe\xfd\x00\x00\xc5\xf7\x0c2\x050P\xf0\n\xb29\xc8\xf2\x02]'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'NRF\xf5|\nT\x00\x00\x19\x19\xff?\xff\xfd\x00\x00\xc3\xfb\x0c2\x06\x10P\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1a\xff?\xff\xfd\x00\x00\xc4\xf7\x0b2\x06\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1b\xff?\xfe\xfd\x00\x00\xc8\xfd\x0b2\x070\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1c\xff?\xfe\xfd\x00\x00\xc5\xf8\x0b2\x060p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1d\xff?\xff\xfd\x00\x00\xc5\xfa\n2\x07\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1e\xff?\xff\xfd\x00\x00\xc5\xfa\x0b2\x07\x100\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19\x1f\xff?\xfe\xfd\x00\x00\xc7\xfb\x0b2\x080\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19 \xff?\xff\xfd\x00\x00\xc6\xf9\x0b2\x04\x100\xf0\n\xb29\xc8'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19!\xff?\xff\xfd\x00\x00\xc6\xfd\x0c2\x05\x10P\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19"\xff?\xff\xfd\x00\x00\xc5\xfb\x0b2\x05\x10p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19#\xff?\xff\xfd\x00\x00\xc5\xf9\x0b2\x06\x100\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19$\xff@\xff\xfd\x00\x00\xc7\xfb\x0b2\x05P\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19%\xff@\xfe\xfd\x00\x00\xc5\xfa\x0c2\x06p\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19&\xff?\xff\xfd\x00\x00\xc4\xf9\x0c2\x06\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19\'\xff?\xff\xfd\x00\x00\xc7\xfa\n2\x07\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19(\xff?\xff\xfd\x00\x00\xc4\xf6\x0c2\x05\x10\x90\xf0\n'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19)\xff?\xff\xfd\x00\x00\xc7\xf6\n2\x06\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19*\xff?\xff\xfd\x00\x00\xc6\xfb\x0b2\x06\x10p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19+\xff?\xfe\xfd\x00\x00\xc5\xf9\x0b2\x0700\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19,\x00?\xfe\xfd\x00\x00\xc6\xf9\x0c2\x060\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19-\xff@\xfe\xfd\x00\x00\xc3\xf9\x0c2\x07p\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19.\xff?\xfe\xfd\x00\x00\xc4\xf8\x0b2\x070\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19/\xff?\xfe\xfd\x00\x00\xc7\xf7\x0b2\x080\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x190\xff?\xff\xfd\x00\x00\xc7\xfb\x0c2\x05\x10'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'\xd0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x191\xff?\xfe\xfd\x00\x00\xc4\xfa\x0b2\x060\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x192\xff?\xff\xfd\x00\x00\xc5\xfa\n2\x06\x10\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x193\xff?\xfe\xfd\x00\x00\xc5\xf7\x0c2\x070P\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x194\xff?\xff\xfd\x00\x00\xc4\xf9\x0c2\x06\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x195\xff?\xfe\xfd\x00\x00\xc4\xf6\n2\x070\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x196\xff?\xff\xfd\x00\x00\xc3\xf8\x0b2\x07\x10p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x197\xff?\xfe\xfd\x00\x00\xc6\xf5\n2\x080\x10\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x198\xff?\xff\xfd\x00\x00\xc8\xfb\x0b'
+[2023-03-13 06:09:06] UHF received uncategorized packet: b'2\x06\x10\xf0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x199\xff?\xff\xfd\x00\x00\xc3\xfb\x0b2\x07\x10p\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19:\xff?\xfe\xfd\x00\x00\xc9\xfa\x0b2\x0700\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19;\xff?\xff\xfd\x00\x00\xc7\xfb\x0c2\x08\x10\xd0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19<\xff?\xff\xfd\x00\x00\xc7\xfa\x0b2\x07\x10\xb0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19=\xff@\xfe\xfd\x00\x00\xc9\xf9\x0b2\x08p0\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19>\xff?\xfe\xfd\x00\x00\xc5\xf8\x0c2\x080P\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\nT\x00\x00\x19?\xff?\xff\xfd\x00\x00\xc8\xf9\n2\t\x10\x90\xf0\n\xb29\xc8\xf2\x02]NRF\xf5|\n\xd4\x00\x00\x19@\xff?\xfe\xfd\x00\x00'
+[2023-03-13 06:13:03] UHF Modem Connection Accepted
+[2023-03-13 06:13:03] Set UHF packet length to 32 bytes
+[2023-03-13 06:13:04] Warning: UHF buffer overflowed!
+[2023-03-13 06:13:29] UHF Modem Disconnected
+[2023-03-13 06:13:31] S-Band Modem Connection Accepted
+[2023-03-13 06:13:32] Set S-Band packet length to 18 bytes
+[2023-03-13 06:13:35] UHF Modem Connection Accepted
+[2023-03-13 06:13:35] Set UHF packet length to 32 bytes
+[2023-03-13 06:14:27] Command hex: 20010102
+[2023-03-13 06:14:28] SBand Entering Transmit Mode
+[2023-03-13 06:14:28] SBand Transmission Complete
+[2023-03-13 06:14:52] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00XXXXXppppppp'
+[2023-03-13 06:14:52] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00XXXXXppppppp'
+[2023-03-13 06:15:04] Command hex: 20020102
+[2023-03-13 06:15:05] SBand Entering Transmit Mode
+[2023-03-13 06:15:05] SBand Transmission Complete
+[2023-03-13 06:15:10] Set image resolution to 320x240
+[2023-03-13 06:16:06] Error decoding image packet: b'\xad\x8c888888HPp\xc0\xc8\xd0\xd0\xd0\xd0\xd0'
+[2023-03-13 06:16:06] Error decoding image packet: b'\xcd\x92ppXXXXPXXPPPPHHH'
+[2023-03-13 06:16:07] Error decoding image packet: b'\xad\xad\xd8\xd8\xd8\xd8\xd8\xd0\xd8x8       '
+[2023-03-13 06:16:07] Error decoding image packet: b'\xcd\xae  ((((((((((88<8'
+[2023-03-13 06:16:07] Error decoding image packet: b'\x9d\xc38 \x18\x18\x10\x10\x08\x10\x18\x188\x18\x18\x18\x18\x18'
+[2023-03-13 06:16:07] Error decoding image packet: b'\xcd\xcfHHHHHH@H@@@@@@8@'
+[2023-03-13 06:16:07] SBand received uncategorized packet: b'\r\xf1\xc8\xc8\xc0xxxxxxxX88xxP'
+[2023-03-13 06:16:28] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPXpppppppp'
+[2023-03-13 06:16:28] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPXpppppppp'
+[2023-03-13 06:17:21] Command hex: 20010102
+[2023-03-13 06:17:21] SBand Entering Transmit Mode
+[2023-03-13 06:17:22] SBand Transmission Complete
+[2023-03-13 06:17:26] Set image resolution to 160x120
+[2023-03-13 06:17:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 06:17:45] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 06:18:32] Warning: telemetry timestamp checksum failed, t=8105
+[2023-03-13 06:18:32] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 06:24:53] Command hex: 20010102
+[2023-03-13 06:24:53] SBand Entering Transmit Mode
+[2023-03-13 06:24:54] SBand Transmission Complete
+[2023-03-13 06:25:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 06:25:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00xxxx\xc0\xc0\xc0\xc0\xc8\xc8\xc8\xc8'
+[2023-03-13 06:25:35] Command hex: 20020102
+[2023-03-13 06:25:35] SBand Entering Transmit Mode
+[2023-03-13 06:25:36] SBand Transmission Complete
+[2023-03-13 06:25:40] Set image resolution to 320x240
+[2023-03-13 06:26:47] SBand received uncategorized packet: b'\x10\t\x18\x18\x18\x18  (888HH@8\x18\x18'
+[2023-03-13 06:26:58] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPXpppppppp'
+[2023-03-13 06:26:58] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00XXPXpppppppp'
+[2023-03-13 06:28:57] Warning: telemetry timestamp checksum failed, t=12592792
+[2023-03-13 06:30:02] SBand received uncategorized packet: b']\xd7V{=>.o\x1eX\xf1,c\xbd\xf8\xfe\xc9\x9b'
+[2023-03-13 06:38:28] Command hex: 20030102
+[2023-03-13 06:38:29] SBand Entering Transmit Mode
+[2023-03-13 06:38:29] SBand Transmission Complete
+[2023-03-13 06:38:34] Set image resolution to 640x480
+[2023-03-13 06:43:47] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:43:47] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:44:14] Saved image to images/you_got_any_games_on_your_phone.png
+[2023-03-13 06:44:24] Command hex: 20020102
+[2023-03-13 06:44:25] SBand Entering Transmit Mode
+[2023-03-13 06:44:26] SBand Transmission Complete
+[2023-03-13 06:44:26] Warning: telemetry timestamp checksum failed, t=12594903
+[2023-03-13 06:44:26] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 06:44:30] Set image resolution to 320x240
+[2023-03-13 06:45:48] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:45:48] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:46:26] Command hex: 20020102
+[2023-03-13 06:46:26] SBand Entering Transmit Mode
+[2023-03-13 06:46:27] SBand Transmission Complete
+[2023-03-13 06:47:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:47:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:47:52] Warning: telemetry timestamp checksum failed, t=405348
+[2023-03-13 06:47:52] Warning: 1 telemetry datapoint(s) failed parity check

@@ -6,10 +6,14 @@
 //#define RADIOTYPE_SBAND 1
 #define RADIOTYPE_UHF 1
 
-#define RX_SIZE 4080
-#define RX_PACKETS 255
+#define RX_SIZE 8192
+#define RX_PACKETS 512
+
 #define TX_SIZE 256
 #define TX_PACKETS 32
+
+#define BACKUP_SIZE 256
+#define BACKUP_PACKETS 32
 
 #ifdef RADIOTYPE_SBAND
 #include <cc2500.h>
@@ -39,7 +43,10 @@ char RXbuf_data[RX_SIZE] = {0};
 #pragma PERSISTENT(RXbuf_ptrs)
 unsigned int RXbuf_ptrs[RX_PACKETS] = {0};
 
-//#pragma PERSISTENT(RXbuf);
+char cache_data[BACKUP_SIZE] = {0};
+unsigned int cache_ptrs[BACKUP_PACKETS] = {0};
+
+#pragma PERSISTENT(RXbuf);
 struct packet_buffer RXbuf = {.data=RXbuf_data,
                               .max_data=RX_SIZE,
                               .data_head=0,
@@ -49,9 +56,10 @@ struct packet_buffer RXbuf = {.data=RXbuf_data,
                               .ptr_head=0,
                               .ptr_base=0,
                               .flags=0,
-                              .BUFFER_ACCESS = FREE};
+                              .BUFFER_ACCESS = FREE,
+                              .MEMORY_TYPE = FRAM};
 
-//#pragma PERSISTENT(TXbuf);
+#pragma PERSISTENT(TXbuf);
 struct packet_buffer TXbuf = {.data=TXbuf_data,
                               .max_data=TX_SIZE,
                               .data_head=0,
@@ -61,9 +69,20 @@ struct packet_buffer TXbuf = {.data=TXbuf_data,
                               .ptr_head=0,
                               .ptr_base=0,
                               .flags=0,
-                              .BUFFER_ACCESS = FREE};
+                              .BUFFER_ACCESS = FREE,
+                              .MEMORY_TYPE = FRAM};
 
-//TODO: add middleman buffer for ISR to avoid race conditions with RXbuf
+struct packet_buffer RXBackup = {.data=cache_data,
+                                 .max_data=BACKUP_SIZE,
+                                 .data_head=0,
+                                 .data_base=0,
+                                 .pointers=cache_ptrs,
+                                 .max_packets=BACKUP_PACKETS,
+                                 .ptr_head=0,
+                                 .ptr_base=0,
+                                 .flags=0,
+                                 .BUFFER_ACCESS = FREE,
+                                 .MEMORY_TYPE = SRAM};
 
 /* helper functions */
 unsigned int get_buffer_distance(unsigned int bottom, unsigned int top, unsigned int max) {
@@ -161,8 +180,8 @@ void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigne
     unsigned char i;
 
     if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        if (buffer->MEMORY_TYPE == FRAM) {enable_FRAM_write(FRAM_WRITE_ENABLE);}
         buffer->BUFFER_ACCESS = ACTIVE;
-        enable_FRAM_write(FRAM_WRITE_ENABLE);
 
         if (get_buffer_data_size(buffer) + len >= (buffer->max_data)) { //data overflow
             buffer->flags |= 0x01;
@@ -187,8 +206,9 @@ void write_packet_buffer(struct packet_buffer* buffer, char* data, const unsigne
             buffer->pointers[buffer->ptr_head] = buffer->data_head; //push pointer to queue
             buffer->ptr_head = buffer->ptr_head < (buffer->max_packets - 1) ? buffer->ptr_head + 1 : 0;
         }
-        enable_FRAM_write(FRAM_WRITE_DISABLE);
+
         buffer->BUFFER_ACCESS = FREE;
+        if (buffer->MEMORY_TYPE == FRAM) {enable_FRAM_write(FRAM_WRITE_DISABLE);}
     }
 }
 
@@ -197,8 +217,9 @@ unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest) {
     unsigned int j = 0;
 
     if (buffer->BUFFER_ACCESS == FREE) { //prevent race conditions
+        if (buffer->MEMORY_TYPE == FRAM) {enable_FRAM_write(FRAM_WRITE_ENABLE);}
+
         buffer->BUFFER_ACCESS = ACTIVE;
-        enable_FRAM_write(FRAM_WRITE_ENABLE);
 
         if (buffer->ptr_head != buffer->ptr_base) { //if not empty
             for(i=buffer->data_base;i!=buffer->pointers[buffer->ptr_base];i = (i < (buffer->max_data-1) ? i+1 : 0)) { //eat up from bottom
@@ -209,8 +230,8 @@ unsigned int read_packet_buffer(struct packet_buffer* buffer, char* dest) {
             buffer->ptr_base = buffer->ptr_base < (buffer->max_packets - 1) ? buffer->ptr_base + 1 : 0;
         }
 
-        enable_FRAM_write(FRAM_WRITE_DISABLE);
         buffer->BUFFER_ACCESS = FREE;
+        if (buffer->MEMORY_TYPE == FRAM) {enable_FRAM_write(FRAM_WRITE_DISABLE);}
     }
     return j;
 }
@@ -233,18 +254,23 @@ void burst_read_packet_buffer(struct packet_buffer* buffer, unsigned char packet
 }
 
 /* ISR for TX/RX detection */
+unsigned char int_pkt_len;
+char int_pkt[256];
+
 #pragma vector=PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
-    unsigned char pkt_len;
-    char pkt[256];
-
     if (info.radio_mode == RX) {
         #ifdef RADIOTYPE_SBAND
-        pkt_len = cc2500_receive(pkt);
+        int_pkt_len = cc2500_receive(int_pkt);
 
-        if (RadioConfigs.radio_packet_length == 0 || pkt_len == RadioConfigs.radio_packet_length) { //only match packets of the same length if packet length parameter > 0
-            if (pkt_len > 0) { //filter failed CRCs
-               write_packet_buffer(&RXbuf, pkt, pkt_len);
+        if (RadioConfigs.radio_packet_length == 0 || int_pkt_len == RadioConfigs.radio_packet_length) { //only match packets of the same length if packet length parameter > 0
+            if (int_pkt_len > 0) { //filter failed CRCs
+               if (RXbuf.BUFFER_ACCESS == FREE) {
+                   write_packet_buffer(&RXbuf, int_pkt, int_pkt_len);
+               }
+               else if (RXBackup.BUFFER_ACCESS == FREE) { //divert to backup buffer to empty later
+                   write_packet_buffer(&RXBackup, int_pkt, int_pkt_len);
+               }
             }
         }
 
@@ -252,11 +278,16 @@ __interrupt void PORT2_ISR(void) {
         cc2500_command_strobe(STROBE_SRX);
         #endif
         #ifdef RADIOTYPE_UHF
-        pkt_len = rfm95w_read_fifo(pkt);
+        int_pkt_len = rfm95w_read_fifo(int_pkt);
 
-        if (RadioConfigs.radio_packet_length == 0 || (pkt_len - 1) == RadioConfigs.radio_packet_length) {
-            if (pkt_len > 0) {
-                write_packet_buffer(&RXbuf, pkt, pkt_len - 1); //don't write newline
+        if (RadioConfigs.radio_packet_length == 0 || (int_pkt_len - 1) == RadioConfigs.radio_packet_length) {
+            if (int_pkt_len > 0) {
+                if (RXbuf.BUFFER_ACCESS == FREE) { //don't write newline
+                   write_packet_buffer(&RXbuf, int_pkt, int_pkt_len - 1);
+               }
+               else if (RXBackup.BUFFER_ACCESS == FREE) {
+                   write_packet_buffer(&RXBackup, int_pkt, int_pkt_len - 1);
+               }
             }
         }
 
@@ -310,6 +341,10 @@ void main_loop(void) {
         case IDLE:
             break;
         case RX:
+            if (get_buffer_packet_count(&RXBackup) != 0) { //handle conflicting packets from earlier
+                pkt_len = read_packet_buffer(&RXBackup, pkt);
+                write_packet_buffer(&RXbuf, pkt, pkt_len);
+            }
             break;
         case TX_WAIT:
             if (get_buffer_packet_count(&TXbuf) != 0) {
@@ -353,6 +388,12 @@ void main_loop(void) {
             rfm95w_set_mode(OP_MODE_RXCONTINUOUS);
             #endif
 
+            enable_FRAM_write(FRAM_WRITE_ENABLE);
+            RXbuf.BUFFER_ACCESS = FREE;
+            TXbuf.BUFFER_ACCESS = FREE;
+            RXBackup.BUFFER_ACCESS = FREE;
+            enable_FRAM_write(FRAM_WRITE_DISABLE);
+
             info.radio_mode = RX;
             state = WAIT;
             break;
@@ -382,7 +423,11 @@ void main_loop(void) {
             break;
         case GET_RX_BUF_STATE:
             putchar(RXbuf.flags | get_flag_from_state(info.radio_mode));
-            putchar((char)get_buffer_packet_count(&RXbuf));
+            //putchar((char)get_buffer_packet_count(&RXbuf));
+
+            temp = get_buffer_packet_count(&RXbuf);
+            putchar((char)((temp >> 8) & 0xFF));
+            putchar((char)(temp & 0xFF));
 
             temp = get_buffer_data_size(&RXbuf);
             putchar((char)((temp >> 8) & 0xFF));
@@ -420,7 +465,11 @@ void main_loop(void) {
             break;
         case GET_TX_BUF_STATE:
             putchar(TXbuf.flags | get_flag_from_state(info.radio_mode));
-            putchar((char)get_buffer_packet_count(&TXbuf));
+            //putchar((char)get_buffer_packet_count(&TXbuf));
+
+            temp = get_buffer_packet_count(&TXbuf);
+            putchar((char)((temp >> 8) & 0xFF));
+            putchar((char)(temp & 0xFF));
 
             temp = get_buffer_data_size(&TXbuf);
             putchar((char)((temp >> 8) & 0xFF));

@@ -698,12 +698,17 @@ class MainWindow():
     def get_radio_packets(self, rx_radio):
         status = rx_radio.get_rx_buffer_state()
 
-        if (status[1] != 0): #if packet
-            if ((status[0] & 0x03) != 0):
+        if (status['Packet Count'] != 0): #if packet
+            if ((status['Flags'] & 0x03) != 0):
                 self.write_console("Warning: {} buffer overflowed!".format(rx_radio.type))
             
-            print("bytes in buffer: {}".format(status[4] * status[1]))
-            packets = rx_radio.burst_read(status[4], status[1])
+            print("bytes in buffer: {}".format(status['Bytes']))
+            
+            count = status['Packet Count']
+            if count > 255:
+                count = 255 #max 255 packets can be burst read at once
+            
+            packets = rx_radio.burst_read(status['Packet Size'], count)
             
             if packets:
                 for packet in packets:         
@@ -742,7 +747,7 @@ class MainWindow():
             if radio.port.is_open:
                 while not radio_queue.empty(): #fill buffer
                     command = radio_queue.get()
-                    for i in range(0, 3): #repeat command (maybe remove later)
+                    for i in range(0, 10): #repeat command (maybe remove later)
                         radio.write_tx_buffer(command)
 
                 self.write_console("{} Entering Transmit Mode".format(radio.type))
@@ -756,8 +761,8 @@ class MainWindow():
                 while tx_packets != 0x0 or (radio_state & 0xF0) == 0xC0: #wait until empty
                     try:
                         state = radio.get_tx_buffer_state()
-                        tx_packets = state[1]
-                        radio_state = state[0]
+                        tx_packets = state['Packet Count']
+                        radio_state = state['Flags']
                         if (radio_state != 0xC0):
                             radio.radio_tx_mode()
                     except IndexError:
