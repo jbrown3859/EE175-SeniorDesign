@@ -82,8 +82,8 @@
 #define OV2640_1600x1200	8	//1600x1200
 
 uint8_t format = RAW;
-uint8_t light_mode = Auto;
-uint8_t effects = Normal;
+uint8_t light_mode = Office;
+uint8_t effects = BW;
 uint8_t resolution = OV2640_160x120;
 /* USER CODE END PD */
 
