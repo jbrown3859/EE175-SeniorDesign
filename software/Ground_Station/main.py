@@ -377,6 +377,11 @@ class MainWindow():
                     self.write_console("Set image resolution to 640x480")
 
         frame = imaging.redtoBGR(self.frame, self.res[0], self.res[1])
+        frame = cv.flip(frame,1) #flip image as it is mirrored by default
+        '''
+        frame = cv.resize(frame, (self.width, self.height))
+        frame = cv.rotate(frame, cv.ROTATE_90_CLOCKWISE)
+        '''
         frame = cv.resize(frame, (self.width, self.height))
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
@@ -416,7 +421,7 @@ class MainWindow():
                     failures += 1
                     
                 if failures != 0:
-                    self.write_console('Warning: {} telemetry datapoint(s) failed parity check'.format(failures))
+                    self.write_console('Warning: {} telemetry datapoint(s) failed parity check, t={}'.format(failures, telem['Timestamp']))
                 
 
             for packet in self.telemetry_packets:

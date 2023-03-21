@@ -2003,3 +2003,266 @@
 [2023-03-13 06:47:49] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 [2023-03-13 06:47:52] Warning: telemetry timestamp checksum failed, t=405348
 [2023-03-13 06:47:52] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 06:49:58] UHF Modem Connection Accepted
+[2023-03-13 06:49:58] Set UHF packet length to 32 bytes
+[2023-03-13 06:49:59] S-Band Modem Connection Accepted
+[2023-03-13 06:49:59] Set S-Band packet length to 18 bytes
+[2023-03-13 06:49:59] Warning: UHF buffer overflowed!
+[2023-03-13 06:50:00] Warning: telemetry timestamp checksum failed, t=12269
+[2023-03-13 06:50:00] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 06:50:00] Warning: telemetry timestamp checksum failed, t=12791791
+[2023-03-13 06:50:22] Cleared all telemetry plots
+[2023-03-13 06:50:36] Warning: telemetry timestamp checksum failed, t=12595614
+[2023-03-13 06:50:36] Warning: 4 telemetry datapoint(s) failed parity check
+[2023-03-13 06:50:44] Warning: telemetry timestamp checksum failed, t=12595644
+[2023-03-13 06:50:44] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 06:50:51] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 06:51:21] Warning: telemetry timestamp checksum failed, t=12861
+[2023-03-13 06:51:21] Warning: 3 telemetry datapoint(s) failed parity check
+[2023-03-13 06:51:25] Warning: telemetry timestamp checksum failed, t=12875
+[2023-03-13 06:51:25] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 06:51:26] Warning: telemetry timestamp checksum failed, t=12880
+[2023-03-13 06:51:51] Command hex: 20010102
+[2023-03-13 06:51:52] SBand Entering Transmit Mode
+[2023-03-13 06:51:52] SBand Transmission Complete
+[2023-03-13 06:52:16] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x18\x18\x18\x18\x18\x18\x18\x18\x18   '
+[2023-03-13 06:52:16] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x18\x18\x18\x18\x18\x18\x18\x18\x18   '
+[2023-03-13 06:52:24] Command hex: 20020102
+[2023-03-13 06:52:24] SBand Entering Transmit Mode
+[2023-03-13 06:52:25] SBand Transmission Complete
+[2023-03-13 06:52:29] Set image resolution to 320x240
+[2023-03-13 06:53:47] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:53:47] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:54:59] Command hex: 20020102
+[2023-03-13 06:54:59] SBand Entering Transmit Mode
+[2023-03-13 06:54:59] SBand Transmission Complete
+[2023-03-13 06:56:22] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:56:22] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 06:56:36] Saved image to images/last_image_of_night.png
+[2023-03-13 16:01:57] UHF Modem Connection Accepted
+[2023-03-13 16:01:57] Set UHF packet length to 32 bytes
+[2023-03-13 16:01:58] S-Band Modem Connection Accepted
+[2023-03-13 16:01:58] Set S-Band packet length to 18 bytes
+[2023-03-13 16:01:59] Warning: telemetry timestamp checksum failed, t=13430
+[2023-03-13 16:01:59] Warning: 6 telemetry datapoint(s) failed parity check
+[2023-03-13 16:02:23] Cleared all telemetry plots
+[2023-03-13 16:03:18] Warning: telemetry timestamp checksum failed, t=12583079
+[2023-03-13 16:04:21] Warning: telemetry timestamp checksum failed, t=12583298
+[2023-03-13 16:04:21] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 16:04:41] Warning: telemetry timestamp checksum failed, t=197064
+[2023-03-13 16:04:41] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 16:06:25] Cleared all telemetry plots
+[2023-03-13 16:07:03] Command hex: 20010102
+[2023-03-13 16:07:03] SBand Entering Transmit Mode
+[2023-03-13 16:07:04] SBand Transmission Complete
+[2023-03-13 16:07:11] Error decoding image packet: b'\x90\x8d\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xd0\xc8\xc0\xf0\xc0'
+[2023-03-13 16:07:15] Error decoding image packet: b'\x85\x0f@HHPXXH@( \x18 @x\xc0\xc0'
+[2023-03-13 16:07:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:07:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:07:53] Command hex: 20020102
+[2023-03-13 16:07:53] SBand Entering Transmit Mode
+[2023-03-13 16:07:54] SBand Transmission Complete
+[2023-03-13 16:07:58] Set image resolution to 320x240
+[2023-03-13 16:09:17] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:09:17] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:09:39] Saved image to images/vincent.png
+[2023-03-13 16:11:10] Command hex: 20030102
+[2023-03-13 16:11:10] SBand Entering Transmit Mode
+[2023-03-13 16:11:11] SBand Transmission Complete
+[2023-03-13 16:11:15] Set image resolution to 640x480
+[2023-03-13 16:12:58] SBand received uncategorized packet: b'\x18\xbe(088\x10\x12,28\x109:({H0'
+[2023-03-13 16:16:29] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:16:29] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 16:17:58] Warning: telemetry timestamp checksum failed, t=394164
+[2023-03-13 16:53:18] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 16:53:44] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 16:54:06] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 16:54:14] Warning: telemetry timestamp checksum failed, t=401683
+[2023-03-13 16:54:14] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 16:54:19] Warning: telemetry timestamp checksum failed, t=401701
+[2023-03-13 16:54:44] Warning: telemetry timestamp checksum failed, t=8571
+[2023-03-13 16:56:22] Cleared all telemetry plots
+[2023-03-13 16:56:35] Warning: telemetry timestamp checksum failed, t=327713
+[2023-03-13 16:56:35] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 16:57:04] Command hex: 20030102
+[2023-03-13 16:57:04] SBand Entering Transmit Mode
+[2023-03-13 16:57:05] SBand Transmission Complete
+[2023-03-13 16:59:03] Command hex: 20020102
+[2023-03-13 16:59:04] SBand Entering Transmit Mode
+[2023-03-13 16:59:04] SBand Transmission Complete
+[2023-03-13 16:59:12] Command hex: 20010102
+[2023-03-13 16:59:12] SBand Entering Transmit Mode
+[2023-03-13 16:59:13] SBand Transmission Complete
+[2023-03-13 17:02:23] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 17:02:23] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 17:02:43] Warning: telemetry timestamp checksum failed, t=12583119
+[2023-03-13 17:02:43] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 17:04:03] Command hex: 20010102
+[2023-03-13 17:04:03] SBand Entering Transmit Mode
+[2023-03-13 17:04:03] SBand Transmission Complete
+[2023-03-13 17:04:08] Set image resolution to 160x120
+[2023-03-13 17:04:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((8888888('
+[2023-03-13 17:04:27] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((8888888('
+[2023-03-13 17:04:46] Command hex: 20010101
+[2023-03-13 17:04:47] SBand Entering Transmit Mode
+[2023-03-13 17:04:47] SBand Transmission Complete
+[2023-03-13 17:04:52] Command hex: 20020101
+[2023-03-13 17:04:52] SBand Entering Transmit Mode
+[2023-03-13 17:04:52] SBand Transmission Complete
+[2023-03-13 17:04:57] Command hex: 20020102
+[2023-03-13 17:04:57] SBand Entering Transmit Mode
+[2023-03-13 17:04:57] SBand Transmission Complete
+[2023-03-13 17:05:07] Set image resolution to 320x240
+[2023-03-13 17:05:11] Error decoding image packet: b'\xf0\xbb888888@@@@HPPXXX'
+[2023-03-13 17:05:56] Error decoding image packet: b'\xc3\x1b%\x83\xd5UUUi\xc8\x89E\xe1$( \x1c\x10'
+[2023-03-13 17:06:07] SBand received uncategorized packet: b'\x0c@088888888( (8888'
+[2023-03-13 17:06:25] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00H@8888@8HH@@'
+[2023-03-13 17:06:25] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00H@8888@8HH@@'
+[2023-03-13 17:09:50] Warning: telemetry timestamp checksum failed, t=12584176
+[2023-03-13 17:13:32] Warning: telemetry timestamp checksum failed, t=2026
+[2023-03-13 17:13:32] Warning: 7 telemetry datapoint(s) failed parity check
+[2023-03-13 18:26:33] UHF Modem Connection Accepted
+[2023-03-13 18:26:33] Set UHF packet length to 32 bytes
+[2023-03-13 18:26:34] S-Band Modem Connection Accepted
+[2023-03-13 18:26:34] Set S-Band packet length to 18 bytes
+[2023-03-13 18:26:35] Warning: telemetry timestamp checksum failed, t=393230
+[2023-03-13 18:26:44] Warning: telemetry timestamp checksum failed, t=327780
+[2023-03-13 18:26:48] Warning: telemetry timestamp checksum failed, t=117
+[2023-03-13 18:27:11] Warning: telemetry timestamp checksum failed, t=12583106
+[2023-03-13 18:27:11] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 18:27:37] Command hex: 20010102
+[2023-03-13 18:27:37] SBand Entering Transmit Mode
+[2023-03-13 18:27:38] SBand Transmission Complete
+[2023-03-13 18:28:02] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:28:02] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:28:14] Warning: telemetry timestamp checksum failed, t=196941
+[2023-03-13 18:28:30] Command hex: 20020102
+[2023-03-13 18:28:30] SBand Entering Transmit Mode
+[2023-03-13 18:28:30] SBand Transmission Complete
+[2023-03-13 18:28:31] Warning: telemetry timestamp checksum failed, t=12583303
+[2023-03-13 18:28:34] Set image resolution to 320x240
+[2023-03-13 18:29:54] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:29:54] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:30:34] Command hex: 20020102
+[2023-03-13 18:30:35] SBand Entering Transmit Mode
+[2023-03-13 18:30:35] SBand Transmission Complete
+[2023-03-13 18:31:51] Warning: SBand buffer overflowed!
+[2023-03-13 18:31:52] SBand received uncategorized packet: b'HHHHHHHHH@@@\x91U@@@@8@@@@@@@@@@@\x91U@@@@8@@@@@@@@@@@\x91V@@88888888888888\x91V@@88'
+[2023-03-13 18:31:52] SBand received uncategorized packet: b'888888888888\x91W888888888(8888((\x91W888888888(8888((\x91X     (((    ((((\x91X    '
+[2023-03-13 18:31:53] SBand received uncategorized packet: b' (((    ((((\x91Y(((((( (((((((((\x91Y(((((( (((((((((\x91Z88((8(((((((((88\x91Z88(('
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'8(((((((((88\x91[88((888888888888\x91[88((888888888888\x91\\8888888888888888\x91\\8888'
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'888888888888\x91]8888888888888888\x91]8888888888888888\x91^8@@@HHXpxxxx\xc0\xc0\xc0\xc8\x91^8@@@'
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'HHXpxxxx\xc0\xc0\xc0\xc8\x91`@888888@@@@@@@@H\x91`@888888@@@@@@@@H\x91aHHHHHHHH@@HHHHHH\x91aHHHH'
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'HHHH@@HHHHHH\x91bHHHHHHHHHHHHHHHH\x91cHH@H@HHHHHHHHHHH\x91cHH@H@HHHHHHHHHHH\x91dHHHH'
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'HHHHHHHHHHHH\x91dHHHHHHHHHHHHHHHH\x91ePPHHHHHHH@HHHHHH\x91ePPHHHHHHH@HHHHHH\x91fHHHH'
+[2023-03-13 18:31:53] SBand received uncategorized packet: b'HHHPPPPPPPPP\x91fHHHHHHHPPPPPPPPP\x91gHHHHHHHHH@HHHHHH\x91gHHHHHHHHH@HHHHHH@\x00\r\x00\xea\x12'
+[2023-03-13 18:31:58] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:31:58] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:32:36] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 18:33:47] Warning: telemetry timestamp checksum failed, t=913
+[2023-03-13 18:33:49] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 18:33:50] Warning: 2 telemetry datapoint(s) failed parity check
+[2023-03-13 18:34:36] Command hex: 20010102
+[2023-03-13 18:34:37] SBand Entering Transmit Mode
+[2023-03-13 18:34:37] SBand Transmission Complete
+[2023-03-13 18:34:42] Set image resolution to 160x120
+[2023-03-13 18:35:02] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((((((88'
+[2023-03-13 18:35:02] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((((((88'
+[2023-03-13 18:35:16] Command hex: 20020102
+[2023-03-13 18:35:16] SBand Entering Transmit Mode
+[2023-03-13 18:35:17] SBand Transmission Complete
+[2023-03-13 18:35:21] Set image resolution to 320x240
+[2023-03-13 18:36:41] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:36:41] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:40:35] Command hex: 20030102
+[2023-03-13 18:40:36] SBand Entering Transmit Mode
+[2023-03-13 18:40:36] SBand Transmission Complete
+[2023-03-13 18:40:41] Set image resolution to 640x480
+[2023-03-13 18:45:55] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:45:55] Error decoding image packet: b'\xcb\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+[2023-03-13 18:46:37] Warning: telemetry timestamp checksum failed, t=329793
+[2023-03-13 18:46:37] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 18:48:01] Command hex: 20010102
+[2023-03-13 18:48:01] SBand Entering Transmit Mode
+[2023-03-13 18:48:02] SBand Transmission Complete
+[2023-03-13 18:48:07] Set image resolution to 160x120
+[2023-03-13 18:48:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 18:48:26] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 18:49:46] Warning: 1 telemetry datapoint(s) failed parity check
+[2023-03-13 19:06:43] UHF Modem Connection Accepted
+[2023-03-13 19:06:43] Set UHF packet length to 32 bytes
+[2023-03-13 19:06:44] S-Band Modem Connection Accepted
+[2023-03-13 19:06:44] Set S-Band packet length to 18 bytes
+[2023-03-13 19:06:53] Command hex: 20010102
+[2023-03-13 19:06:53] SBand Entering Transmit Mode
+[2023-03-13 19:06:54] SBand Transmission Complete
+[2023-03-13 19:07:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 19:07:18] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x10'
+[2023-03-13 19:09:11] Command hex: 20020102
+[2023-03-13 19:09:11] SBand Entering Transmit Mode
+[2023-03-13 19:09:11] SBand Transmission Complete
+[2023-03-13 19:09:15] Set image resolution to 320x240
+[2023-03-13 19:10:34] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:10:34] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:10:59] UHF Modem Connection Accepted
+[2023-03-13 19:10:59] Set UHF packet length to 32 bytes
+[2023-03-13 19:11:00] S-Band Modem Connection Accepted
+[2023-03-13 19:11:00] Set S-Band packet length to 18 bytes
+[2023-03-13 19:11:06] Command hex: 20010102
+[2023-03-13 19:11:06] SBand Entering Transmit Mode
+[2023-03-13 19:11:07] SBand Transmission Complete
+[2023-03-13 19:11:30] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:11:30] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:11:49] UHF Modem Connection Accepted
+[2023-03-13 19:11:49] Set UHF packet length to 32 bytes
+[2023-03-13 19:11:50] S-Band Modem Connection Accepted
+[2023-03-13 19:11:50] Set S-Band packet length to 18 bytes
+[2023-03-13 19:11:55] Command hex: 20010102
+[2023-03-13 19:11:55] SBand Entering Transmit Mode
+[2023-03-13 19:11:56] SBand Transmission Complete
+[2023-03-13 19:12:20] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:12:20] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:12:39] UHF Modem Connection Accepted
+[2023-03-13 19:12:40] Set UHF packet length to 32 bytes
+[2023-03-13 19:12:41] S-Band Modem Connection Accepted
+[2023-03-13 19:12:41] Set S-Band packet length to 18 bytes
+[2023-03-13 19:12:56] UHF Modem Connection Accepted
+[2023-03-13 19:12:56] Set UHF packet length to 32 bytes
+[2023-03-13 19:13:19] UHF Modem Connection Accepted
+[2023-03-13 19:13:19] Set UHF packet length to 32 bytes
+[2023-03-13 19:13:20] S-Band Modem Connection Accepted
+[2023-03-13 19:13:20] Set S-Band packet length to 18 bytes
+[2023-03-13 19:13:26] Command hex: 20010102
+[2023-03-13 19:13:27] SBand Entering Transmit Mode
+[2023-03-13 19:13:27] SBand Transmission Complete
+[2023-03-13 19:13:51] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:13:51] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00((((((( (((('
+[2023-03-13 19:13:58] Command hex: 20020102
+[2023-03-13 19:13:58] SBand Entering Transmit Mode
+[2023-03-13 19:13:58] SBand Transmission Complete
+[2023-03-13 19:14:02] Set image resolution to 320x240
+[2023-03-13 19:15:21] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:15:21] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:15:53] Command hex: 20020102
+[2023-03-13 19:15:53] SBand Entering Transmit Mode
+[2023-03-13 19:15:54] SBand Transmission Complete
+[2023-03-13 19:17:17] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:17:17] Error decoding image packet: b'\x92\xc0\x00\x00\x00\x00\x10\x10\x10\x10\x08\x10\x10\x10\x10\x10\x10\x18'
+[2023-03-13 19:17:24] Saved image to images/rotate_test.png
+[2023-03-13 19:17:30] Warning: telemetry timestamp checksum failed, t=12590171
+[2023-03-13 19:17:30] Warning: 2 telemetry datapoint(s) failed parity check, t=12590171
+[2023-03-13 19:17:45] UHF Modem Connection Accepted
+[2023-03-13 19:17:45] Set UHF packet length to 32 bytes
+[2023-03-13 19:17:46] S-Band Modem Connection Accepted
+[2023-03-13 19:17:46] Set S-Band packet length to 18 bytes
+[2023-03-13 19:17:50] Command hex: 20010102
+[2023-03-13 19:17:50] SBand Entering Transmit Mode
+[2023-03-13 19:17:51] SBand Transmission Complete
+[2023-03-13 19:18:15] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00  ((((((((88'
+[2023-03-13 19:18:15] Error decoding image packet: b'\x84\xb0\x00\x00\x00\x00  ((((((((88'
+[2023-03-21 01:04:27] UHF Modem Connection Accepted
+[2023-03-21 01:04:28] Set UHF packet length to 32 bytes
+[2023-03-21 01:04:28] S-Band Modem Connection Accepted
+[2023-03-21 01:04:29] Set S-Band packet length to 18 bytes
+[2023-03-21 01:05:48] S-Band Modem Disconnected
+[2023-03-21 01:05:50] UHF Modem Disconnected
